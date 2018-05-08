@@ -10,22 +10,22 @@
 
 class IEntity {
 public:
-    virtual ~IEntity() = default;
-    bool isSuperpoz() const = 0;
-    void hit() = 0;
-    void poke() = 0;
-    bool isDestruct() = 0;
-    void extractInfo() = 0;
-    void insertInfo() = 0;
-    Entity getType() = 0;
-
     enum Entity {
-        Box,
-        Wall,
-        Bomb,
-        Player,
-        Item
+        BOX,
+        WALL,
+        BOMB,
+        PLAYER,
+        ITEM
     };
+
+    virtual ~IEntity() = default;
+    virtual bool isSuperpoz() const = 0;
+    virtual void hit() = 0;
+    virtual void poke() = 0;
+    virtual bool isDestruct() = 0;
+    virtual void extractInfo() = 0;
+    virtual void insertInfo() = 0;
+    virtual Entity getType() const = 0;
 };
 
 #endif /* !IENTITY_HPP_ */
