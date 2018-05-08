@@ -16,24 +16,24 @@ public:
     // This is the one method that we have to implement
     virtual bool OnEvent(const SEvent& event)
     {
-        // Remember whether each key is down or up
-        if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
-            KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+	// Remember whether each key is down or up
+	if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
+	    KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
 	}
 
-        return false;
+	return false;
     }
 
     // This is used to check whether a key is being held down
     virtual bool IsKeyDown(EKEY_CODE keyCode) const
     {
-        return KeyIsDown[keyCode];
+	return KeyIsDown[keyCode];
     }
     
     MyEventReceiver()
     {
-        for (u32 i=0; i<KEY_KEY_CODES_COUNT; ++i)
-            KeyIsDown[i] = false;
+	for (u32 i=0; i<KEY_KEY_CODES_COUNT; ++i)
+	    KeyIsDown[i] = false;
     }
 
 private:
@@ -65,11 +65,10 @@ int main() {
 	scene::ICameraSceneNode* cam = sceneManager->addCameraSceneNode();
 	core::vector3df camPos(0, 10, 0);
 	cam->setPosition(camPos);    //This is also important
-	cam->setTarget(core::vector3df(0, 1, 0));
 	// sceneManager->addCameraSceneNodeFPS();
 	sceneManager->addMeshSceneNode(plane);
 	while(device->run()){
-		driver->beginScene(true, true, video::SColor(255, 255, 255, 255));    //Important for the background to be white
+		driver->beginScene(true, true, video::SColor(0, 0, 0, 0));    //Important for the background to be white
 		driver->draw3DLine(core::vector3df(1000, 0, 0), core::vector3df(-1000, 0, 0));
 		driver->draw3DLine(core::vector3df(0, 1000, 0), core::vector3df(0, -1000, 0));
 		driver->draw3DLine(core::vector3df(0, 0, 1000), core::vector3df(0, 0, -1000));
@@ -78,9 +77,14 @@ int main() {
 		if(receiver.IsKeyDown(irr::KEY_RIGHT))
 			camPos.rotateXZBy(1.0, core::vector3df(0, 1, 0));
 		if(receiver.IsKeyDown(irr::KEY_DOWN))
-			camPos.set(camPos.X - (0 - camPos.X) / 100, camPos.Y - (1 - camPos.Y) / 100, camPos.Z - (0 - camPos.Z) / 100);
+			camPos.rotateXYBy(-1.0, core::vector3df(0, 1, 0));
+		// camPos.set(camPos.X - (0 - camPos.X) / 100, camPos.Y - (1 - camPos.Y) / 100, camPos.Z - (0 - camPos.Z) / 100);
 		if(receiver.IsKeyDown(irr::KEY_UP))
-			camPos.set(camPos.X + (0 - camPos.X) / 100, camPos.Y + (1 - camPos.Y) / 100, camPos.Z + (0 - camPos.Z) / 100);
+			camPos.rotateXYBy(1.0, core::vector3df(0, 1, 0));
+		if(receiver.IsKeyDown(irr::KEY_KEY_F))
+			cam->setTarget(core::vector3df(0, 1, 0));
+
+		// camPos.set(camPos.X + (0 - camPos.X) / 100, camPos.Y + (1 - camPos.Y) / 100, camPos.Z + (0 - camPos.Z) / 100);
 		cam->setPosition(camPos);
 		sceneManager->drawAll();
 		driver->endScene();
