@@ -6,8 +6,7 @@
 #include <irrlicht.h>
 #include <iostream>
 #include "driverChoice.h"
-
-
+#include <vector>
 
 using namespace irr;
 class MyEventReceiver : public IEventReceiver
@@ -56,36 +55,79 @@ int main() {
 	ground->setMaterialFlag(video::EMF_LIGHTING, false);    //This is important
 	
 	scene::ISceneNode* cube = sceneManager->addCubeSceneNode(1);
-	cube->setPosition(core::vector3df(10, 0.5, 0));
+	cube->setPosition(core::vector3df(1, 0.5, 0));
 	cube->setMaterialTexture(0, driver->getTexture("./media/wall.bmp"));
 	cube->setMaterialFlag(video::EMF_LIGHTING, false);    //This is important
 	cube->render();
 
-
+	std::vector<scene::ISceneNode*> wall;
+	for(int i = -10; i < 10; ++i) {
+		scene::ISceneNode* cube = sceneManager->addCubeSceneNode(1);
+		cube->setPosition(core::vector3df(i, 0.5, 10));
+		cube->setMaterialTexture(0, driver->getTexture("./media/wall.bmp"));
+		cube->setMaterialFlag(video::EMF_LIGHTING, false);    //This is important
+		cube->render();
+		wall.push_back(cube);
+	}
+	for(int i = -10; i < 11; ++i) {
+		scene::ISceneNode* cube = sceneManager->addCubeSceneNode(1);
+		cube->setPosition(core::vector3df(10, 0.5, i));
+		cube->setMaterialTexture(0, driver->getTexture("./media/wall.bmp"));
+		cube->setMaterialFlag(video::EMF_LIGHTING, false);    //This is important
+		cube->render();
+		wall.push_back(cube);
+	}
+	for(int i = -10; i < 10; ++i) {
+		scene::ISceneNode* cube = sceneManager->addCubeSceneNode(1);
+		cube->setPosition(core::vector3df(-10, 0.5, i));
+		cube->setMaterialTexture(0, driver->getTexture("./media/wall.bmp"));
+		cube->setMaterialFlag(video::EMF_LIGHTING, false);    //This is important
+		cube->render();
+		wall.push_back(cube);
+	}
+	for(int i = -10; i < 11; ++i) {
+		scene::ISceneNode* cube = sceneManager->addCubeSceneNode(1);
+		cube->setPosition(core::vector3df(i, 0.5, -10));
+		cube->setMaterialTexture(0, driver->getTexture("./media/wall.bmp"));
+		cube->setMaterialFlag(video::EMF_LIGHTING, false);    //This is important
+		cube->render();
+		wall.push_back(cube);
+	}
 	scene::ICameraSceneNode* cam = sceneManager->addCameraSceneNode();
-	core::vector3df camPos(0, 10, 0);
+	core::vector3df camPos(0, 1, 0);
+	core::vector3df cubePos(0, 0.5, 0);
 	cam->setPosition(camPos);    //This is also important
-	// sceneManager->addCameraSceneNodeFPS();
+	// sceneManager->addCameraSceneNode();
 	sceneManager->addMeshSceneNode(plane);
 	while(device->run()){
 		driver->beginScene(true, true, video::SColor(0, 0, 0, 0));    //Important for the background to be white
 		driver->draw3DLine(core::vector3df(1000, 0, 0), core::vector3df(-1000, 0, 0));
 		driver->draw3DLine(core::vector3df(0, 1000, 0), core::vector3df(0, -1000, 0));
 		driver->draw3DLine(core::vector3df(0, 0, 1000), core::vector3df(0, 0, -1000));
-		if(receiver.IsKeyDown(irr::KEY_LEFT))
-			camPos.rotateXZBy(-1.0, core::vector3df(0, 1, 0));
-		if(receiver.IsKeyDown(irr::KEY_RIGHT))
-			camPos.rotateXZBy(1.0, core::vector3df(0, 1, 0));
-		if(receiver.IsKeyDown(irr::KEY_DOWN))
-			camPos.rotateXYBy(-1.0, core::vector3df(0, 1, 0));
-		// camPos.set(camPos.X - (0 - camPos.X) / 100, camPos.Y - (1 - camPos.Y) / 100, camPos.Z - (0 - camPos.Z) / 100);
-		if(receiver.IsKeyDown(irr::KEY_UP))
-			camPos.rotateXYBy(1.0, core::vector3df(0, 1, 0));
-		if(receiver.IsKeyDown(irr::KEY_KEY_F))
-			cam->setTarget(core::vector3df(0, 1, 0));
+		if(receiver.IsKeyDown(irr::KEY_KEY_A))
+			cubePos.set(cubePos.X + 0.1, cubePos.Y, cubePos.Z);
+		if(receiver.IsKeyDown(irr::KEY_KEY_S))
+			cubePos.set(cubePos.X - 0.1, cubePos.Y, cubePos.Z);
+		if(receiver.IsKeyDown(irr::KEY_KEY_Q))
+			cubePos.set(cubePos.X, cubePos.Y, cubePos.Z + 0.1);
+		if(receiver.IsKeyDown(irr::KEY_KEY_D))
+			cubePos.set(cubePos.X, cubePos.Y, cubePos.Z - 0.1);
 
-		// camPos.set(camPos.X + (0 - camPos.X) / 100, camPos.Y + (1 - camPos.Y) / 100, camPos.Z + (0 - camPos.Z) / 100);
+		if(receiver.IsKeyDown(irr::KEY_LEFT))
+			camPos.rotateXZBy(-1.0, cubePos);
+		if(receiver.IsKeyDown(irr::KEY_RIGHT))
+			camPos.rotateXZBy(1.0, cubePos);
+		if(receiver.IsKeyDown(irr::KEY_DOWN))
+			camPos.set(camPos.X - (cubePos.X - camPos.X) / 100 , camPos.Y - (cubePos.Y - camPos.Y) / 100, camPos.Z - (cubePos.Z - camPos.Z) / 100);
+		if(receiver.IsKeyDown(irr::KEY_UP))
+			camPos.set(camPos.X + (cubePos.X - camPos.X) / 100 , camPos.Y + (cubePos.Y - camPos.Y) / 100, camPos.Z + (cubePos.Z - camPos.Z) / 100);
+
+
+		// if(receiver.IsKeyDown(irr::KEY_KEY_F))
+		cube->setPosition(cubePos);
+		cam->setTarget(cubePos);
 		cam->setPosition(camPos);
+		// cam->setTarget(camPos);
 		sceneManager->drawAll();
 		driver->endScene();
 	}
