@@ -11,13 +11,13 @@
 class IEntity {
 public:
     virtual ~IEntity() = default;
-    bool isSuperpoz() const = default;
-    void hit() = default;
-    void poke() = default;
-    bool isDestruct() = default;
-    void extractInfo() = default;
-    void insertInfo() = default;
-    Entity getType() = default;
+    bool isSuperpoz() const = 0;
+    void hit() = 0;
+    void poke() = 0;
+    bool isDestruct() = 0;
+    void extractInfo() = 0;
+    void insertInfo() = 0;
+    Entity getType() = 0;
 
     enum Entity {
         Box,
