@@ -14,7 +14,7 @@ typedef std::pair<unsigned char, unsigned char> pairUC;
 
 class MenuItem {
 public:
-    MenuItem();
+    MenuItem(std::string text = std::string());
     ~MenuItem() {}
     void setText(const std::string &text) { _text = text; }
     void select() { _selected = true; }

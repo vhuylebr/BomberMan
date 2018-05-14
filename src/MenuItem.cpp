@@ -7,8 +7,8 @@
 
 #include "MenuItem.hpp"
 
-MenuItem::MenuItem()
-    : _selected(false)
+MenuItem::MenuItem(std::string text)
+    : _selected(false), _text(text)
 {
 }
 
