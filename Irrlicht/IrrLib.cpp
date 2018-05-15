@@ -64,30 +64,24 @@ void IrrLib::addCube(irr::core::vector3df pos)
 
 Actions	IrrLib::getActions()
 {
+	_actions.escape = false;
+	_actions.space = false;
+	_actions.right = false;
+	_actions.left = false;
+	_actions.up = false;
+	_actions.down = false;
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
-	else
-		_actions.left = false;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))
 		_actions.right = true;
-	else
-		_actions.right = false;
 	if (_eventReceiver.IsKeyDown(irr::KEY_UP))
 		_actions.up = true;
-	else
-		_actions.up = false;
 	if (_eventReceiver.IsKeyDown(irr::KEY_DOWN))
-		_actions.down = true;
-	else
 		_actions.down = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_ESCAPE))
 		_actions.escape = true;
-	else
-		_actions.escape = false;
 	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE))
 		_actions.space = true;
-	else
-		_actions.space = false;
 	return (_actions);
 }
 
