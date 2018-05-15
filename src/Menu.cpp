@@ -270,10 +270,8 @@ bool 	Menu::changeState()
 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
-	if (_change_menu == true) {
-		std::cout << "toto " << std::endl;
+	if (_change_menu == true)
 		changeMenu();
-	}
 	switch (_step) {
 		case 1:
 			handleFirstMenu(actions, state);
