@@ -13,6 +13,7 @@
 typedef std::pair<unsigned char, unsigned char> pairUC;
 
 enum class TypeItem {
+    BUTTON,
     CHECKBOX,
     INPUT,
     LABEL

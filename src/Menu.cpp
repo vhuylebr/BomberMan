@@ -70,7 +70,7 @@ void    Menu::makeMainMenu()
     MenuItem tmp;
 
     _item.clear();
-    tmp.setType(TypeItem::CHECKBOX);
+    tmp.setType(TypeItem::INPUT;
     tmp.setText("Start game");
     tmp.select();
     tmp.setCoord(60, 40);
