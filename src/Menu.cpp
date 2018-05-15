@@ -8,9 +8,9 @@
 #include "Menu.hpp"
 
 Menu::Menu()
-    : _step(1), _nb_player(4), _change_menu(true)
+	: _step(1), _nb_player(4), _change_menu(true)
 {
-    makeMainMenu();
+	makeMainMenu();
 }
 
 Menu::~Menu()
@@ -86,89 +86,123 @@ void 	Menu::makeJoinMenu()
 
 void    Menu::makeOptionMenu()
 {
-    MenuItem tmp;
+	MenuItem tmp;
 
-    _item.clear();
-    tmp.setText("Quit");
-    tmp.setCoord(20, 90);
-    tmp.setSize(40, 20);
-    _item.push_back(tmp);
-    tmp.setText("Pseudo");
-    tmp.setCoord(80, 60);
-    tmp.setSize(60, 20);
-    _item.push_back(tmp);
-    tmp.setText("Number player");
-    tmp.setCoord(80, 120);
-    tmp.setSize(60, 20);
-    _item.push_back(tmp);
-    tmp.setText(std::to_string(_nb_player));
-    tmp.setCoord(80, 120);
-    tmp.setSize(60, 20);
-    _item.push_back(tmp);
-    addItemList(_item);
+	// Number Player
+	_item.clear();
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(200, 150);
+	tmp.setSize(300, 100);
+	tmp.setText("Number Player : ");
+	_item.push_back(tmp);
+
+	// +
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(300, 325);
+	tmp.setSize(100, 100);
+	tmp.setText("+");
+	_item.push_back(tmp);
+
+	// Number Player effectif
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(300, 475);
+	tmp.setSize(100, 100);
+	tmp.setText("3");
+	_item.push_back(tmp);
+
+	// -
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(300, 625);
+	tmp.setSize(100, 100);
+	tmp.setText("-");
+	_item.push_back(tmp);
+
+	// Pseudo text
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(800, 250);
+	tmp.setSize(300, 100);
+	tmp.setText("Pseudo : ");
+	_item.push_back(tmp);
+
+	// Pseudo input
+	tmp.setType(TypeItem::INPUT);
+	tmp.setCoord(800, 500);
+	tmp.setSize(300, 100);
+	tmp.setText("valerian t'es un pd");
+	_item.push_back(tmp);
+
+	// Quit
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(850, 700);
+	tmp.setSize(200, 100);
+	tmp.setText("Quit");
+	_item.push_back(tmp);
+
+	addItemList(_item);
 }
 
 void    Menu::makeMainMenu()
 {
-    MenuItem tmp;
+	MenuItem tmp;
 
-    _item.clear();
-    tmp.select();
-    tmp.setType(TypeItem::BUTTON);
-    tmp.setText("Start game");
-    tmp.setCoord(500, 280);
-    tmp.setSize(500, 100);
-    _item.push_back(tmp);
-    tmp.deselect();
-    tmp.setText("Join game");
-    tmp.setCoord(500, 430);
-    _item.push_back(tmp);
-    tmp.setText("Quit");
-    tmp.setCoord(500, 580);
-    _item.push_back(tmp);
-    attributeId();
+	_item.clear();
+	tmp.select();
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setText("Start game");
+	tmp.setCoord(500, 280);
+	tmp.setSize(500, 100);
+	_item.push_back(tmp);
+	tmp.deselect();
+	tmp.setText("Join game");
+	tmp.setCoord(500, 430);
+	_item.push_back(tmp);
+	tmp.setText("Quit");
+	tmp.setCoord(500, 580);
+	_item.push_back(tmp);
+	attributeId();
 }
 
 void Menu::changeMenu()
 {
-    _change_menu = false;
-    switch (_step) {
-        case 1:
-            makeMainMenu();
-            break;
-        case 2:
-            makeOptionMenu();
-            break;
-        case 3:
-            // makeJoinMenu();
-            break;
-    }
+	_change_menu = false;
+	switch (_step) {
+		case 1:
+		   makeOptionMenu();
+//            makeMainMenu();
+			break;
+		case 2:
+			makeOptionMenu();
+			break;
+		case 3:
+			// makeJoinMenu();
+			break;
+	}
 }
 
 
 void Menu::attributeId()
 {
-    int id = 1;
+	int id = 1;
 
-    for (auto &i : _item) {
-        i.setId(id);
-        id++;
-    }
+	for (auto &i : _item) {
+		i.setId(id);
+		id++;
+	}
 }
 
 void Menu::handleFirstMenu(Actions &actions)
 {
-    (void)actions;
+	(void)actions;
 }
 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
-    if (_change_menu == true)
-        changeMenu();
-    switch (_step) {
-        case 1:
-            handleFirstMenu(actions);
-            break;
-    }
-    return _item;
+	if (_change_menu == true)
+		changeMenu();
+	switch (_step) {
+		case 1:
+			handleFirstMenu(actions);
+			break;
+	}
+	return _item;
 }
