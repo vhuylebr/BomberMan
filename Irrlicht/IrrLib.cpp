@@ -23,7 +23,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		skin->setFont(font);
 	else
 		std::cout << "font not set" << std::endl;
-	skin.setSize();	_geomentryCreator = _smgr->getGeometryCreator();
+	// skin.setSize();	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
