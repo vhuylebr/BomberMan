@@ -136,7 +136,7 @@ bool IrrLib::getRun()
 
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
-	_driver->beginScene(true, true, irr::video::SColor(0,200,200,200));
+	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);
 	}

@@ -35,11 +35,14 @@ public:
     pairUC getSize() const { return _size; }
     void setType(TypeItem type) { _type = type; }
     TypeItem getType() const { return _type; }
+    void setId(int id) { _id = id; }
+    int getId() const { return _id; }
 
 private:
     TypeItem _type;
     bool _selected;
 	std::string _text;
+    int _id;
 	// texture
 	std::pair<unsigned int, unsigned int> _coord;
 	std::pair<unsigned int, unsigned int> _size;
