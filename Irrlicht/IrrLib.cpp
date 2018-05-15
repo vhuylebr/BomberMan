@@ -82,10 +82,12 @@ void IrrLib::addButton(const MenuItem &item)
 
 	for (int i; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	_guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
+	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second), 0, GUI_ID_QUIT_BUTTON,
 				wText.c_str());
+	button->setPressed(item.isSelected());
+	
 }
 
 void IrrLib::addStaticText(const MenuItem &item)
