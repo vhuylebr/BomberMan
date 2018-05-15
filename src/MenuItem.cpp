@@ -12,12 +12,12 @@ MenuItem::MenuItem(std::string text)
 {
 }
 
-void MenuItem::setCoord(unsigned char x, unsigned char y)
+void MenuItem::setCoord(unsigned int x, unsigned int y)
 {
     _coord = std::make_pair(x, y);
 }
 
-void MenuItem::setSize(unsigned char x, unsigned char y)
+void MenuItem::setSize(unsigned int x, unsigned int y)
 {
     _size = std::make_pair(x, y);
 }
