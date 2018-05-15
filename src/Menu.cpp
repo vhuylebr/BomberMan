@@ -41,6 +41,37 @@ void Menu::deselectAll()
     }
 }
 
+void 	Menu::makeJoinMenu()
+{
+	MenuItem tmp;
+	_item.clear();
+	tmp.setType(TypeItem::INPUT);
+	tmp.setCoord(950, 150);
+	tmp.setSize(350, 100);
+	tmp.setText("Enter your IP here");
+	_item.push_back(tmp);
+	tmp.setType(TypeItem::INPUT);
+	tmp.setCoord(950, 350);
+	tmp.setSize(350, 100);
+	tmp.setText("Enter your Username here");
+	_item.push_back(tmp);
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(950, 550);
+	tmp.setSize(350, 100);
+	tmp.setText("Connect");
+	_item.push_back(tmp);
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(350, 150);
+	tmp.setSize(350, 100);
+	tmp.setText("IP : ");
+	_item.push_back(tmp);
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(350, 350);
+	tmp.setSize(350, 100);
+	tmp.setText("Pseudo : ");
+	_item.push_back(tmp);
+}
+
 void    Menu::makeOptionMenu()
 {
     MenuItem tmp;
