@@ -20,7 +20,9 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addStaticText, this,
+	_factory.insert(std::make_pair(TypeItem::LABEL, std::bind(&IrrLib::addStaticText, this,
+		std::placeholders::_1)));
+	_factory.insert(std::make_pair(TypeItem::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
 }
 
@@ -91,7 +93,14 @@ void IrrLib::addButton(const MenuItem &item)
 
 void IrrLib::addStaticText(const MenuItem &item)
 {
-	_guienv->addStaticText(L"Logging ListBox:", irr::core::rect<irr::s32>(50,110,250,130), true);
+	std::wstring wText;
+	std::string str = item.getText();
+
+	for (unsigned int i; i < str.size(); ++i)
+		wText += wchar_t(str[i]);
+	_guienv->addStaticText(wText, irr::core::rect<irr::s32>(item.getCoord().first,
+		item.getCoord().second, item.getCoord().first + item.getSize().first,
+			item.getCoord().second + item.getSize().second), true);
 }
 
 void IrrLib::addEditBox(const MenuItem &item)
