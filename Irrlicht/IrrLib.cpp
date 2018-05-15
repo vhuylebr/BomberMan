@@ -16,6 +16,12 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
+	_factory.insert(std::make_pair(TypeMenuItem::INPUT, std::bind(&IrrLib::addEditBox, this,
+		std::placeholders::_1)));
+	_factory.insert(std::make_pair(TypeMenuItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
+		std::placeholders::_1)));
+	_factory.insert(std::make_pair(TypeMenuItem::CHECKBOX, std::bind(&IrrLib::addStaticText, this,
+		std::placeholders::_1)));
 }
 
 IrrLib::~IrrLib()
@@ -69,6 +75,27 @@ Actions	IrrLib::getAction()
 	return (_actions);
 }
 
+void IrrLib::addButton(const MenuItem &item)
+{
+	_guienv->addButton(irr::core::rect<irr::s32>(10,240,110,240 + 32), 0, GUI_ID_QUIT_BUTTON,
+		L"Quit", L"Exits Program");
+}
+
+void IrrLib::addStaticText(const MenuItem &item)
+{
+	_guienv->addStaticText(L"Logging ListBox:", irr::core::rect<irr::s32>(50,110,250,130), true);
+}
+
+void IrrLib::addEditBox(const MenuItem &item)
+{
+	_guienv->addEditBox(L"Editable Text", irr::core::rect<irr::s32>(350, 80, 550, 100));
+}
+
+void IrrLib::addCheckBox(const MenuItem &item)
+{
+	_guienv->addCheckBox(false, irr::core::rect<irr::s32>(350, 80, 550, 100));
+}
+
 void IrrLib::getRun()
 {
 	_device->run();
@@ -76,7 +103,9 @@ void IrrLib::getRun()
 
 void IrrLib::AffMenuItems(std::vector<MenuItem> menuItems)
 {
-	
+	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
+		_factory[it->getType()](*it);
+	}
 }
 
 // void IrrLib::AffEntities(std::vector<GameEntities> entities)
