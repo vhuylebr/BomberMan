@@ -17,4 +17,7 @@ struct Actions {
     bool    escape = false;
 };
 
+void clearAction(Actions &actions);
+void displayAction(Actions &ctions);
+
 #endif /* ACTIONS_HPP_ */
