@@ -98,7 +98,7 @@ void IrrLib::addStaticText(const MenuItem &item)
 
 	for (unsigned int i; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	_guienv->addStaticText(wText, irr::core::rect<irr::s32>(item.getCoord().first,
+	_guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second), true);
 }
