@@ -10,20 +10,28 @@
 
 # include "IEntity.hpp"
 
-class Item : public IEntity {
-	public:
-		Item();
-		~Item();
-		bool 	isSuperpoz() const final;
-		void 	hit() final;
-		void 	poke() final;
-		bool 	isDestruct() final;
-		// void	extractInfo() final;
-		// void 	insertInfo() final;
-		IEntity::Entity 	getType() const final;
+enum class eItem {
+	BOMB_UP,
+	POWER_UP,
+	PENE,
+	SPEED,
+	WALL_PASS,
+	KICK,
+	NONE
+};
 
-	protected:
-	private:
+class Item : public IEntity {
+public:
+	Item();
+	~Item();
+	bool 	isSuperpoz() const final;
+	void 	hit() final;
+	void 	poke() final;
+	bool 	isDestruct() final;
+	// void	extractInfo() final;
+	// void 	insertInfo() final;
+	IEntity::Entity 	getType() const final;
+private:
 };
 
 #endif /* !ITEM_HPP_ */
