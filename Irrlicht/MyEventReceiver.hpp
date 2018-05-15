@@ -23,6 +23,12 @@ public:
 	virtual bool IsKeyDown(irr::EKEY_CODE keyCode) const;
 
 private:
+	struct SMouseState
+	{
+		irr::core::position2di Position;
+		bool LeftButtonDown;
+		SMouseState() : LeftButtonDown(false) { }
+	} MouseState;
 	// We use this array to store the current state of each key
 	bool KeyIsDown[irr::KEY_KEY_CODES_COUNT];
 };
