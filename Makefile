@@ -15,6 +15,7 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(SRC)MenuItem.cpp	\
 		$(SRC)main.cpp	\
 		$(SRC)Core.cpp	\
+		$(SRC)Actions.cpp	\
 		$(GAME)GameCore.cpp\
 		$(IRR)IrrLib.cpp\
 		$(IRR)MyEventReceiver.cpp	\
