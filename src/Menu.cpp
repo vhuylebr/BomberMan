@@ -103,6 +103,16 @@ void    Menu::makeOptionMenu()
     addItemList(_item);
 }
 
+static void attributeId(std::vector<MenuItem> &item)
+{
+    int id = 1;
+
+    for (auto &i : item) {
+        i.setId(id);
+        id++;
+    }
+}
+
 void    Menu::makeMainMenu()
 {
     MenuItem tmp;
@@ -121,7 +131,7 @@ void    Menu::makeMainMenu()
     tmp.setText("Quit");
     tmp.setCoord(500, 580);
     _item.push_back(tmp);
-    attributeId();
+    attributeId(_item);
 }
 
 void Menu::changeMenu()
@@ -140,30 +150,52 @@ void Menu::changeMenu()
     }
 }
 
-
-void Menu::attributeId()
+static void selectLast(std::vector<MenuItem> &item)
 {
-    int id = 1;
+    item[item.size() - 1].select();
+    item[0].deselect();
+}
 
-    for (auto &i : _item) {
-        i.setId(id);
+static void selectUp(int before, int after, std::vector<MenuItem> &item)
+{
+    item[before].deselect();
+    item[after].select();
+}
+
+
+static int findSelected(std::vector<MenuItem> &item)
+{
+    int id = 0;
+
+    for (auto &i : item) {
+        if (i.isSelected())
+            return id;
         id++;
     }
+    return 0; // p-ê renvoyer -1 mais check le renvoi de findSelected
 }
 
 void Menu::handleFirstMenu(Actions &actions)
 {
-    (void)actions;
+    if (actions.up) {
+        if (_item[0].isSelected())
+            selectLast(_item);
+        else
+            selectUp(findSelected(_item), findSelected(_item) - 1, _item);
+    } //else if (actions.down)
 }
 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
     if (_change_menu == true)
         changeMenu();
+    if (actions.up == true)
+        printf("IS UP\n");
     switch (_step) {
         case 1:
             handleFirstMenu(actions);
             break;
     }
+    clearAction(actions);
     return _item;
 }
