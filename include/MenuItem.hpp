@@ -36,7 +36,7 @@ public:
     void setType(TypeItem type) { _type = type; }
     TypeItem getType() const { return _type; }
     void setId(int id) { _id = id; }
-    int getId() const { return _id; }
+    int getId() const { return _id; }
 
 private:
     TypeItem _type;
