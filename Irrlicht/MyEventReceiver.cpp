@@ -30,6 +30,11 @@ int MyEventReceiver::getIdButtonPressed() const
 	return _idButtonPressed;
 }
 
+void MyEventReceiver::resetIdButtonPressed()
+{
+	_idButtonPressed = -1;
+}
+
 bool MyEventReceiver::OnEvent(const irr::SEvent& event)
 {
 	// Remember whether each key is down or up

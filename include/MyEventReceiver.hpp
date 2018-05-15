@@ -23,6 +23,7 @@ public:
 	virtual bool IsKeyDown(irr::EKEY_CODE keyCode) const;
 	virtual bool IsKeyUp(irr::EKEY_CODE keyCode) const;
 	int getIdButtonPressed() const;
+	void resetIdButtonPressed();
 
 private:
 	struct SMouseState
