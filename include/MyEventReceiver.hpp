@@ -9,6 +9,7 @@
 	#define MYEVENTRECEIVER_HPP_
 
 #include <irrlicht.h>
+#include <iostream>
 
 class MyEventReceiver : public irr::IEventReceiver
 {
