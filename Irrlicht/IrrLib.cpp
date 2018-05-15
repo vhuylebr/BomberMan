@@ -12,6 +12,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 1080),
 		16, false, false, false, &_eventReceiver);
+	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
@@ -120,6 +121,7 @@ bool IrrLib::getRun()
 
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
+	_driver->beginScene(true, true, irr::video::SColor(0,200,200,200));
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);
 	}
