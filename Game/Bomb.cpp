@@ -8,6 +8,7 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb()
+    : _timer(), _power(1)
 {
 }
 

@@ -23,9 +23,9 @@ public:
     IEntity::Entity getType() const override;
 
 private:
-    unsigned int _timer;
-    char _power;
-    bool _penetration;
+    unsigned int timer;
+    char power;
+    bool penetration;
 };
 
 #endif /* !BOMB_HPP_ */
