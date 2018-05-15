@@ -13,6 +13,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 1080),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
+	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
@@ -143,6 +144,10 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 	_driver->endScene();
 }
 
+void IrrLib::drop()
+{
+	_device->drop();
+}
 // void IrrLib::AffEntities(std::vector<GameEntities> entities)
 // {
 	
