@@ -17,14 +17,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
-	irr::gui::IGUISkin* skin = _guienv->getSkin();
-	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
-	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
-	if (font)
-		skin->setFont(font);
-	else
-		std::cout << "font not set" << std::endl;
-	// skin.setSize();	_geomentryCreator = _smgr->getGeometryCreator();
+	// skin.setSize();
+	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
@@ -153,6 +147,14 @@ bool IrrLib::getRun()
 
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
+	_guienv->clear();
+	irr::gui::IGUISkin* skin = _guienv->getSkin();
+	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
+	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
+	if (font)
+		skin->setFont(font);
+	else
+		std::cout << "font not set" << std::endl;
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);
 	}
