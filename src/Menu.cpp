@@ -56,30 +56,25 @@ void Menu::deselectAll()
 void 	Menu::makeJoinMenu()
 {
 	MenuItem tmp;
+
 	_item.clear();
 	tmp.setType(TypeItem::INPUT);
 	tmp.setCoord(950, 150);
 	tmp.setSize(350, 100);
 	tmp.setText("Enter your IP here");
 	_item.push_back(tmp);
-	tmp.setType(TypeItem::INPUT);
 	tmp.setCoord(950, 350);
-	tmp.setSize(350, 100);
 	tmp.setText("Enter your Username here");
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::BUTTON);
 	tmp.setCoord(950, 550);
-	tmp.setSize(350, 100);
 	tmp.setText("Connect");
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 150);
-	tmp.setSize(350, 100);
 	tmp.setText("IP : ");
 	_item.push_back(tmp);
-	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 350);
-	tmp.setSize(350, 100);
 	tmp.setText("Pseudo : ");
 	_item.push_back(tmp);
 }
@@ -178,14 +173,14 @@ void Menu::changeMenu()
 	switch (_step) {
 		case 1:
             makeMainMenu();
-			break;
-		case 2:
-			makeOptionMenu();
-			break;
-		case 3:
-			makeJoinMenu();
-			break;
-	}
+            break;
+        case 2:
+            makeOptionMenu();
+            break;
+        case 3:
+            makeJoinMenu();
+            break;
+    }
 }
 
 static void selectLast(std::vector<MenuItem> &item)
@@ -219,8 +214,17 @@ static void selectFirst(std::vector<MenuItem> &item)
     item[0].select();
 }
 
+void Menu::firstMenuKey(Actions &actions, STATE &state)
+{
+    if (actions.space) {// ou Enter 
+        // gérer le clic et changé le selectionné si l'on a cliqué ailleurs
+        _step = findSelected(_item) + 1;
+        if (_step == 4)
+            state = STATE::EXIT;
+    }
+}
 
-void Menu::handleFirstMenu(Actions &actions)
+void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
     if (actions.up) {
         if (_item[0].isSelected())
@@ -232,6 +236,8 @@ void Menu::handleFirstMenu(Actions &actions)
             selectFirst(_item);
         else
             selectAnother(findSelected(_item), findSelected(_item) + 1, _item);
+    } else {
+        firstMenuKey(actions, state);
     }
 }
 
@@ -241,7 +247,7 @@ std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &st
         changeMenu();
     switch (_step) {
         case 1:
-            handleFirstMenu(actions);
+            handleFirstMenu(actions, state);
             break;
     }
     clearAction(actions);

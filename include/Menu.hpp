@@ -26,9 +26,10 @@ public:
     std::vector<eItem> &getBonus() { return _bonus; }
     unsigned char getNbPlayer() const { return _nb_player; }
     void changeMenu();
+    void firstMenuKey(Actions &actions, STATE &state);
 
 private:
-    void handleFirstMenu(Actions &actions);
+    void handleFirstMenu(Actions &actions, STATE &state);
     void makeMainMenu();
     void makeOptionMenu();
     void makeJoinMenu();
