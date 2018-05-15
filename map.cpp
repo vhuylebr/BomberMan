@@ -50,10 +50,11 @@ int main() {
 	video::IVideoDriver *driver = device->getVideoDriver();
 	scene::ISceneManager *smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
-	scene::IAnimatedMesh* mesh = smgr->getMesh("media/METAL_SONIC.md2");
+
 
 	const scene::IGeometryCreator *geomentryCreator = smgr->getGeometryCreator();
 
+	scene::IAnimatedMesh* mesh = smgr->getMesh("media/METAL_SONIC.md2");
 	if (!mesh) {
 		device->drop();
 		return 1;

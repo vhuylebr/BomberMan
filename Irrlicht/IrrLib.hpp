@@ -9,9 +9,9 @@
 	#define IRRLIB_HPP_
 
 #include <irrlicht.h>
-#include "../src/Actions.hpp"
-#include "MyEventReceiver.hpp"
 #include <vector>
+#include "MyEventReceiver.hpp"
+#include "../src/Actions.hpp"
 
 class IrrLib {
 	public:
@@ -22,6 +22,8 @@ class IrrLib {
 		Actions getAction();
 		void getRun();
 		void createPlane();
+		void AffMenuItems(std::vector<MenuItem>);
+		void AffEntities(std::vector<Entities>);
 
 	private:
 		irr::IrrlichtDevice		*_device;

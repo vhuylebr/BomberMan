@@ -73,3 +73,13 @@ void IrrLib::getRun()
 {
 	_device->run();
 }
+
+void IrrLib::AffMenuItems(std::vector<MenuItem> menuItems)
+{
+	
+}
+
+void IrrLib::AffEntities(std::vector<Entities> entities)
+{
+	
+}
