@@ -72,6 +72,7 @@ Actions	IrrLib::getActions()
 	_actions.up = false;
 	_actions.down = false;
 	_actions.enter = false;
+	_actions.buttonPressed = _eventReceiver.getIdButtonPressed();
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))

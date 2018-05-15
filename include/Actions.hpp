@@ -16,6 +16,7 @@ struct Actions {
     bool    space = false;
     bool    escape = false;
     bool    enter = false;
+    int    buttonPressed = -1;
 };
 
 void clearAction(Actions &actions);
