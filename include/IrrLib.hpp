@@ -39,6 +39,7 @@ class IrrLib {
 		void addEditBox(const MenuItem &item);
 		void addCheckBox(const MenuItem &item);
 		void drop();
+		void drawMenu();
 
 		// void AffEntities(std::vector<GameEntities>);
 

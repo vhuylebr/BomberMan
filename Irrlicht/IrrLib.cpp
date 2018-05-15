@@ -19,7 +19,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_guienv = _device->getGUIEnvironment();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
-
+	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
 	if (font)
 		skin->setFont(font);
 	else
@@ -104,9 +104,10 @@ void IrrLib::addButton(const MenuItem &item)
 		wText += wchar_t(str[i]);
 	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second), 0, GUI_ID_QUIT_BUTTON,
+			item.getCoord().second + item.getSize().second), 0, GUI_ID_NEW_WINDOW_BUTTON,
 				wText.c_str());
 	button->setPressed(item.isSelected());
+	button->setDrawBorder(true);
 }
 
 void IrrLib::addStaticText(const MenuItem &item)
@@ -152,10 +153,19 @@ bool IrrLib::getRun()
 
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
-	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);
 	}
+	// if (_device->isWindowActive()) {	
+	// 	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
+	// 	_guienv->drawAll();
+	// 	_driver->endScene();
+	// }
+}
+
+void IrrLib::drawMenu()
+{
+	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
 	_guienv->drawAll();
 	_driver->endScene();
 }
