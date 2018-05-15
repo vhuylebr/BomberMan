@@ -12,6 +12,12 @@
 
 typedef std::pair<unsigned char, unsigned char> pairUC;
 
+enum class TypeItem {
+    CHECKBOX,
+    INPUT,
+    LABEL
+};
+
 class MenuItem {
 public:
     MenuItem(std::string text = std::string());
@@ -26,8 +32,11 @@ public:
     std::string getText() const { return _text; }
     pairUC getCoord() const { return _coord; }
     pairUC getSize() const { return _size; }
+    void setType(TypeItem type) { _type = type; }
+    TypeItem getType() const { return _type; }
 
 private:
+    TypeItem _type;
     bool _selected;
 	std::string _text;
 	// texture

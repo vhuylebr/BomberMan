@@ -9,15 +9,22 @@ SRC		= 	src/
 
 GAME	=	Game/
 
+IRR	=	Irrlicht/
+
 SRCS	=	$(SRC)Menu.cpp	\
 		$(SRC)MenuItem.cpp	\
-		$(GAME)Bomb.cpp	\
-		$(GAME)Box.cpp	\
-		$(GAME)Item.cpp	\
-		$(GAME)Player.cpp\
-		$(GAME)Wall.cpp	\
+		$(SRC)main.cpp	\
+		$(SRC)Core.cpp	\
+		$(GAME)GameCore.cpp\
+		$(IRR)IrrLib.cpp\
+		$(IRR)MyEventReceiver.cpp	\
+#		$(GAME)Item.cpp
+		#$(GAME)Bomb.cpp	
+		#$(GAME)Box.cpp	
+		#$(GAME)Player.cpp
+#		$(GAME)Wall.cpp	
 
-CPPFLAGS	+= -I./include -Wall -Wextra -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lGL -LGLU
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lGL -LGLU
 
 CC	=	g++
 

@@ -16,11 +16,11 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
-	_factory.insert(std::make_pair(TypeMenuItem::INPUT, std::bind(&IrrLib::addEditBox, this,
+	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(TypeMenuItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
+	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(TypeMenuItem::CHECKBOX, std::bind(&IrrLib::addStaticText, this,
+	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addStaticText, this,
 		std::placeholders::_1)));
 }
 
@@ -58,7 +58,7 @@ void IrrLib::addCube(irr::core::vector3df pos)
 	_cubes.push_back(cube);
 }
 
-Actions	IrrLib::getAction()
+Actions	IrrLib::getActions()
 {
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
@@ -80,7 +80,7 @@ void IrrLib::addButton(const MenuItem &item)
 	std::wstring wText;
 	std::string str = item.getText();
 
-	for (int i; i < str.size(); ++i)
+	for (unsigned int i; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
 	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
@@ -105,12 +105,12 @@ void IrrLib::addCheckBox(const MenuItem &item)
 	_guienv->addCheckBox(false, irr::core::rect<irr::s32>(350, 80, 550, 100));
 }
 
-void IrrLib::getRun()
+bool IrrLib::getRun()
 {
-	_device->run();
+	return _device->run();
 }
 
-void IrrLib::AffMenuItems(std::vector<MenuItem> menuItems)
+void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);

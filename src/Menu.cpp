@@ -8,6 +8,7 @@
 #include "Menu.hpp"
 
 Menu::Menu()
+    : _step(1), _nb_player(4), _change_menu(true)
 {
     makeMainMenu();
 }
@@ -33,6 +34,13 @@ static void addItemList(std::vector<MenuItem> &item)
     }
 }
 
+void Menu::deselectAll()
+{
+    for (auto &i : _item) {
+        i.deselect();
+    }
+}
+
 void    Menu::makeOptionMenu()
 {
     MenuItem tmp;
@@ -54,7 +62,6 @@ void    Menu::makeOptionMenu()
     tmp.setCoord(80, 120);
     tmp.setSize(60, 20);
     _item.push_back(tmp);
-
     addItemList(_item);
 }
 
@@ -63,10 +70,13 @@ void    Menu::makeMainMenu()
     MenuItem tmp;
 
     _item.clear();
+    tmp.setType(TypeItem::CHECKBOX);
     tmp.setText("Start game");
+    tmp.select();
     tmp.setCoord(60, 40);
     tmp.setSize(80, 20);
     _item.push_back(tmp);
+    tmp.deselect();
     tmp.setText("Join game");
     tmp.setCoord(60, 80);
     tmp.setSize(80, 20);
@@ -75,4 +85,30 @@ void    Menu::makeMainMenu()
     tmp.setCoord(60, 120);
     tmp.setSize(80, 20);
     _item.push_back(tmp);
+}
+
+void Menu::changeMenu()
+{
+    _change_menu = false;
+    switch (_step) {
+        case 1:
+            makeMainMenu();
+            break;
+        case 2:
+            makeOptionMenu();
+            break;
+        case 3:
+            // makeJoinMenu();
+            break;
+    }
+}
+
+std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
+{
+    if (_change_menu == true)
+        changeMenu();
+    (void)to_write;
+    (void)actions;
+    (void)state;
+    return _item;
 }

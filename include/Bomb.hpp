@@ -8,24 +8,30 @@
 #ifndef BOMB_HPP_
 # define BOMB_HPP_
 
-# include "IEntity.hpp"
+# include "AEntity.hpp"
+# include ""
 
-class Bomb : public IEntity {
+class Bomb : public AEntity {
 public:
-    Bomb();
+    Bomb(int x, int y);
     ~Bomb();
     bool isSuperpoz() const override;
     void hit() override;
-    void poke() override;
     bool isDestruct() override;
-    void extractInfo() override;
-    void insertInfo() override;
+    struct s_bomb extractInfo();
+    void insertInfo();
     IEntity::Entity getType() const override;
+    int getStartingTime() const;
 
 private:
-    unsigned int timer;
-    char power;
-    bool penetration;
+//    Timer _timer;
+//    Timer _starting_time;
+    int _timer;
+    int _starting_time;
+    char _power;
+    bool _penetration;
+    bool _portable;
+    Direction _direction;
 };
 
 #endif /* !BOMB_HPP_ */

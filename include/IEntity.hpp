@@ -6,22 +6,21 @@
 */
 
 #ifndef IENTITY_HPP_
-	#define IENTITY_HPP_
+# define IENTITY_HPP_
+
+enum class Entity {
+    BOX,
+    WALL,
+    BOMB,
+    PLAYER,
+    ITEM
+};
 
 class IEntity {
 public:
-    enum Entity {
-        BOX,
-        WALL,
-        BOMB,
-        PLAYER,
-        ITEM
-    };
-
     virtual ~IEntity() = default;
     virtual bool isSuperpoz() const = 0;
     virtual void hit() = 0;
-    virtual void poke() = 0;
     virtual bool isDestruct() = 0;
     virtual void extractInfo() = 0;
     virtual void insertInfo() = 0;
