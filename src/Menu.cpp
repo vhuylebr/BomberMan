@@ -19,6 +19,7 @@ Menu::~Menu()
 
 static void addItemList(std::vector<MenuItem> &item)
 {
+	MenuItem tmp;
 	MenuItem bonus[NB_ITEMS] =
 	{   MenuItem("Bomb Up"),
 		MenuItem("Power Up"),
@@ -27,16 +28,20 @@ static void addItemList(std::vector<MenuItem> &item)
 		MenuItem("Wall Pass"),
 		MenuItem("Kick"),
 	};
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(1250, 0);
+	tmp.setSize(820, 1080);
+	item.push_back(tmp);
+
 	for (int i = 0; i < NB_ITEMS; i++) {
-		MenuItem tmp;
 		tmp.setType(TypeItem::CHECKBOX);
-		tmp.setCoord(900, (i + 1) * 30 + 120 );
-		tmp.setSize(30, 30);
+		tmp.setCoord(1400, (i + 1) * 100 + 100 );
+		tmp.setSize(50, 50);
 		item.push_back(tmp);
 
 		bonus[i].setType(TypeItem::LABEL);
-		bonus[i].setCoord(1000, ((i + 1) * 30 + 120));
-		bonus[i].setSize(60, 20);
+		bonus[i].setCoord(1500, ((i + 1) * 100 + 100));
+		bonus[i].setSize(100, 50);
 		item.push_back(bonus[i]);
 	}
 }
