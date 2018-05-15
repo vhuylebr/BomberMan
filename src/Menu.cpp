@@ -19,26 +19,33 @@ Menu::~Menu()
 
 static void addItemList(std::vector<MenuItem> &item)
 {
-    MenuItem bonus[NB_ITEMS] = 
-    {   MenuItem("Bomb Up"),
-        MenuItem("Power Up"),
-        MenuItem("Penetration"), // Peut-être renommer ça en "Super Bomb"
-        MenuItem("Speed"),
-        MenuItem("Wall Pass"),
-        MenuItem("Kick"),
-    };
-    for (int i = 0; i < NB_ITEMS; i++) {
-        bonus[i].setCoord(180, ((i + 1) * 30));
-        bonus[i].setSize(60, 20);
-        item.push_back(bonus[i]);
-    }
+	MenuItem bonus[NB_ITEMS] =
+	{   MenuItem("Bomb Up"),
+		MenuItem("Power Up"),
+		MenuItem("Penetration"), // Peut-être renommer ça en "Super Bomb"
+		MenuItem("Speed"),
+		MenuItem("Wall Pass"),
+		MenuItem("Kick"),
+	};
+	for (int i = 0; i < NB_ITEMS; i++) {
+		MenuItem tmp;
+		tmp.setType(TypeItem::CHECKBOX);
+		tmp.setCoord(900, (i + 1) * 30 + 120 );
+		tmp.setSize(30, 30);
+		item.push_back(tmp);
+
+		bonus[i].setType(TypeItem::LABEL);
+		bonus[i].setCoord(1000, ((i + 1) * 30 + 120));
+		bonus[i].setSize(60, 20);
+		item.push_back(bonus[i]);
+	}
 }
 
 void Menu::deselectAll()
 {
-    for (auto &i : _item) {
-        i.deselect();
-    }
+	for (auto &i : _item) {
+		i.deselect();
+	}
 }
 
 void 	Menu::makeJoinMenu()
