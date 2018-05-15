@@ -83,6 +83,7 @@ void    Menu::makeMainMenu()
     tmp.setText("Quit");
     tmp.setCoord(500, 580);
     _item.push_back(tmp);
+    attributeId();
 }
 
 void Menu::changeMenu()
@@ -101,12 +102,30 @@ void Menu::changeMenu()
     }
 }
 
+
+void Menu::attributeId()
+{
+    int id = 1;
+
+    for (auto &i : _item) {
+        i.setId(id);
+        id++;
+    }
+}
+
+void Menu::handleFirstMenu(Actions &actions)
+{
+    (void)actions;
+}
+
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
     if (_change_menu == true)
         changeMenu();
-    (void)to_write;
-    (void)actions;
-    (void)state;
+    switch (_step) {
+        case 1:
+            handleFirstMenu(actions);
+            break;
+    }
     return _item;
 }
