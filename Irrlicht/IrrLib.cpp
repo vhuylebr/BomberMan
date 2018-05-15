@@ -17,7 +17,13 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
-	_geomentryCreator = _smgr->getGeometryCreator();
+	irr::gui::IGUISkin* skin = _guienv->getSkin();
+	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
+	if (font)
+		skin->setFont(font);
+	else
+		std::cout << "font not set" << std::endl;
+	skin.setSize();	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
@@ -70,6 +76,7 @@ Actions	IrrLib::getActions()
 	_actions.left = false;
 	_actions.up = false;
 	_actions.down = false;
+	_actions.enter = false;
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))
@@ -82,6 +89,8 @@ Actions	IrrLib::getActions()
 		_actions.escape = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE))
 		_actions.space = true;
+	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE))
+		_actions.enter = true;
 	return (_actions);
 }
 
