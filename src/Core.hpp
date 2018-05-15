@@ -12,7 +12,13 @@ public:
 
     int run();
 private:
+    void    menuManager(STATE &);
+    void    lobbyManager(STATE &);
+    void    gameManager(STATE &);
+
     STATE   _state;
+    Actions _act;
+    char    _host;
     Game    _game;
     Menu    _menu;
     IrrLib  _lib;
