@@ -156,7 +156,7 @@ static void selectLast(std::vector<MenuItem> &item)
     item[0].deselect();
 }
 
-static void selectUp(int before, int after, std::vector<MenuItem> &item)
+static void selectAnother(int before, int after, std::vector<MenuItem> &item)
 {
     item[before].deselect();
     item[after].select();
@@ -175,22 +175,32 @@ static int findSelected(std::vector<MenuItem> &item)
     return 0; // p-ê renvoyer -1 mais check le renvoi de findSelected
 }
 
+static void selectFirst(std::vector<MenuItem> &item)
+{
+    item[item.size() - 1].deselect();
+    item[0].select();
+}
+
+
 void Menu::handleFirstMenu(Actions &actions)
 {
     if (actions.up) {
         if (_item[0].isSelected())
             selectLast(_item);
         else
-            selectUp(findSelected(_item), findSelected(_item) - 1, _item);
-    } //else if (actions.down)
+            selectAnother(findSelected(_item), findSelected(_item) - 1, _item);
+    } else if (actions.down) {
+        if (static_cast<unsigned int>(findSelected(_item)) == _item.size() - 1)
+            selectFirst(_item);
+        else
+            selectAnother(findSelected(_item), findSelected(_item) + 1, _item);
+    }
 }
 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
     if (_change_menu == true)
         changeMenu();
-    if (actions.up == true)
-        printf("IS UP\n");
     switch (_step) {
         case 1:
             handleFirstMenu(actions);
