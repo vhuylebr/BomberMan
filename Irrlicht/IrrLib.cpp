@@ -10,7 +10,7 @@
 IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown)
 {
-	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 1080),
+	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);

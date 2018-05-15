@@ -15,6 +15,7 @@
 #include "MyEventReceiver.hpp"
 #include "Actions.hpp"
 #include "MenuItem.hpp"
+#include "driverChoice.h"
 
 enum
 {
