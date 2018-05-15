@@ -87,7 +87,6 @@ void IrrLib::addButton(const MenuItem &item)
 			item.getCoord().second + item.getSize().second), 0, GUI_ID_QUIT_BUTTON,
 				wText.c_str());
 	button->setPressed(item.isSelected());
-	
 }
 
 void IrrLib::addStaticText(const MenuItem &item)
@@ -115,6 +114,8 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);
 	}
+	_guienv->drawAll();
+	_driver->endScene();
 }
 
 // void IrrLib::AffEntities(std::vector<GameEntities> entities)
