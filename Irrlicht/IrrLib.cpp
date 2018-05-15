@@ -84,7 +84,7 @@ void IrrLib::addButton(const MenuItem &item)
 	std::wstring wText;
 	std::string str = item.getText();
 
-	for (unsigned int i; i < str.size(); ++i)
+	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
 	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
@@ -98,7 +98,7 @@ void IrrLib::addStaticText(const MenuItem &item)
 	std::wstring wText;
 	std::string str = item.getText();
 
-	for (unsigned int i; i < str.size(); ++i)
+	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
 	_guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
@@ -110,7 +110,7 @@ void IrrLib::addEditBox(const MenuItem &item)
 	std::wstring wText;
 	std::string str = item.getText();
 
-	for (unsigned int i; i < str.size(); ++i)
+	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
 	_guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
@@ -122,7 +122,7 @@ void IrrLib::addCheckBox(const MenuItem &item)
 	std::wstring wText;
 	std::string str = item.getText();
 
-	for (unsigned int i; i < str.size(); ++i)
+	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
 	_guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
