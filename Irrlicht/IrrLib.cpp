@@ -106,12 +106,26 @@ void IrrLib::addStaticText(const MenuItem &item)
 
 void IrrLib::addEditBox(const MenuItem &item)
 {
-	_guienv->addEditBox(L"Editable Text", irr::core::rect<irr::s32>(350, 80, 550, 100));
+	std::wstring wText;
+	std::string str = item.getText();
+
+	for (unsigned int i; i < str.size(); ++i)
+		wText += wchar_t(str[i]);
+	_guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
+		item.getCoord().second, item.getCoord().first + item.getSize().first,
+			item.getCoord().second + item.getSize().second));
 }
 
 void IrrLib::addCheckBox(const MenuItem &item)
 {
-	_guienv->addCheckBox(false, irr::core::rect<irr::s32>(350, 80, 550, 100));
+	std::wstring wText;
+	std::string str = item.getText();
+
+	for (unsigned int i; i < str.size(); ++i)
+		wText += wchar_t(str[i]);
+	_guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getCoord().first,
+		item.getCoord().second, item.getCoord().first + item.getSize().first,
+			item.getCoord().second + item.getSize().second));
 }
 
 bool IrrLib::getRun()
