@@ -70,18 +70,18 @@ void    Menu::makeMainMenu()
     MenuItem tmp;
 
     _item.clear();
+    tmp.select();
     tmp.setType(TypeItem::BUTTON);
     tmp.setText("Start game");
-    tmp.select();
-    tmp.setCoord(500, 330);
+    tmp.setCoord(500, 280);
     tmp.setSize(500, 100);
     _item.push_back(tmp);
     tmp.deselect();
     tmp.setText("Join game");
-    tmp.setCoord(500, 480);
+    tmp.setCoord(500, 430);
     _item.push_back(tmp);
     tmp.setText("Quit");
-    tmp.setCoord(500, 630);
+    tmp.setCoord(500, 580);
     _item.push_back(tmp);
 }
 
