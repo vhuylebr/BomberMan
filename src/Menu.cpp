@@ -8,9 +8,9 @@
 #include "Menu.hpp"
 
 Menu::Menu()
-    : _step(1), _nb_player(4), _change_menu(true)
+	: _step(1), _nb_player(4), _change_menu(true)
 {
-    makeMainMenu();
+	makeMainMenu();
 }
 
 Menu::~Menu()
@@ -19,6 +19,7 @@ Menu::~Menu()
 
 static void addItemList(std::vector<MenuItem> &item)
 {
+	MenuItem tmp;
 	MenuItem bonus[NB_ITEMS] =
 	{   MenuItem("Bomb Up"),
 		MenuItem("Power Up"),
@@ -27,16 +28,20 @@ static void addItemList(std::vector<MenuItem> &item)
 		MenuItem("Wall Pass"),
 		MenuItem("Kick"),
 	};
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(1250, 0);
+	tmp.setSize(820, 1080);
+	item.push_back(tmp);
+
 	for (int i = 0; i < NB_ITEMS; i++) {
-		MenuItem tmp;
 		tmp.setType(TypeItem::CHECKBOX);
-		tmp.setCoord(900, (i + 1) * 30 + 120 );
-		tmp.setSize(30, 30);
+		tmp.setCoord(1400, (i + 1) * 100 + 100 );
+		tmp.setSize(50, 50);
 		item.push_back(tmp);
 
 		bonus[i].setType(TypeItem::LABEL);
-		bonus[i].setCoord(1000, ((i + 1) * 30 + 120));
-		bonus[i].setSize(60, 20);
+		bonus[i].setCoord(1500, ((i + 1) * 100 + 100));
+		bonus[i].setSize(100, 50);
 		item.push_back(bonus[i]);
 	}
 }
@@ -51,56 +56,84 @@ void Menu::deselectAll()
 void 	Menu::makeJoinMenu()
 {
 	MenuItem tmp;
+
 	_item.clear();
 	tmp.setType(TypeItem::INPUT);
 	tmp.setCoord(950, 150);
 	tmp.setSize(350, 100);
 	tmp.setText("Enter your IP here");
 	_item.push_back(tmp);
-	tmp.setType(TypeItem::INPUT);
 	tmp.setCoord(950, 350);
-	tmp.setSize(350, 100);
 	tmp.setText("Enter your Username here");
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::BUTTON);
 	tmp.setCoord(950, 550);
-	tmp.setSize(350, 100);
 	tmp.setText("Connect");
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 150);
-	tmp.setSize(350, 100);
 	tmp.setText("IP : ");
 	_item.push_back(tmp);
-	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 350);
-	tmp.setSize(350, 100);
 	tmp.setText("Pseudo : ");
 	_item.push_back(tmp);
 }
 
 void    Menu::makeOptionMenu()
 {
-    MenuItem tmp;
+	MenuItem tmp;
 
-    _item.clear();
-    tmp.setText("Quit");
-    tmp.setCoord(20, 90);
-    tmp.setSize(40, 20);
-    _item.push_back(tmp);
-    tmp.setText("Pseudo");
-    tmp.setCoord(80, 60);
-    tmp.setSize(60, 20);
-    _item.push_back(tmp);
-    tmp.setText("Number player");
-    tmp.setCoord(80, 120);
-    tmp.setSize(60, 20);
-    _item.push_back(tmp);
-    tmp.setText(std::to_string(_nb_player));
-    tmp.setCoord(80, 120);
-    tmp.setSize(60, 20);
-    _item.push_back(tmp);
-    addItemList(_item);
+	// Number Player
+	_item.clear();
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(200, 150);
+	tmp.setSize(300, 100);
+	tmp.setText("Number Player : ");
+	_item.push_back(tmp);
+
+	// +
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(300, 325);
+	tmp.setSize(100, 100);
+	tmp.setText("+");
+	_item.push_back(tmp);
+
+	// Number Player effectif
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(300, 475);
+	tmp.setSize(100, 100);
+	tmp.setText("3");
+	_item.push_back(tmp);
+
+	// -
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(300, 625);
+	tmp.setSize(100, 100);
+	tmp.setText("-");
+	_item.push_back(tmp);
+
+	// Pseudo text
+	tmp.setType(TypeItem::LABEL);
+	tmp.setCoord(800, 250);
+	tmp.setSize(300, 100);
+	tmp.setText("Pseudo : ");
+	_item.push_back(tmp);
+
+	// Pseudo input
+	tmp.setType(TypeItem::INPUT);
+	tmp.setCoord(800, 500);
+	tmp.setSize(300, 100);
+	tmp.setText("valerian t'es un pd");
+	_item.push_back(tmp);
+
+	// Quit
+	tmp.setType(TypeItem::BUTTON);
+	tmp.setCoord(850, 700);
+	tmp.setSize(200, 100);
+	tmp.setText("Quit");
+	_item.push_back(tmp);
+
+	addItemList(_item);
 }
 
 static void attributeId(std::vector<MenuItem> &item)
@@ -136,16 +169,16 @@ void    Menu::makeMainMenu()
 
 void Menu::changeMenu()
 {
-    _change_menu = false;
-    switch (_step) {
-        case 1:
+	_change_menu = false;
+	switch (_step) {
+		case 1:
             makeMainMenu();
             break;
         case 2:
             makeOptionMenu();
             break;
         case 3:
-            // makeJoinMenu();
+            makeJoinMenu();
             break;
     }
 }
@@ -181,8 +214,17 @@ static void selectFirst(std::vector<MenuItem> &item)
     item[0].select();
 }
 
+void Menu::firstMenuKey(Actions &actions, STATE &state)
+{
+    if (actions.space) {// ou Enter 
+        // gérer le clic et changé le selectionné si l'on a cliqué ailleurs
+        _step = findSelected(_item) + 1;
+        if (_step == 4)
+            state = STATE::EXIT;
+    }
+}
 
-void Menu::handleFirstMenu(Actions &actions)
+void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
     if (actions.up) {
         if (_item[0].isSelected())
@@ -194,6 +236,8 @@ void Menu::handleFirstMenu(Actions &actions)
             selectFirst(_item);
         else
             selectAnother(findSelected(_item), findSelected(_item) + 1, _item);
+    } else {
+        firstMenuKey(actions, state);
     }
 }
 
@@ -203,7 +247,7 @@ std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &st
         changeMenu();
     switch (_step) {
         case 1:
-            handleFirstMenu(actions);
+            handleFirstMenu(actions, state);
             break;
     }
     clearAction(actions);
