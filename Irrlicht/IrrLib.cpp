@@ -19,6 +19,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_guienv = _device->getGUIEnvironment();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
+
 	if (font)
 		skin->setFont(font);
 	else
@@ -89,7 +90,7 @@ Actions	IrrLib::getActions()
 		_actions.escape = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE))
 		_actions.space = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE))
+	if (_eventReceiver.IsKeyDown(irr::KEY_RETURN))
 		_actions.enter = true;
 	return (_actions);
 }
