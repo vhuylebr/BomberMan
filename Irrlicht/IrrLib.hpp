@@ -12,6 +12,7 @@
 #include <vector>
 #include "MyEventReceiver.hpp"
 #include "../src/Actions.hpp"
+#include "../src/MenuItem.hpp"
 
 class IrrLib {
 	public:
@@ -23,7 +24,7 @@ class IrrLib {
 		void getRun();
 		void createPlane();
 		void AffMenuItems(std::vector<MenuItem>);
-		void AffEntities(std::vector<Entities>);
+		// void AffEntities(std::vector<GameEntities>);
 
 	private:
 		irr::IrrlichtDevice		*_device;
