@@ -10,7 +10,7 @@
 # include <utility>
 # include <string>
 
-typedef std::pair<unsigned char, unsigned char> pairUC;
+typedef std::pair<unsigned int, unsigned int> pairUC;
 
 enum class TypeItem {
     BUTTON,
@@ -25,8 +25,8 @@ public:
     ~MenuItem() {}
     void setText(const std::string &text) { _text = text; }
     void select() { _selected = true; }
-    void setCoord(unsigned char x, unsigned char y);
-    void setSize(unsigned char x, unsigned char y);
+    void setCoord(unsigned int x, unsigned int y);
+    void setSize(unsigned int x, unsigned int y);
     void setTexture() {}
     void deselect() { _selected = false; }
     bool isSelected() const { return _selected; }
@@ -41,8 +41,8 @@ private:
     bool _selected;
 	std::string _text;
 	// texture
-	std::pair<unsigned char, unsigned char> _coord;
-	std::pair<unsigned char, unsigned char> _size;
+	std::pair<unsigned int, unsigned int> _coord;
+	std::pair<unsigned int, unsigned int> _size;
 };
 
 #endif /* !MENUITEM_HPP_ */
