@@ -141,25 +141,35 @@ void    Menu::makeOptionMenu()
 	addItemList(_item);
 }
 
+static void attributeId(std::vector<MenuItem> &item)
+{
+    int id = 1;
+
+    for (auto &i : item) {
+        i.setId(id);
+        id++;
+    }
+}
+
 void    Menu::makeMainMenu()
 {
-	MenuItem tmp;
+    MenuItem tmp;
 
-	_item.clear();
-	tmp.select();
-	tmp.setType(TypeItem::BUTTON);
-	tmp.setText("Start game");
-	tmp.setCoord(500, 280);
-	tmp.setSize(500, 100);
-	_item.push_back(tmp);
-	tmp.deselect();
-	tmp.setText("Join game");
-	tmp.setCoord(500, 430);
-	_item.push_back(tmp);
-	tmp.setText("Quit");
-	tmp.setCoord(500, 580);
-	_item.push_back(tmp);
-	attributeId();
+    _item.clear();
+    tmp.select();
+    tmp.setType(TypeItem::BUTTON);
+    tmp.setText("Start game");
+    tmp.setCoord(500, 280);
+    tmp.setSize(500, 100);
+    _item.push_back(tmp);
+    tmp.deselect();
+    tmp.setText("Join game");
+    tmp.setCoord(500, 430);
+    _item.push_back(tmp);
+    tmp.setText("Quit");
+    tmp.setCoord(500, 580);
+    _item.push_back(tmp);
+    attributeId(_item);
 }
 
 void Menu::changeMenu()
@@ -167,42 +177,73 @@ void Menu::changeMenu()
 	_change_menu = false;
 	switch (_step) {
 		case 1:
-		   makeOptionMenu();
-//            makeMainMenu();
+            makeMainMenu();
 			break;
 		case 2:
 			makeOptionMenu();
 			break;
 		case 3:
-			// makeJoinMenu();
+			makeJoinMenu();
 			break;
 	}
 }
 
-
-void Menu::attributeId()
+static void selectLast(std::vector<MenuItem> &item)
 {
-	int id = 1;
-
-	for (auto &i : _item) {
-		i.setId(id);
-		id++;
-	}
+    item[item.size() - 1].select();
+    item[0].deselect();
 }
+
+static void selectAnother(int before, int after, std::vector<MenuItem> &item)
+{
+    item[before].deselect();
+    item[after].select();
+}
+
+
+static int findSelected(std::vector<MenuItem> &item)
+{
+    int id = 0;
+
+    for (auto &i : item) {
+        if (i.isSelected())
+            return id;
+        id++;
+    }
+    return 0; // p-ê renvoyer -1 mais check le renvoi de findSelected
+}
+
+static void selectFirst(std::vector<MenuItem> &item)
+{
+    item[item.size() - 1].deselect();
+    item[0].select();
+}
+
 
 void Menu::handleFirstMenu(Actions &actions)
 {
-	(void)actions;
+    if (actions.up) {
+        if (_item[0].isSelected())
+            selectLast(_item);
+        else
+            selectAnother(findSelected(_item), findSelected(_item) - 1, _item);
+    } else if (actions.down) {
+        if (static_cast<unsigned int>(findSelected(_item)) == _item.size() - 1)
+            selectFirst(_item);
+        else
+            selectAnother(findSelected(_item), findSelected(_item) + 1, _item);
+    }
 }
 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
-	if (_change_menu == true)
-		changeMenu();
-	switch (_step) {
-		case 1:
-			handleFirstMenu(actions);
-			break;
-	}
-	return _item;
+    if (_change_menu == true)
+        changeMenu();
+    switch (_step) {
+        case 1:
+            handleFirstMenu(actions);
+            break;
+    }
+    clearAction(actions);
+    return _item;
 }

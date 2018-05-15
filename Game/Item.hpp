@@ -10,8 +10,6 @@
 
 # include "IEntity.hpp"
 
-# define NB_ITEMS 6 // Nombre d'items implémentés
-
 enum class eItem {
 	BOMB_UP,
 	POWER_UP,
