@@ -27,19 +27,24 @@ public:
     unsigned char getNbPlayer() const { return _nb_player; }
     void changeMenu();
     void firstMenuKey(Actions &actions, STATE &state);
+    bool changeState();
 
 private:
     void handleFirstMenu(Actions &actions, STATE &state);
+    void handleThirdMenu(Actions &actions, STATE &state);
+
     void makeMainMenu();
     void makeOptionMenu();
     void makeJoinMenu();
-    unsigned char _step;
+
+    int _step;
     unsigned char _nb_player;
     bool _change_menu;
     std::string _pseudo;
     std::string _ip;
     std::vector<eItem> _bonus;
     std::vector<MenuItem> _item;
+    int     _changeState;
 	//menu1: titre, "start game", "join game", "quit"
 	//menu2: nb_p, pseudo, liste de bonus, quit
 	//menu3: pseudo, ip, quit

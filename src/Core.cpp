@@ -10,7 +10,11 @@ void    Core::menuManager(STATE &last)
     // state = state;
     char a = 'a';
     _act = _lib.getActions();
-    _lib.affMenuItems(_menu.getMenu(a, _act, last));
+    if (_menu.changeState() == true) {
+        _lib.affMenuItems(_menu.getMenu(a, _act, last));
+    }
+    _menu.getMenu(a, _act, last);
+    _lib.drawMenu();
 }
 
 // void    Core::lobbyManager(STATE &last)
