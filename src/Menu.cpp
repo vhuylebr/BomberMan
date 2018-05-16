@@ -12,6 +12,13 @@
 Menu::Menu()
 	: _step(1), _nbPlayer(4), _change_menu(true), _changeState(true)
 {
+	_map_bonus[eItem::BOMB_UP] = true;
+	_map_bonus[eItem::POWER_UP] = true;
+	_map_bonus[eItem::SUPER_BOMB] = true;
+	_map_bonus[eItem::SPEED] = true;
+	_map_bonus[eItem::BOMB_UP] = true;
+	_map_bonus[eItem::BOMB_UP] = true;
+
 	makeMainMenu();
 }
 
@@ -28,8 +35,9 @@ static void addItemList(std::vector<MenuItem> &item)
 		MenuItem("Penetration"), // Peut-être renommer ça en "Super Bomb"
 		MenuItem("Speed"),
 		MenuItem("Wall Pass"),
-		MenuItem("Kick"),
+		MenuItem("Kick")
 	};
+	// c'est la ligne de séparation ?
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(1250, 0);
 	tmp.setSize(820, 1080);
@@ -262,19 +270,63 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 		firstMenuKey(actions, state);
 }
 
+static void fillBonus(std::map<eItem, bool> map_bonus, std::vector<eItem> &bnus)
+{
+	for (auto &i : map_bonus) {
+		if (i.second)
+			bnus.push_back(i.first);
+	}
+}
+
+std::vector<eItem> &Menu::getBonus()
+{
+	fillBonus(_map_bonus, _bonus);
+	return _bonus;
+}
+
+void Menu::checkBonus(Actions &actions)
+{
+	switch (actions.buttonPressed) {
+		case 9:
+			_map_bonus[eItem::BOMB_UP] = true;
+			break;
+		case 11:
+			_map_bonus[eItem::POWER_UP] = true;
+			break;
+		case 13:
+			_map_bonus[eItem::SUPER_BOMB] = true;
+			break;
+		case 15:
+			_map_bonus[eItem::SPEED] = true;
+			break;
+		case 17:
+			_map_bonus[eItem::BOMB_UP] = true;
+			break;
+		case 19:
+			_map_bonus[eItem::BOMB_UP] = true;
+	}
+}
+
 void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 {
 	if (actions.buttonPressed == 7)
 		state = STATE::EXIT; // Faire la connexion
-	if (actions.buttonPressed == 2) {
-		_nbPlayer+=1;
-		std::cout << "toto\n";
+	else if (actions.buttonPressed == 2) {
+		if (_nbPlayer < 4)
+			_nbPlayer += 1;
 		_item[2].setText(std::to_string(_nbPlayer));
 		_changeState = true;
 	}
-	if (actions.buttonPressed == 4) {
-		_item[2].setText(std::to_string(_nbPlayer-=1));
+	else if (actions.buttonPressed == 4) {
+		if (_nbPlayer > 2)
+			_nbPlayer -= 1;
+		_item[2].setText(std::to_string(_nbPlayer));
 		_changeState = true;
+	}
+	checkBonus(actions);
+	for (auto &i : _item) {
+		if (i.getType() != TypeItem::CHECKBOX)
+			std::cout << i.getText() << " = " << i.getId() << std::endl;
 	}
 }
 

@@ -9,6 +9,7 @@
 # define MENU_HPP_
 
 # include <vector>
+# include <map>
 # include "Actions.hpp"
 # include "MenuItem.hpp"
 # include "Item.hpp"
@@ -23,13 +24,14 @@ public:
     void deselectAll();
     std::string getIP() const { return _ip; }
     std::string getPseudo() const { return _pseudo; }
-    std::vector<eItem> &getBonus() { return _bonus; }
     unsigned char getNbPlayer() const { return _nbPlayer; }
     void changeMenu();
-    void firstMenuKey(Actions &actions, STATE &state);
     bool changeState();
+    std::vector<eItem> &getBonus();
 
 private:
+    void firstMenuKey(Actions &actions, STATE &state);
+    void checkBonus(Actions &actions);
     void handleFirstMenu(Actions &actions, STATE &state);
     void handleSecondMenu(Actions &actions, STATE &state);
     void handleThirdMenu(Actions &actions, STATE &state);
@@ -43,6 +45,7 @@ private:
     bool _change_menu;
     std::string _pseudo;
     std::string _ip;
+    std::map<eItem, bool> _map_bonus;
     std::vector<eItem> _bonus;
     std::vector<MenuItem> _item;
     int     _changeState;

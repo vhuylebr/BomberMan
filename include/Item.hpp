@@ -9,18 +9,21 @@
 # define ITEM_HPP_
 
 # include "IEntity.hpp"
+# include <string>
 
 # define NB_ITEMS 6 // Nombre d'items implémentés
 
 enum class eItem {
 	BOMB_UP,
 	POWER_UP,
-	PENE,
+	SUPER_BOMB,
 	SPEED,
 	WALL_PASS,
 	KICK,
 	NONE
 };
+
+std::string itemToStr(eItem item);
 
 class Item : public IEntity {
 public:

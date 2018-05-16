@@ -15,27 +15,27 @@ Item::~Item()
 {
 }
 
-bool 	Item::isSuperpoz() const
-{
+// bool 	Item::isSuperpoz() const
+// {
 
-}
+// }
 
-void 	Item::hit()
-{
+// void 	Item::hit()
+// {
 
-}
+// }
 
-void 	Item::poke()
-{
+// void 	Item::poke()
+// {
 
-}
+// }
 
-bool 	Item::isDestruct()
-{
+// bool 	Item::isDestruct()
+// {
 
-}
+// }
 
-IEntity::Entity	Item::getType() const
-{
-	return WALL;
-}
+// IEntity::Entity	Item::getType() const
+// {
+// 	return WALL;
+// }
