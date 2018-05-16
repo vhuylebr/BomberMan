@@ -10,7 +10,7 @@
 
 
 Menu::Menu()
-	: _step(1), _nb_player(4), _change_menu(true), _changeState(true)
+	: _step(1), _nbPlayer(4), _change_menu(true), _changeState(true)
 {
 	makeMainMenu();
 }
@@ -55,6 +55,16 @@ void Menu::deselectAll()
 	}
 }
 
+static void attributeId(std::vector<MenuItem> &item)
+{
+	int id = 1;
+
+	for (auto &i : item) {
+		i.setId(id);
+		id++;
+	}
+}
+
 void 	Menu::makeJoinMenu()
 {
 	MenuItem tmp;
@@ -78,12 +88,13 @@ void 	Menu::makeJoinMenu()
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 150);
 	tmp.setText("IP : ");
-	tmp.deselect();
+	tmp.select();
 	_item.push_back(tmp);
 	tmp.setCoord(350, 350);
 	tmp.setText("Pseudo : ");
-	tmp.deselect();
+	tmp.select();
 	_item.push_back(tmp);
+	attributeId(_item);
 }
 
 void    Menu::makeOptionMenu()
@@ -109,7 +120,7 @@ void    Menu::makeOptionMenu()
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(300, 475);
 	tmp.setSize(100, 100);
-	tmp.setText("3");
+	tmp.setText(std::to_string(_nbPlayer));
 	_item.push_back(tmp);
 
 	// -
@@ -139,18 +150,8 @@ void    Menu::makeOptionMenu()
 	tmp.setSize(200, 100);
 	tmp.setText("Quit");
 	_item.push_back(tmp);
-
 	addItemList(_item);
-}
-
-static void attributeId(std::vector<MenuItem> &item)
-{
-	int id = 1;
-
-	for (auto &i : item) {
-		i.setId(id);
-		id++;
-	}
+	attributeId(_item);
 }
 
 void    Menu::makeMainMenu()
@@ -211,8 +212,13 @@ static int findSelected(std::vector<MenuItem> &item)
 
 void Menu::firstMenuKey(Actions &actions, STATE &state)
 {
-	if (actions.space || actions.enter) { // gérer le clic et changé le selectionné si l'on a cliqué ailleurs
-		_step = findSelected(_item) + 1;
+	if (actions.space || actions.enter || actions.buttonPressed != -1) { // gérer le clic et changé le selectionné si l'on a cliqué ailleurs
+		if (actions.buttonPressed != -1)
+			_step = actions.buttonPressed;
+		else
+			_step = findSelected(_item) + 1;
+		if (_step == 3)
+			state = STATE::EXIT;
 		if (_step == 2)
 			_step = 3; // Join a Game;
 		if (_step == 1)
@@ -256,19 +262,26 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 		firstMenuKey(actions, state);
 }
 
+void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
+{
+	if (actions.buttonPressed == 7)
+		state = STATE::EXIT; // Faire la connexion
+	if (actions.buttonPressed == 2) {
+		_nbPlayer+=1;
+		std::cout << "toto\n";
+		_item[2].setText(std::to_string(_nbPlayer));
+		_changeState = true;
+	}
+	if (actions.buttonPressed == 4) {
+		_item[2].setText(std::to_string(_nbPlayer-=1));
+		_changeState = true;
+	}
+}
+
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 {
-	static int toto;
-
-	toto++;
-	if (toto < 100)
-		return ;
-	toto = 0;
-	_item[1].select();
-	_item[1].setText("caca");
-	std::cout << _item.size() << std::endl;
-	int i = findSelected(_item);
-	std::cout << i << std::endl;
+	if (actions.buttonPressed == 3)
+		state = STATE::EXIT; // Faire la connexion
 }
 
 bool 	Menu::changeState()
@@ -289,8 +302,7 @@ std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &st
 			handleFirstMenu(actions, state);
 			break;
 		case 2:
-			// std::cout << "on verra ça après ok" << std::endl;
-//			handleSecondMenu(actions, state);
+			handleSecondMenu(actions, state);
 			break;
 		case 3:
 			handleThirdMenu(actions, state);

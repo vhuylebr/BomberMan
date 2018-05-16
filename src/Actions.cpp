@@ -15,6 +15,7 @@ void    clearAction(Actions &actions)
     actions.left = false;
     actions.space = false;
     actions.escape = false;
+	actions.buttonPressed = -1;
 }
 
 void displayAction(Actions &actions)

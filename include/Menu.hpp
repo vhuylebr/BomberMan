@@ -24,13 +24,14 @@ public:
     std::string getIP() const { return _ip; }
     std::string getPseudo() const { return _pseudo; }
     std::vector<eItem> &getBonus() { return _bonus; }
-    unsigned char getNbPlayer() const { return _nb_player; }
+    unsigned char getNbPlayer() const { return _nbPlayer; }
     void changeMenu();
     void firstMenuKey(Actions &actions, STATE &state);
     bool changeState();
 
 private:
     void handleFirstMenu(Actions &actions, STATE &state);
+    void handleSecondMenu(Actions &actions, STATE &state);
     void handleThirdMenu(Actions &actions, STATE &state);
 
     void makeMainMenu();
@@ -38,7 +39,7 @@ private:
     void makeJoinMenu();
 
     int _step;
-    unsigned char _nb_player;
+    int _nbPlayer;
     bool _change_menu;
     std::string _pseudo;
     std::string _ip;
