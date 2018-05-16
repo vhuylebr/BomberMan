@@ -149,6 +149,7 @@ bool IrrLib::getRun()
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
 	_guienv->clear();
+	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
