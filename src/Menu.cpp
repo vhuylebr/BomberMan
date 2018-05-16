@@ -226,7 +226,6 @@ void Menu::firstMenuKey(Actions &actions, STATE &state)
 		if (_step == 4)
 			state = STATE::EXIT;
 		_change_menu = true;
-		_changeState = true;
 	}
 }
 
@@ -250,14 +249,10 @@ static void actionIsDown(std::vector<MenuItem> &_item)
 
 void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
-	if (actions.up) {
+	if (actions.up)
 		actionIsUp(_item);
-		_changeState = true;
-	}
-	else if (actions.down) {
+	else if (actions.down)
 		actionIsDown(_item);
-		_changeState = true;
-	}
 	else
 		firstMenuKey(actions, state);
 }
@@ -266,16 +261,10 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 {
 	if (actions.buttonPressed == 7)
 		state = STATE::EXIT; // Faire la connexion
-	if (actions.buttonPressed == 2) {
-		_nbPlayer+=1;
-		std::cout << "toto\n";
-		_item[2].setText(std::to_string(_nbPlayer));
-		_changeState = true;
-	}
-	if (actions.buttonPressed == 4) {
+	if (actions.buttonPressed == 2)
+		_item[2].setText(std::to_string(_nbPlayer+=1));
+	if (actions.buttonPressed == 4)
 		_item[2].setText(std::to_string(_nbPlayer-=1));
-		_changeState = true;
-	}
 }
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
@@ -284,9 +273,9 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 		state = STATE::EXIT; // Faire la connexion
 }
 
-bool 	Menu::changeState()
+bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
 {
-	if (_changeState == true) {
+	if (actions.buttonPressed != -1 || actions.enter || actions.space || actions.up || actions.down || _changeState == true) {
 		_changeState = false;
 		return true;
 	}

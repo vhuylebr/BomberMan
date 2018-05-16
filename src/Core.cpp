@@ -9,10 +9,9 @@ void    Core::menuManager(STATE &last)
 {
     char a = 'a';
     _act = _lib.getActions();
-    _menu.getMenu(a, _act, last); // Il faut faire une fonction action afin de check seulement si de nouvelles, bref il faut faire un truc ici
-    if (_menu.changeState() == true) {
+    if (_menu.getState(a, _act, last) == true)
         _lib.affMenuItems(_menu.getMenu(a, _act, last));
-    }
+    // if (_menu.changeState() == true) {
     _lib.drawMenu();
 }
 

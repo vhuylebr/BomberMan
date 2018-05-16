@@ -27,7 +27,8 @@ public:
     unsigned char getNbPlayer() const { return _nbPlayer; }
     void changeMenu();
     void firstMenuKey(Actions &actions, STATE &state);
-    bool changeState();
+    bool getState(char &to_write, Actions &actions, STATE &state);
+
 
 private:
     void handleFirstMenu(Actions &actions, STATE &state);
