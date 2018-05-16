@@ -61,23 +61,28 @@ void 	Menu::makeJoinMenu()
 
 	_item.clear();
 	tmp.setType(TypeItem::INPUT);
+	tmp.select();
 	tmp.setCoord(950, 150);
 	tmp.setSize(350, 100);
 	tmp.setText("Enter your IP here");
 	_item.push_back(tmp);
 	tmp.setCoord(950, 350);
 	tmp.setText("Enter your Username here");
+	tmp.deselect();
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::BUTTON);
 	tmp.setCoord(950, 550);
 	tmp.setText("Connect");
+	tmp.deselect();
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 150);
 	tmp.setText("IP : ");
+	tmp.deselect();
 	_item.push_back(tmp);
 	tmp.setCoord(350, 350);
 	tmp.setText("Pseudo : ");
+	tmp.deselect();
 	_item.push_back(tmp);
 }
 
@@ -206,10 +211,8 @@ static int findSelected(std::vector<MenuItem> &item)
 
 void Menu::firstMenuKey(Actions &actions, STATE &state)
 {
-	if (actions.space) {// ou Enter 
-		// gérer le clic et changé le selectionné si l'on a cliqué ailleurs
+	if (actions.space || actions.enter) { // gérer le clic et changé le selectionné si l'on a cliqué ailleurs
 		_step = findSelected(_item) + 1;
-		// std::cout << "step is : " << _step << std::endl;
 		if (_step == 2)
 			_step = 3; // Join a Game;
 		if (_step == 1)
@@ -255,13 +258,22 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 {
-	// std::cout << "je passe bien par ici" << std::endl;
+	static int toto;
+
+	toto++;
+	if (toto < 100)
+		return ;
+	toto = 0;
+	_item[1].select();
+	_item[1].setText("caca");
+	std::cout << _item.size() << std::endl;
+	int i = findSelected(_item);
+	std::cout << i << std::endl;
 }
 
 bool 	Menu::changeState()
 {
 	if (_changeState == true) {
-		// std::cout << "je passe bien ici val" << std::endl;
 		_changeState = false;
 		return true;
 	}
@@ -270,10 +282,8 @@ bool 	Menu::changeState()
 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
-	if (_change_menu == true) {
-		std::cout << "toto " << std::endl;
+	if (_change_menu == true)
 		changeMenu();
-	}
 	switch (_step) {
 		case 1:
 			handleFirstMenu(actions, state);
