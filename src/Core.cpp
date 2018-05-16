@@ -5,6 +5,8 @@ Core::Core()
 {
 }
 
+#include <unistd.h>
+
 void    Core::menuManager(STATE &last)
 {
     char a = 'a';
@@ -13,6 +15,16 @@ void    Core::menuManager(STATE &last)
         _lib.affMenuItems(_menu.getMenu(a, _act, last));
     // if (_menu.changeState() == true) {
     _lib.drawMenu();
+    // Les lignes qui suivent sont censées afficher les bonus qu'on a sélectionné mais ça segfault
+
+    // std::vector<eItem> bonus = _menu.getBonus();
+    // std::cout << "Bonus:" << std::endl;
+    // if (!bonus.empty())
+    //     for (auto &i : bonus) {
+    //         std::cout << itemToStr(i) << std::endl;
+    //     }
+    // std::cout << std::endl;
+    // sleep(2);
 }
 
 // void    Core::lobbyManager(STATE &last)
