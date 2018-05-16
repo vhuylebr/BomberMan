@@ -90,7 +90,7 @@ Actions	IrrLib::getActions()
 }
 
 void IrrLib::addButton(const MenuItem &item)
-{	
+{
 	std::wstring wText;
 	std::string str = item.getText();
 
@@ -150,7 +150,7 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 	_guienv->clear();
 	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
-	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
+	irr::gui::IGUIFont* font = _guienv->getFont("./media/fontlucida.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
 	if (font)
 		skin->setFont(font);
@@ -159,7 +159,7 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
 		_factory[it->getType()](*it);
 	}
-	// if (_device->isWindowActive()) {	
+	// if (_device->isWindowActive()) {
 	// 	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
 	// 	_guienv->drawAll();
 	// 	_driver->endScene();
@@ -186,5 +186,5 @@ void IrrLib::drop()
 }
 // void IrrLib::AffEntities(std::vector<GameEntities> entities)
 // {
-	
+
 // }
