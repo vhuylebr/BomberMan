@@ -286,6 +286,8 @@ std::vector<eItem> &Menu::getBonus()
 
 void Menu::checkBonus(Actions &actions)
 {
+	if (_step != 2)
+		return;
 	switch (actions.buttonPressed) {
 		case 9:
 			_map_bonus[eItem::BOMB_UP] = true;
@@ -324,10 +326,10 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 		_changeState = true;
 	}
 	checkBonus(actions);
-	for (auto &i : _item) {
-		if (i.getType() != TypeItem::CHECKBOX)
-			std::cout << i.getText() << " = " << i.getId() << std::endl;
-	}
+	// for (auto &i : _item) {
+	// 	if (i.getType() != TypeItem::CHECKBOX)
+	// 		std::cout << i.getText() << " = " << i.getId() << std::endl;
+	// }
 }
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
