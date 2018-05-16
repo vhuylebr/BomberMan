@@ -17,7 +17,6 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
 	_guienv = _device->getGUIEnvironment();
-	// skin.setSize();
 	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
 		std::placeholders::_1)));
@@ -72,7 +71,9 @@ Actions	IrrLib::getActions()
 	_actions.up = false;
 	_actions.down = false;
 	_actions.enter = false;
+	_eventReceiver.resetIdButtonPressed();
 	_actions.buttonPressed = _eventReceiver.getIdButtonPressed();
+	std::cout << _actions.buttonPressed << std::endl;
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))
