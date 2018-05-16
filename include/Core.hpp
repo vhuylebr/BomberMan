@@ -12,15 +12,16 @@ public:
     Core();
     ~Core() = default;
 
-    int run();
+    int loop();
     void menuManager(STATE &last);
     // void lobbyManager(STATE &last);
-    // void gameManager(STATE &last);
+    void gameManager(STATE &last);
 private:
     STATE   _state;
     GameCore    _game;
     Menu    _menu;
     IrrLib  _lib;
+    char    _host;
     // Lobby   _lobby;
     Actions _act;
 };
