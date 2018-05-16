@@ -40,6 +40,8 @@ class IrrLib {
 		void addCheckBox(const MenuItem &item);
 		void drop();
 		void drawMenu();
+		int getIdButtonPressed() const;
+		
 
 		// void AffEntities(std::vector<GameEntities>);
 

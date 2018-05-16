@@ -72,6 +72,7 @@ Actions	IrrLib::getActions()
 	_actions.up = false;
 	_actions.down = false;
 	_actions.enter = false;
+	_actions.buttonPressed = _eventReceiver.getIdButtonPressed();
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))
@@ -98,7 +99,7 @@ void IrrLib::addButton(const MenuItem &item)
 		wText += wchar_t(str[i]);
 	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second), 0, GUI_ID_NEW_WINDOW_BUTTON,
+			item.getCoord().second + item.getSize().second), 0, item.getId(),
 				wText.c_str());
 	button->setPressed(item.isSelected());
 	button->setDrawBorder(true);
@@ -113,7 +114,7 @@ void IrrLib::addStaticText(const MenuItem &item)
 		wText += wchar_t(str[i]);
 	_guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second), true);
+			item.getCoord().second + item.getSize().second), item.isSelected());
 }
 
 void IrrLib::addEditBox(const MenuItem &item)
@@ -148,6 +149,7 @@ bool IrrLib::getRun()
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
 	_guienv->clear();
+	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
@@ -165,11 +167,18 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 	// }
 }
 
+int IrrLib::getIdButtonPressed() const
+{
+	return _eventReceiver.getIdButtonPressed();
+}
+
 void IrrLib::drawMenu()
 {
-	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
-	_guienv->drawAll();
-	_driver->endScene();
+	if (_device->isWindowActive()) {
+		_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
+		_guienv->drawAll();
+		_driver->endScene();
+	}
 }
 
 void IrrLib::drop()
