@@ -71,9 +71,7 @@ Actions	IrrLib::getActions()
 	_actions.up = false;
 	_actions.down = false;
 	_actions.enter = false;
-	_eventReceiver.resetIdButtonPressed();
-	_actions.buttonPressed = _eventReceiver.getIdButtonPressed();
-	std::cout << _actions.buttonPressed << std::endl;
+	_actions.buttonPressed = getIdButtonPressed();
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))
