@@ -17,38 +17,40 @@
 
 class Menu {
 public:
-    Menu();
-    ~Menu();
-    std::vector<MenuItem> &getMenu(char &to_write, Actions &actions, STATE &state);
-    bool isHost() const;
-    void deselectAll();
-    std::string getIP() const { return _ip; }
-    std::string getPseudo() const { return _pseudo; }
-    unsigned char getNbPlayer() const { return _nbPlayer; }
-    void changeMenu();
-    bool getState(char &to_write, Actions &actions, STATE &state);
-    std::vector<eItem> &getBonus();
+	Menu();
+	~Menu();
+	std::vector<MenuItem> &getMenu(char &to_write, Actions &actions, STATE &state);
+	bool isHost() const;
+	void deselectAll();
+	std::string getIP() const { return _ip; }
+	std::string getPseudo() const { return _pseudo; }
+	unsigned char getNbPlayer() const { return _nbPlayer; }
+	void changeMenu();
+	bool getState(char &to_write, Actions &actions, STATE &state);
+	std::vector<eItem> &getBonus();
+	MenuItem &getItemByID(int);
+	int getStep() const {return _step;};
 
 private:
-    void firstMenuKey(Actions &actions, STATE &state);
-    void checkBonus(Actions &actions);
-    void handleFirstMenu(Actions &actions, STATE &state);
-    void handleSecondMenu(Actions &actions, STATE &state);
-    void handleThirdMenu(Actions &actions, STATE &state);
+	void firstMenuKey(Actions &actions, STATE &state);
+	void checkBonus(Actions &actions);
+	void handleFirstMenu(Actions &actions, STATE &state);
+	void handleSecondMenu(Actions &actions, STATE &state);
+	void handleThirdMenu(Actions &actions, STATE &state);
 
-    void makeMainMenu();
-    void makeOptionMenu();
-    void makeJoinMenu();
+	void makeMainMenu();
+	void makeOptionMenu();
+	void makeJoinMenu();
 
-    int _step;
-    int _nbPlayer;
-    bool _change_menu;
-    std::string _pseudo;
-    std::string _ip;
-    std::map<eItem, bool> _map_bonus;
-    std::vector<eItem> _bonus;
-    std::vector<MenuItem> _item;
-    int     _changeState;
+	int _step;
+	int _nbPlayer;
+	bool _change_menu;
+	std::string _pseudo;
+	std::string _ip;
+	std::map<eItem, bool> _map_bonus;
+	std::vector<MenuItem> _item;
+	std::vector<eItem> _bonus;
+	int     _changeState;
 	//menu1: titre, "start game", "join game", "quit"
 	//menu2: nb_p, pseudo, liste de bonus, quit
 	//menu3: pseudo, ip, quit

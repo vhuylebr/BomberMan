@@ -15,25 +15,20 @@ Item::~Item()
 {
 }
 
-// bool 	Item::isSuperpoz() const
-// {
+bool 	Item::isSuperpoz() const
+{
+	return true;
+}
 
-// }
+void 	Item::hit()
+{
 
-// void 	Item::hit()
-// {
+}
 
-// }
-
-// void 	Item::poke()
-// {
-
-// }
-
-// bool 	Item::isDestruct()
-// {
-
-// }
+bool 	Item::isDestruct()
+{
+	return true;
+}
 
 // IEntity::Entity	Item::getType() const
 // {

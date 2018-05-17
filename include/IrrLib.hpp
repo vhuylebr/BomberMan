@@ -42,6 +42,8 @@ class IrrLib {
 		void drawMenu();
 		int getIdButtonPressed() const;
 		std::wstring getInputText(MenuItem &item);
+		bool getCheckboxState(MenuItem &item);
+		std::wstring getLabelText(MenuItem &item);
 
 		// void AffEntities(std::vector<GameEntities>);
 
@@ -56,6 +58,8 @@ class IrrLib {
 		Actions _actions;
 		std::map<TypeItem, std::function<void(const MenuItem&)>> _factory;
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
+		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
+		std::vector<irr::gui::IGUIStaticText*> _labels;
 };
 
 #endif /* !IRRLIB_HPP_ */
