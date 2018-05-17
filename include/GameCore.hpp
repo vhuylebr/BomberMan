@@ -28,6 +28,7 @@ class GameCore {
 
 	private:
 		std::vector<Entity>	_entities;
+		coords				_size;
 };
 
 #endif /* !GAMECORE_HPP_ */
