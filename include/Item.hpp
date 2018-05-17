@@ -29,8 +29,11 @@ class Item : public IEntity {
 public:
 	Item();
 	~Item();
-	// void	extractInfo() final;
-	// void 	insertInfo() final;
+
+	void 	poke();
+	Entity 	getType() const final;
+	bool	isAlive() const final;
+	std::pair<std::size_t, std::size_t> getPos() const;	
 private:
 };
 
