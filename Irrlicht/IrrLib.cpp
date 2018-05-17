@@ -162,6 +162,7 @@ void IrrLib::drawMenu()
 {
 	if (_device->isWindowActive()) {
 		_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
+		_smgr->drawAll();
 		_guienv->drawAll();
 		_driver->endScene();
 	}
