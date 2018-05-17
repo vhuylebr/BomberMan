@@ -12,13 +12,6 @@
 Menu::Menu()
 	: _step(1), _nbPlayer(4), _change_menu(true), _changeState(true)
 {
-	_map_bonus[eItem::BOMB_UP] = true;
-	_map_bonus[eItem::POWER_UP] = true;
-	_map_bonus[eItem::SUPER_BOMB] = true;
-	_map_bonus[eItem::SPEED] = true;
-	_map_bonus[eItem::BOMB_UP] = true;
-	_map_bonus[eItem::BOMB_UP] = true;
-
 	makeMainMenu();
 }
 
@@ -77,15 +70,15 @@ void 	Menu::makeJoinMenu()
 	MenuItem tmp;
 
 	_item.clear();
-	tmp.setType(TypeItem::INPUT);
+	 tmp.setType(TypeItem::INPUT);
 	tmp.select();
 	tmp.setCoord(950, 150);
 	tmp.setSize(350, 100);
-	tmp.setText("Enter your IP here");
+	tmp.setText("Game1 : ");
 	_item.push_back(tmp);
-	tmp.setCoord(950, 350);
-	tmp.setText("Enter your Username here");
-	tmp.deselect();
+	// tmp.setCoord(950, 350);
+	// tmp.setText("Enter your Username here");
+	// tmp.deselect();
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::BUTTON);
 	tmp.setCoord(950, 550);
@@ -94,13 +87,13 @@ void 	Menu::makeJoinMenu()
 	_item.push_back(tmp);
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(350, 150);
-	tmp.setText("IP : ");
+	tmp.setText("Game name : ");
 	tmp.select();
 	_item.push_back(tmp);
-	tmp.setCoord(350, 350);
-	tmp.setText("Pseudo : ");
-	tmp.select();
-	_item.push_back(tmp);
+	// tmp.setCoord(350, 350);
+	// tmp.setText("Pseudo : ");
+	// tmp.select();
+	// _item.push_back(tmp);
 	attributeId(_item);
 }
 
@@ -141,21 +134,21 @@ void    Menu::makeOptionMenu()
 	tmp.setType(TypeItem::LABEL);
 	tmp.setCoord(800, 250);
 	tmp.setSize(300, 100);
-	tmp.setText("Pseudo : ");
+	tmp.setText("Game name : ");
 	_item.push_back(tmp);
 
 	// Pseudo input
 	tmp.setType(TypeItem::INPUT);
 	tmp.setCoord(800, 500);
 	tmp.setSize(300, 100);
-	tmp.setText("valerian t'es un pd");
+	tmp.setText("Game1");
 	_item.push_back(tmp);
 
 	// Quit
 	tmp.setType(TypeItem::BUTTON);
 	tmp.setCoord(850, 700);
 	tmp.setSize(200, 100);
-	tmp.setText("Quit");
+	tmp.setText("Start Game");
 	_item.push_back(tmp);
 	addItemList(_item);
 	attributeId(_item);
@@ -264,49 +257,10 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 		firstMenuKey(actions, state);
 }
 
-static void fillBonus(std::map<eItem, bool> map_bonus, std::vector<eItem> &bnus)
-{
-	for (auto &i : map_bonus) {
-		if (i.second)
-			bnus.push_back(i.first);
-	}
-}
-
-std::vector<eItem> &Menu::getBonus()
-{
-	fillBonus(_map_bonus, _bonus);
-	return _bonus;
-}
-
-void Menu::checkBonus(Actions &actions)
-{
-	if (_step != 2)
-		return;
-	switch (actions.buttonPressed) {
-		case 9:
-			_map_bonus[eItem::BOMB_UP] = true;
-			break;
-		case 11:
-			_map_bonus[eItem::POWER_UP] = true;
-			break;
-		case 13:
-			_map_bonus[eItem::SUPER_BOMB] = true;
-			break;
-		case 15:
-			_map_bonus[eItem::SPEED] = true;
-			break;
-		case 17:
-			_map_bonus[eItem::BOMB_UP] = true;
-			break;
-		case 19:
-			_map_bonus[eItem::BOMB_UP] = true;
-	}
-}
-
 void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 {
 	if (actions.buttonPressed == 7)
-		state = STATE::EXIT; // Faire la connexion
+		state = STATE::GAME;
 	else if (actions.buttonPressed == 2) {
 		if (_nbPlayer < 4)
 			_nbPlayer += 1;
@@ -319,17 +273,12 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 		_item[2].setText(std::to_string(_nbPlayer));
 		_changeState = true;
 	}
-	checkBonus(actions);
-	// for (auto &i : _item) {
-	// 	if (i.getType() != TypeItem::CHECKBOX)
-	// 		std::cout << i.getText() << " = " << i.getId() << std::endl;
-	// }
 }
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 {
 	if (actions.buttonPressed == 3)
-		state = STATE::EXIT; // Faire la connexion
+		state = STATE::GAME;
 }
 
 bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
@@ -341,6 +290,11 @@ bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
 	return false;
 }
 
+MenuItem &Menu::getItemByID(int id)
+{
+	return _item[id - 1];
+}
+ 
 std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
 	if (_change_menu == true)

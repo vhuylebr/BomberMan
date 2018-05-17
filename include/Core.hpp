@@ -6,6 +6,15 @@
 # include "IrrLib.hpp"
 # include "GameCore.hpp"
 # include "Menu.hpp"
+# include "Item.hpp"
+
+struct  parameters
+{
+    std::pair<int,int> mapSize;
+    int nbPlayers;
+    std::vector<eItem> bonuses;
+};
+
 
 class Core {
 public:
@@ -16,6 +25,8 @@ public:
     void menuManager(STATE &last);
     // void lobbyManager(STATE &last);
     void gameManager(STATE &last);
+    parameters  getParameters();
+
 private:
     STATE   _state;
     GameCore    _game;

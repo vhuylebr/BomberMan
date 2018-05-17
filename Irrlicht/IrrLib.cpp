@@ -114,6 +114,12 @@ void IrrLib::addStaticText(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
+	irr::gui::IGUIStaticText *label = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
+		item.getCoord().second, item.getCoord().first + item.getSize().first,
+			item.getCoord().second + item.getSize().second), item.isSelected());
+	label->setID(item.getId());
+	_labels.push_back(label);
+
 	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second), item.isSelected());
@@ -142,9 +148,11 @@ void IrrLib::addCheckBox(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	_guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getCoord().first,
+	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second));
+	checkbox->setID(item.getId());
+	_checkboxes.push_back(checkbox);
 }
 
 bool IrrLib::getRun()
@@ -162,6 +170,9 @@ void IrrLib::displayBackground()
 void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 {
 	_guienv->clear();
+	_checkboxes.clear();
+	_inputs.clear();
+	_labels.clear();
 	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/fontlucida.png");
@@ -185,6 +196,34 @@ std::wstring IrrLib::getInputText(MenuItem &item)
 	}
 	return (L"");
 }
+
+bool IrrLib::getCheckboxState(MenuItem &item)
+{
+	for (auto it = _checkboxes.begin(); it != _checkboxes.end(); ++it) {
+		if ((*it)->getID() == item.getId()) {
+
+//			(*it)->setChecked(true);
+			if ((*it)->isChecked() == true)
+				std::cout << "c'est true" << std::endl;
+			if ((*it)->isChecked() == false)
+				std::cout << "c'est false" << std::endl;
+
+			return ((*it)->isChecked());
+		}
+	}
+	return (false);
+}
+
+std::wstring  IrrLib::getLabelText(MenuItem &item)
+{
+	for (auto it = _labels.begin(); it != _labels.end(); ++it) {
+		if ((*it)->getID() == item.getId()) {
+			return ((*it)->getText());
+		}
+	}
+	return (L"");
+}
+
 
 int IrrLib::getIdButtonPressed() const
 {
