@@ -273,7 +273,6 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 		_item[2].setText(std::to_string(_nbPlayer));
 		_changeState = true;
 	}
-	std::cout << "action : " << actions.buttonPressed << std::endl;
 }
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
