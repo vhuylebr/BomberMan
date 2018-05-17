@@ -114,17 +114,15 @@ void IrrLib::addStaticText(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUIStaticText *label = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
-		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second), item.isSelected());
-	label->setID(item.getId());
-	_labels.push_back(label);
-
 	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second), item.isSelected());
 	text->setDrawBackground(true);
 	text->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
+	text->setID(item.getId());
+//	std::cout << "id : " << text->getID() << std::endl;
+//	std::cout << "id : " << item.getId() << std::endl;
+	_labels.push_back(text);
 }
 
 void IrrLib::addEditBox(const MenuItem &item)
@@ -138,6 +136,8 @@ void IrrLib::addEditBox(const MenuItem &item)
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second));
 	editbox->setID(item.getId());
+	std::cout << "id : " << editbox->getID() << std::endl;
+	std::cout << "id : " << item.getId() << std::endl;
 	_inputs.push_back(editbox);
 }
 
@@ -170,9 +170,9 @@ void IrrLib::displayBackground()
 void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 {
 	_guienv->clear();
-	_checkboxes.clear();
 	_inputs.clear();
 	_labels.clear();
+	_checkboxes.clear();
 	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/fontlucida.png");
@@ -181,7 +181,7 @@ void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 		skin->setFont(font);
 	else
 		std::cout << "font not set" << std::endl;
-	for (auto &it : menuItems) {
+	for (auto &&it : menuItems) {
 		_factory[it.getType()](it);
 	}
 	_skybox->setVisible(true);
@@ -189,8 +189,11 @@ void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 
 std::wstring IrrLib::getInputText(MenuItem &item)
 {
+	std::cout << "size : " << _inputs.size() << std::endl;
 	for (auto it = _inputs.begin(); it != _inputs.end(); ++it) {
+		std::cout << "tour" << std::endl;
 		if ((*it)->getID() == item.getId()) {
+			std::cout << "ici" << std::endl;
 			return ((*it)->getText());
 		}
 	}
@@ -216,10 +219,17 @@ bool IrrLib::getCheckboxState(MenuItem &item)
 
 std::wstring  IrrLib::getLabelText(MenuItem &item)
 {
+	std::cout << "size : " << _labels.size() << std::endl;
 	for (auto it = _labels.begin(); it != _labels.end(); ++it) {
+		std::wcout << L"lol :" << (*it)->getText() << std::endl;
+		std::cout << "tour" << std::endl;
+		if ((*it) == nullptr)
+			std::cout << "caca" << std::endl;
 		if ((*it)->getID() == item.getId()) {
+			std::cout << "re" << std::endl;
 			return ((*it)->getText());
 		}
+		std::cout << "rofl" << std::endl;
 	}
 	return (L"");
 }

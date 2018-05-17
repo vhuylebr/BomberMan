@@ -219,12 +219,15 @@ void Menu::firstMenuKey(Actions &actions, STATE &state)
 			_step = findSelected(_item) + 1;
 		if (_step == 3)
 			state = STATE::EXIT;
-		if (_step == 2)
+		if (_step == 2) {
 			_step = 3; // Join a Game;
-		if (_step == 1)
+			_changed = true;
+		}
+		if (_step == 1) {
 			_step = 2; // Create new Game
-		if (_step == 4)
-			state = STATE::EXIT;
+			_changed = true;
+		}
+		std::cout << actions.buttonPressed << std::endl;
 		_change_menu = true;
 	}
 }
@@ -279,6 +282,15 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 {
 	if (actions.buttonPressed == 3)
 		state = STATE::GAME;
+}
+
+bool 	Menu::stepChanged()
+{
+	if (_changed == true) {
+		_changed = false;
+		return true;	
+	}
+	return false;
 }
 
 bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)

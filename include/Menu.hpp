@@ -29,6 +29,7 @@ public:
 	bool getState(char &to_write, Actions &actions, STATE &state);
 	std::vector<eItem> &getBonus();
 	MenuItem &getItemByID(int);
+	bool 	stepChanged();
 	int getStep() const {return _step;};
 
 private:
@@ -51,6 +52,7 @@ private:
 	std::vector<MenuItem> _item;
 	std::vector<eItem> _bonus;
 	int     _changeState;
+	bool 	_changed;
 	//menu1: titre, "start game", "join game", "quit"
 	//menu2: nb_p, pseudo, liste de bonus, quit
 	//menu3: pseudo, ip, quit
