@@ -14,7 +14,6 @@ void    Core::menuManager(STATE &last)
     if (_menu.getState(a, _act, last) == true) {
 	    _lib.affMenuItems(_menu.getMenu(a, _act, last));
     }
-    // if (_menu.changeState() == true) {
     _lib.drawMenu();
 
     last = STATE::MENU;
@@ -55,10 +54,12 @@ parameters 	Core::getParameters()
 
 void    Core::gameManager(STATE &last)
 {
-    if (last == STATE::MENU)
-        _game.init(std::make_pair(10, 10)); // Deserialization from file or new here
-    else if (_host || true) { // Forcing true for now
-       /*_lib.affEntities(*/_game.calc(_lib.getActions()); /*) */
+    if (last == STATE::MENU) {
+        _game.init(std::make_pair(10, 10));
+        _lib.initGame(_game.getEntities(), _game.getSize());
+    } else if (_host || true) { // Forcing true for now
+       _lib.affGameEntities(_game.calc(_lib.getActions()));
+       _lib.drawGame();
     }
     last = STATE::GAME;
 }
@@ -66,12 +67,10 @@ void    Core::gameManager(STATE &last)
 int     Core::loop()
 {
     STATE   lstate = STATE::MENU;
-    //_state = STATE::GAME; // Game
+    // _state = STATE::GAME; // Game
     while (_state != STATE::EXIT && _lib.getRun()) {
         if (_state == STATE::MENU)
             menuManager(lstate);
-        // else if (_state == STATE::LOBBY)
-        //     lobbyManager(lstate);
         else if (_state == STATE::GAME)
              gameManager(lstate);
     }

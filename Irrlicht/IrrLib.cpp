@@ -27,6 +27,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
+	_gameFactory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -34,7 +36,6 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
-	_skybox->setVisible(true);
 	_camPos = irr::core::vector3df(10, 20, 10);
 	_camera->setPosition(_camPos);
 }
@@ -49,25 +50,15 @@ void IrrLib::createPlane()
 		irr::core::dimension2d<irr::u32>(5, 5));
 	irr::scene::ISceneNode* ground = _smgr->addMeshSceneNode(plane);
 	ground->setPosition(irr::core::vector3df(0, 0, 0));
-	ground->setMaterialTexture(0, _driver->getTexture("../media/grass.bmp"));
+	ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
-void IrrLib::addCube(double x, double y)
+void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 {
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
-	cube->setPosition(irr::core::vector3df(x, 0.5, y));
-	cube->setMaterialTexture(0, _driver->getTexture("../media/wall.bmp"));
-	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	cube->render();
-	_cubes.push_back(cube);
-}
-
-void IrrLib::addCube(irr::core::vector3df pos)
-{
-	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
-	cube->setPosition(pos);
-	cube->setMaterialTexture(0, _driver->getTexture("../media/wall.bmp"));
+	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+	cube->setMaterialTexture(0, _driver->getTexture("./media/wall.bmp"));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	cube->render();
 	_cubes.push_back(cube);
@@ -176,7 +167,7 @@ void IrrLib::displayBackground()
 	_camera->setRotation(_camPos);
 }
 
-void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
+void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 {
 	_guienv->clear();
 	_checkboxes.clear();
@@ -190,14 +181,10 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 		skin->setFont(font);
 	else
 		std::cout << "font not set" << std::endl;
-	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
-		_factory[it->getType()](*it);
+	for (auto &it : menuItems) {
+		_factory[it.getType()](it);
 	}
-	// if (_device->isWindowActive()) {
-	// 	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
-	// 	_guienv->drawAll();
-	// 	_driver->endScene();
-	// }
+	_skybox->setVisible(true);
 }
 
 std::wstring IrrLib::getInputText(MenuItem &item)
@@ -253,11 +240,33 @@ void IrrLib::drawMenu()
 	}
 }
 
+void IrrLib::drawGame()
+{
+	_skybox->setVisible(false);
+	_driver->beginScene(true, true);
+	_smgr->drawAll();
+	_guienv->drawAll();
+	_driver->endScene();
+}
+
+void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities)
+{
+	_camera->setPosition(irr::core::vector3df(20, 20, 20));
+	_camera->setTarget(irr::core::vector3df(0, 0, 0));
+	createPlane();
+	for (auto &it : gameEntities) {
+		_gameFactory[it->getType()](it);
+	}
+}
+
+void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
+{
+	for (auto &it : gameEntities) {//.begin(); it != gameEntities.end(); ++it) {
+		_gameFactory[it->getType()](it);
+	}
+}
+
 void IrrLib::drop()
 {
 	_device->drop();
 }
-// void IrrLib::AffEntities(std::vector<GameEntities> entities)
-// {
-
-// }

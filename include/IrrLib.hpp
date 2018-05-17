@@ -12,6 +12,8 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <memory>
+#include "IEntity.hpp"
 #include "MyEventReceiver.hpp"
 #include "Actions.hpp"
 #include "MenuItem.hpp"
@@ -28,12 +30,12 @@ class IrrLib {
 	public:
 		IrrLib(Actions &);
 		~IrrLib();
-		void addCube(double x, double y);
-		void addCube(irr::core::vector3df pos);
+		void addCube(std::unique_ptr<IEntity>&);
 		Actions getActions();
 		bool getRun();
 		void createPlane();
-		void affMenuItems(std::vector<MenuItem>);
+		void affGameEntities(std::vector<std::unique_ptr<IEntity>>&);
+		void affMenuItems(std::vector<MenuItem>&);
 		void addButton(const MenuItem &item);
 		void addStaticText(const MenuItem &item);
 		void addEditBox(const MenuItem &item);
@@ -45,6 +47,8 @@ class IrrLib {
 		bool getCheckboxState(MenuItem &item);
 		std::wstring getLabelText(MenuItem &item);
 		void displayBackground();
+		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities);
+		void drawGame();
 
 		// void AffEntities(std::vector<GameEntities>);
 
@@ -58,6 +62,7 @@ class IrrLib {
 		std::vector<irr::scene::ISceneNode*> _cubes;
 		Actions _actions;
 		std::map<TypeItem, std::function<void(const MenuItem&)>> _factory;
+		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _gameFactory;
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
