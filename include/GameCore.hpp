@@ -24,6 +24,7 @@ class GameCore {
 		~GameCore();
 
 		std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
+		std::vector<std::unique_ptr<IEntity>>	&getEntities();
 		void	init(std::pair<std::size_t, std::size_t>);
 		void	init(const std::string &);
 
