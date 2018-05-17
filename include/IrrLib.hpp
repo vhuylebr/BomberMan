@@ -33,7 +33,7 @@ class IrrLib {
 		void addCube(std::unique_ptr<IEntity>&);
 		Actions getActions();
 		bool getRun();
-		void createPlane();
+		void createPlane(std::pair<std::size_t, std::size_t> &size);
 		void affGameEntities(std::vector<std::unique_ptr<IEntity>>&);
 		void affMenuItems(std::vector<MenuItem>&);
 		void addButton(const MenuItem &item);

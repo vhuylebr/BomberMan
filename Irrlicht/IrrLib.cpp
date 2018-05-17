@@ -44,12 +44,12 @@ IrrLib::~IrrLib()
 {
 }
 
-void IrrLib::createPlane()
+void IrrLib::createPlane(std::pair<std::size_t, std::size_t> &size)
 {
 	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(5, 5),
 		irr::core::dimension2d<irr::u32>(5, 5));
 	irr::scene::ISceneNode* ground = _smgr->addMeshSceneNode(plane);
-	ground->setPosition(irr::core::vector3df(0, 0, 0));
+	ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
 	ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
@@ -264,11 +264,12 @@ void IrrLib::drawGame()
 	_driver->endScene();
 }
 
-void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities, std::pair<std::size_t, std::size_t> size)
+void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
+	std::pair<std::size_t, std::size_t> size)
 {
 	_camera->setPosition(irr::core::vector3df(20, 20, 20));
 	_camera->setTarget(irr::core::vector3df(0, 0, 0));
-	createPlane();
+	createPlane(size);
 	for (auto &it : gameEntities) {
 		_gameFactory[it->getType()](it);
 	}
