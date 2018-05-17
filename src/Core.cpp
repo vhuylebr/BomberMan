@@ -67,7 +67,6 @@ void    Core::gameManager(STATE &last)
 int     Core::loop()
 {
     STATE   lstate = STATE::MENU;
-    // _state = STATE::GAME; // Game
     while (_state != STATE::EXIT && _lib.getRun()) {
         if (_state == STATE::MENU) {
             menuManager(lstate);
