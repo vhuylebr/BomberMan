@@ -45,7 +45,8 @@ class IrrLib {
 		int getIdButtonPressed() const;
 		std::wstring getInputText(MenuItem &item);
 		void displayBackground();
-		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities);
+		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
+			std::pair<std::size_t, std::size_t> size);
 		void drawGame();
 
 		// void AffEntities(std::vector<GameEntities>);

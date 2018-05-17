@@ -34,7 +34,7 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
     }
 }
 
-std::pair<std::size_t, std::size_t>	getSize() const
+std::pair<std::size_t, std::size_t>	GameCore::getSize() const
 {
     return (std::make_pair(_size.x, _size.y));
 }
