@@ -20,6 +20,7 @@ void 	Wall::poke()
 
 bool 	Wall::isAlive() const
 {
+	std::cout << "Wall here, pos " << _pos.x << ":" << _pos.y << std::endl;
 	return (true);
 }
 

@@ -37,6 +37,7 @@ void    Core::gameManager(STATE &last)
     if (last == STATE::MENU)
         _game.init(std::make_pair(10, 10)); // Deserialization from file or new here
     else if (_host || true) { // Forcing true for now
+        std::cout << "qsdqsd" << std::endl;
        _lib.affGameEntities(_game.calc(_lib.getActions()));
        _lib.drawMenu();
     }
