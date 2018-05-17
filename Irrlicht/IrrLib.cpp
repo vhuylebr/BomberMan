@@ -16,6 +16,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
+	_smgr->addCameraSceneNodeFPS();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
@@ -40,7 +41,7 @@ void IrrLib::createPlane()
 		irr::core::dimension2d<irr::u32>(5, 5));
 	irr::scene::ISceneNode* ground = _smgr->addMeshSceneNode(plane);
 	ground->setPosition(irr::core::vector3df(0, 0, 0));
-	ground->setMaterialTexture(0, _driver->getTexture("../media/grass.bmp"));
+	ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
@@ -48,7 +49,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 {
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-	cube->setMaterialTexture(0, _driver->getTexture("../media/wall.bmp"));
+	cube->setMaterialTexture(0, _driver->getTexture("./media/wall.bmp"));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	cube->render();
 	_cubes.push_back(cube);
@@ -160,12 +161,12 @@ int IrrLib::getIdButtonPressed() const
 
 void IrrLib::drawMenu()
 {
-	if (_device->isWindowActive()) {
-		_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
-		_smgr->drawAll();
-		_guienv->drawAll();
+	// if (_device->isWindowActive()) {
+		_driver->beginScene(true, true);
+	_smgr->drawAll();
+		// _guienv->drawAll();
 		_driver->endScene();
-	}
+	// }
 }
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
