@@ -37,7 +37,8 @@ void    Core::gameManager(STATE &last)
     if (last == STATE::MENU)
         _game.init(std::make_pair(10, 10)); // Deserialization from file or new here
     else if (_host || true) { // Forcing true for now
-       /*_lib.affEntities(*/_game.calc(_lib.getActions()); /*) */
+       _lib.affGameEntities(_game.calc(_lib.getActions()));
+       _lib.drawMenu();
     }
     last = STATE::GAME;
 }
@@ -45,7 +46,7 @@ void    Core::gameManager(STATE &last)
 int     Core::loop()
 {
     STATE   lstate = STATE::MENU;
-    //_state = STATE::GAME; // Game
+    _state = STATE::GAME; // Game
     while (_state != STATE::EXIT && _lib.getRun()) {
         if (_state == STATE::MENU)
             menuManager(lstate);
