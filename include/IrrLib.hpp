@@ -46,7 +46,7 @@ class IrrLib {
 		std::wstring getInputText(MenuItem &item);
 		void displayBackground();
 		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities);
-		
+		void drawGame();
 
 		// void AffEntities(std::vector<GameEntities>);
 
