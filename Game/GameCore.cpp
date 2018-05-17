@@ -40,6 +40,11 @@ void    GameCore::init(const std::string &file)
     std::cout << "Loading " << file << std::endl;
 }
 
+std::vector<std::unique_ptr<IEntity>>	&getEntities()
+{
+    return _entities;
+}
+
 std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 {
  //   for (auto &i : _entities) {
