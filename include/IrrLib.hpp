@@ -44,6 +44,7 @@ class IrrLib {
 		std::wstring getInputText(MenuItem &item);
 		bool getCheckboxState(MenuItem &item);
 		std::wstring getLabelText(MenuItem &item);
+		void displayBackground();
 
 		// void AffEntities(std::vector<GameEntities>);
 
@@ -60,6 +61,9 @@ class IrrLib {
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
+		irr::scene::ICameraSceneNode	*_camera;
+		irr::scene::ISceneNode	*_skybox;
+		irr::core::vector3df		_camPos;
 };
 
 #endif /* !IRRLIB_HPP_ */
