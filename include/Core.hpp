@@ -13,6 +13,7 @@ struct  parameters
     std::pair<int,int> mapSize;
     int nbPlayers;
     std::vector<eItem> bonuses;
+    std::wstring gameName;
 };
 
 
@@ -25,9 +26,10 @@ public:
     void menuManager(STATE &last);
     // void lobbyManager(STATE &last);
     void gameManager(STATE &last);
-    parameters  getParameters();
+    void  getParameters();
 
 private:
+    parameters _param;
     STATE   _state;
     GameCore    _game;
     Menu    _menu;

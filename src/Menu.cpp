@@ -227,7 +227,6 @@ void Menu::firstMenuKey(Actions &actions, STATE &state)
 			_step = 2; // Create new Game
 			_changed = true;
 		}
-		std::cout << actions.buttonPressed << std::endl;
 		_change_menu = true;
 	}
 }
@@ -295,6 +294,11 @@ bool 	Menu::stepChanged()
 
 bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
 {
+	if (_step == 2 && actions.buttonPressed == 7) {
+		std::cout << "salut toi " << std::endl;
+		state = STATE::GAME;
+		return false;
+	}
 	if (actions.buttonPressed != -1 || actions.enter || actions.space || actions.up || actions.down || _changeState == true) {
 		_changeState = false;
 		return true;
