@@ -249,7 +249,7 @@ void IrrLib::drawGame()
 	_driver->endScene();
 }
 
-void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities)
+void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities, std::pair<std::size_t, std::size_t> size)
 {
 	_camera->setPosition(irr::core::vector3df(20, 20, 20));
 	_camera->setTarget(irr::core::vector3df(0, 0, 0));
