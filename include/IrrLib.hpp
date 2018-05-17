@@ -48,6 +48,7 @@ class IrrLib {
 		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 			std::pair<std::size_t, std::size_t> size);
 		void drawGame();
+		void cleanMenu();
 
 		// void AffEntities(std::vector<GameEntities>);
 

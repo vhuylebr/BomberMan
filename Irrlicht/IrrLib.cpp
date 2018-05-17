@@ -201,6 +201,11 @@ void IrrLib::drawMenu()
 	}
 }
 
+void IrrLib::cleanMenu()
+{
+	_guienv->clear();
+}
+
 void IrrLib::drawGame()
 {
 	_skybox->setVisible(false);
