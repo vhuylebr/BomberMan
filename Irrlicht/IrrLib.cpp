@@ -123,9 +123,11 @@ void IrrLib::addEditBox(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	_guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
+	irr::gui::IGUIEditBox *editbox = _guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second));
+	editbox->setID(item.getId());
+	_inputs.push_back(editbox);
 }
 
 void IrrLib::addCheckBox(const MenuItem &item)
@@ -164,6 +166,16 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 	// 	_guienv->drawAll();
 	// 	_driver->endScene();
 	// }
+}
+
+std::wstring IrrLib::getInputText(MenuItem &item)
+{
+	for (auto it = _inputs.begin(); it != _inputs.end(); ++it) {
+		if ((*it)->getID() == item.getId()) {
+			return ((*it)->getText());
+		}
+	}
+	return (L"");
 }
 
 int IrrLib::getIdButtonPressed() const

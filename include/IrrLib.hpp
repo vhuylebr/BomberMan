@@ -41,7 +41,7 @@ class IrrLib {
 		void drop();
 		void drawMenu();
 		int getIdButtonPressed() const;
-		
+		std::wstring getInputText(MenuItem &item);
 
 		// void AffEntities(std::vector<GameEntities>);
 
@@ -55,6 +55,7 @@ class IrrLib {
 		std::vector<irr::scene::ISceneNode*> _cubes;
 		Actions _actions;
 		std::map<TypeItem, std::function<void(const MenuItem&)>> _factory;
+		std::vector<irr::gui::IGUIEditBox*> _inputs;
 };
 
 #endif /* !IRRLIB_HPP_ */
