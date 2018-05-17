@@ -16,7 +16,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
-	_camera = _smgr->addCameraSceneNode();
+	_camera = _smgr->addCameraSceneNodeFPS();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,

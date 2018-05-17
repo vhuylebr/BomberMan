@@ -40,7 +40,7 @@ void    GameCore::init(const std::string &file)
     std::cout << "Loading " << file << std::endl;
 }
 
-std::vector<std::unique_ptr<IEntity>>	&getEntities()
+std::vector<std::unique_ptr<IEntity>>	&GameCore::getEntities()
 {
     return _entities;
 }
