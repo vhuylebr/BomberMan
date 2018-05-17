@@ -14,7 +14,6 @@ void    Core::menuManager(STATE &last)
     if (_menu.getState(a, _act, last) == true) {
 	    _lib.affMenuItems(_menu.getMenu(a, _act, last));
     }
-    // if (_menu.changeState() == true) {
     _lib.drawMenu();
     last = STATE::MENU;
     // Les lignes qui suivent sont censées afficher les bonus qu'on a sélectionné mais ça segfault
@@ -41,7 +40,7 @@ void    Core::gameManager(STATE &last)
         _lib.initGame(_game.getEntities(), _game.getSize());
     } else if (_host || true) { // Forcing true for now
        _lib.affGameEntities(_game.calc(_lib.getActions()));
-       _lib.drawMenu();
+       _lib.drawGame();
     }
     last = STATE::GAME;
 }
@@ -53,8 +52,6 @@ int     Core::loop()
     while (_state != STATE::EXIT && _lib.getRun()) {
         if (_state == STATE::MENU)
             menuManager(lstate);
-        // else if (_state == STATE::LOBBY)
-        //     lobbyManager(lstate);
         else if (_state == STATE::GAME)
              gameManager(lstate);
     }

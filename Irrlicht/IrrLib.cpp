@@ -16,7 +16,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
-	_camera = _smgr->addCameraSceneNodeFPS();
+	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
@@ -36,7 +36,6 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
-	_skybox->setVisible(false);
 	_camPos = irr::core::vector3df(10, 20, 10);
 	_camera->setPosition(_camPos);
 }
@@ -171,6 +170,7 @@ void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 	for (auto &it : menuItems) {
 		_factory[it.getType()](it);
 	}
+	_skybox->setVisible(true);
 }
 
 std::wstring IrrLib::getInputText(MenuItem &item)
@@ -198,8 +198,19 @@ void IrrLib::drawMenu()
 	}
 }
 
+void IrrLib::drawGame()
+{
+	_skybox->setVisible(false);
+	_driver->beginScene(true, true);
+	_smgr->drawAll();
+	_guienv->drawAll();
+	_driver->endScene();
+}
+
 void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
+	_camera->setPosition(irr::core::vector3df(20, 20, 20));
+	_camera->setTarget(irr::core::vector3df(0, 0, 0));
 	createPlane();
 	for (auto &it : gameEntities) {
 		_gameFactory[it->getType()](it);
