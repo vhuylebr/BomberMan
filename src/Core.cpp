@@ -69,10 +69,13 @@ int     Core::loop()
     STATE   lstate = STATE::MENU;
     // _state = STATE::GAME; // Game
     while (_state != STATE::EXIT && _lib.getRun()) {
-        if (_state == STATE::MENU)
+        if (_state == STATE::MENU) {
             menuManager(lstate);
-        else if (_state == STATE::GAME)
+            if (_state == STATE::GAME)
+                _lib.cleanMenu();
+        } else if (_state == STATE::GAME)
              gameManager(lstate);
+        
     }
     return 0;
 }
