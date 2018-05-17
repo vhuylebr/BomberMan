@@ -43,6 +43,9 @@ class IrrLib {
 		void drop();
 		void drawMenu();
 		int getIdButtonPressed() const;
+		std::wstring getInputText(MenuItem &item);
+		void displayBackground();
+		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities);
 		
 
 		// void AffEntities(std::vector<GameEntities>);
@@ -58,6 +61,10 @@ class IrrLib {
 		Actions _actions;
 		std::map<TypeItem, std::function<void(const MenuItem&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _gameFactory;
+		std::vector<irr::gui::IGUIEditBox*> _inputs;
+		irr::scene::ICameraSceneNode	*_camera;
+		irr::scene::ISceneNode	*_skybox;
+		irr::core::vector3df		_camPos;
 };
 
 #endif /* !IRRLIB_HPP_ */

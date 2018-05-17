@@ -10,13 +10,13 @@
 IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown)
 {
-	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080),
+	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
-	_smgr->addCameraSceneNodeFPS();
+	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
@@ -29,6 +29,16 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_gameFactory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
+	_skybox = _smgr->addSkyBoxSceneNode(
+		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
+	_skybox->setVisible(false);
+	_camPos = irr::core::vector3df(10, 20, 10);
+	_camera->setPosition(_camPos);
 }
 
 IrrLib::~IrrLib()
@@ -83,7 +93,7 @@ Actions	IrrLib::getActions()
 }
 
 void IrrLib::addButton(const MenuItem &item)
-{	
+{
 	std::wstring wText;
 	std::string str = item.getText();
 
@@ -116,9 +126,11 @@ void IrrLib::addEditBox(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	_guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
+	irr::gui::IGUIEditBox *editbox = _guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second));
+	editbox->setID(item.getId());
+	_inputs.push_back(editbox);
 }
 
 void IrrLib::addCheckBox(const MenuItem &item)
@@ -138,12 +150,19 @@ bool IrrLib::getRun()
 	return _device->run();
 }
 
+void IrrLib::displayBackground()
+{
+	_camPos.rotateXZBy(-0.2, irr::core::vector3df(20, 20, 20));
+	_camera->setTarget(_camPos);
+	_camera->setRotation(_camPos);
+}
+
 void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 {
 	_guienv->clear();
 	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
-	irr::gui::IGUIFont* font = _guienv->getFont("./media/fonthaettenschweiler.bmp");
+	irr::gui::IGUIFont* font = _guienv->getFont("./media/fontlucida.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
 	if (font)
 		skin->setFont(font);
@@ -154,6 +173,16 @@ void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 	}
 }
 
+std::wstring IrrLib::getInputText(MenuItem &item)
+{
+	for (auto it = _inputs.begin(); it != _inputs.end(); ++it) {
+		if ((*it)->getID() == item.getId()) {
+			return ((*it)->getText());
+		}
+	}
+	return (L"");
+}
+
 int IrrLib::getIdButtonPressed() const
 {
 	return _eventReceiver.getIdButtonPressed();
@@ -161,12 +190,12 @@ int IrrLib::getIdButtonPressed() const
 
 void IrrLib::drawMenu()
 {
-	// if (_device->isWindowActive()) {
+	if (_device->isWindowActive()) {
 		_driver->beginScene(true, true);
-	_smgr->drawAll();
-		// _guienv->drawAll();
+		_smgr->drawAll();
+		_guienv->drawAll();
 		_driver->endScene();
-	// }
+	}
 }
 
 void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities)
