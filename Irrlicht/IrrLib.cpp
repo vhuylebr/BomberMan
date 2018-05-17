@@ -10,12 +10,13 @@
 IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown)
 {
-	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1920, 1080),
+	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
+	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
 	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
@@ -26,6 +27,16 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
+	_skybox = _smgr->addSkyBoxSceneNode(
+		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
+		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
+	_skybox->setVisible(true);
+	_camPos = irr::core::vector3df(10, 20, 10);
+	_camera->setPosition(_camPos);
 }
 
 IrrLib::~IrrLib()
@@ -147,6 +158,13 @@ bool IrrLib::getRun()
 	return _device->run();
 }
 
+void IrrLib::displayBackground()
+{
+	_camPos.rotateXZBy(-0.2, irr::core::vector3df(20, 20, 20));
+	_camera->setTarget(_camPos);
+	_camera->setRotation(_camPos);
+}
+
 void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 {
 	_guienv->clear();
@@ -186,7 +204,8 @@ int IrrLib::getIdButtonPressed() const
 void IrrLib::drawMenu()
 {
 	if (_device->isWindowActive()) {
-		_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
+		_driver->beginScene(true, true);
+		_smgr->drawAll();
 		_guienv->drawAll();
 		_driver->endScene();
 	}
