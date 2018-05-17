@@ -119,12 +119,15 @@ void IrrLib::addStaticText(const MenuItem &item)
 {
 	std::wstring wText;
 	std::string str = item.getText();
+	irr::gui::IGUIStaticText	*text;
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	_guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
+	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
 		item.getCoord().second, item.getCoord().first + item.getSize().first,
 			item.getCoord().second + item.getSize().second), item.isSelected());
+	text->setDrawBackground(true);
+	text->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 }
 
 void IrrLib::addEditBox(const MenuItem &item)
