@@ -16,13 +16,12 @@ class Wall : public IEntity {
 		~Wall();
 		bool 	isSuperpoz() const final;
 		void 	hit() final;
-		void 	poke() final;
+		void 	poke();
 		bool 	isDestruct() final;
 		// void	extractInfo() final;
 		// void 	insertInfo() final;
-		IEntity::Entity 	getType() const final;
+		Entity 	getType() const final;
 
-	protected:
 	private:
 };
 

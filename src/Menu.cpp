@@ -48,7 +48,6 @@ static void addItemList(std::vector<MenuItem> &item)
 		tmp.setCoord(1400, (i + 1) * 100 + 100 );
 		tmp.setSize(50, 50);
 		item.push_back(tmp);
-
 		bonus[i].setType(TypeItem::LABEL);
 		bonus[i].setCoord(1500, ((i + 1) * 100 + 100));
 		bonus[i].setSize(100, 50);

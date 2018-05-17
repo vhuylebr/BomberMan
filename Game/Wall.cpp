@@ -18,12 +18,12 @@ Wall::~Wall()
 
 bool 	Wall::isSuperpoz() const
 {
-
+	return (false);
 }
 
 void 	Wall::hit()
 {
-
+	
 }
 
 void 	Wall::poke()
@@ -33,10 +33,10 @@ void 	Wall::poke()
 
 bool 	Wall::isDestruct()
 {
-
+	return (false);
 }
 
-IEntity::Entity	Wall::getType() const
+Entity	Wall::getType() const
 {
-	return ITEM;
+	return Entity::ITEM;
 }
