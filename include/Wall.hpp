@@ -8,24 +8,22 @@
 #ifndef WALL_HPP_
 	#define WALL_HPP_
 
+#include <cstddef>
+# include "IEntity.hpp"
+
 struct coords {
 	std::size_t	x;
 	std::size_t	y;
 };
 
-# include "IEntity.hpp"
-
 class Wall : public IEntity {
 	public:
-		Wall();
-		~Wall();
-		bool 	isSuperpoz() const final;
-		void 	hit() final;
+		Wall(std::size_t, std::size_t);
+		~Wall() {};
 		void 	poke();
-		bool 	isDestruct() final;
-		// void	extractInfo() final;
-		// void 	insertInfo() final;
 		Entity 	getType() const final;
+		bool	isAlive() const final;
+		std::pair<std::size_t, std::size_t> getPos() const;
 
 	private:
 	coords			_pos;

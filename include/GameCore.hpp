@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <utility>
 #include "Item.hpp"
 #include "Actions.hpp"
@@ -22,12 +23,12 @@ class GameCore {
 		GameCore();
 		~GameCore();
 
-		std::vector<Entity>	&calc(Actions);
+		std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
 		void	init(std::pair<std::size_t, std::size_t>);
 		void	init(const std::string &);
 
 	private:
-		std::vector<Entity>	_entities;
+		std::vector<std::unique_ptr<IEntity>>	_entities;
 		coords				_size;
 };
 
