@@ -26,6 +26,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
+	_gameFactory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
+		std::placeholders::_1)));
 }
 
 IrrLib::~IrrLib()
@@ -42,20 +44,10 @@ void IrrLib::createPlane()
 	ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
-void IrrLib::addCube(double x, double y)
+void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 {
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
-	cube->setPosition(irr::core::vector3df(x, 0.5, y));
-	cube->setMaterialTexture(0, _driver->getTexture("../media/wall.bmp"));
-	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	cube->render();
-	_cubes.push_back(cube);
-}
-
-void IrrLib::addCube(irr::core::vector3df pos)
-{
-	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
-	cube->setPosition(pos);
+	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 	cube->setMaterialTexture(0, _driver->getTexture("../media/wall.bmp"));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	cube->render();
@@ -145,7 +137,7 @@ bool IrrLib::getRun()
 	return _device->run();
 }
 
-void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
+void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 {
 	_guienv->clear();
 	_eventReceiver.resetIdButtonPressed();
@@ -156,14 +148,9 @@ void IrrLib::affMenuItems(std::vector<MenuItem> menuItems)
 		skin->setFont(font);
 	else
 		std::cout << "font not set" << std::endl;
-	for (auto it = menuItems.begin(); it != menuItems.end(); ++it) {
-		_factory[it->getType()](*it);
+	for (auto &it : menuItems) {
+		_factory[it.getType()](it);
 	}
-	// if (_device->isWindowActive()) {	
-	// 	_driver->beginScene(true, true, irr::video::SColor(0,100,100,100));
-	// 	_guienv->drawAll();
-	// 	_driver->endScene();
-	// }
 }
 
 int IrrLib::getIdButtonPressed() const
@@ -180,11 +167,15 @@ void IrrLib::drawMenu()
 	}
 }
 
+void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
+{
+	createPlane();
+	for (auto &it : gameEntities) {//.begin(); it != gameEntities.end(); ++it) {
+		_gameFactory[it->getType()](it);
+	}
+}
+
 void IrrLib::drop()
 {
 	_device->drop();
 }
-// void IrrLib::AffEntities(std::vector<GameEntities> entities)
-// {
-	
-// }
