@@ -38,7 +38,7 @@ void    Core::gameManager(STATE &last)
 {
     if (last == STATE::MENU) {
         _game.init(std::make_pair(10, 10));
-        _lib.initGame(_game.getEntities());
+        _lib.initGame(_game.getEntities(), _game.getSize());
     } else if (_host || true) { // Forcing true for now
        _lib.affGameEntities(_game.calc(_lib.getActions()));
        _lib.drawMenu();

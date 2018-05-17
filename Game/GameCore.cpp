@@ -34,6 +34,11 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
     }
 }
 
+std::pair<std::size_t, std::size_t>	getSize() const
+{
+    return (std::make_pair(_size.x, _size.y));
+}
+
 void    GameCore::init(const std::string &file)
 {
     init(std::make_pair(100, 100));
