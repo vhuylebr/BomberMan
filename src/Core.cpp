@@ -11,7 +11,7 @@ void    Core::menuManager(STATE &last)
     char a = 'a';
     _act = _lib.getActions();
     if (_menu.getState(a, _act, last) == true)
-        _lib.affMenuItems(_menu.getMenu(a, _act, last));
+        _lib.affMenuItems(_menu.getMenu(a, _act, _state));
     // if (_menu.changeState() == true) {
     _lib.drawMenu();
     last = STATE::MENU;

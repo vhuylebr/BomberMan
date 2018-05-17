@@ -7,7 +7,8 @@
 
 #include "Wall.hpp"
 
-Wall::Wall()
+Wall::Wall(size_t x, size_t y)
+	:_pos(x, y)
 {
 }
 
@@ -23,7 +24,6 @@ bool 	Wall::isSuperpoz() const
 
 void 	Wall::hit()
 {
-	
 }
 
 void 	Wall::poke()

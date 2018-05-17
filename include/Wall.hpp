@@ -8,6 +8,11 @@
 #ifndef WALL_HPP_
 	#define WALL_HPP_
 
+struct coords {
+	std::size_t	x;
+	std::size_t	y;
+};
+
 # include "IEntity.hpp"
 
 class Wall : public IEntity {
@@ -23,6 +28,7 @@ class Wall : public IEntity {
 		Entity 	getType() const final;
 
 	private:
+	coords			_pos;
 };
 
 #endif /* !WALL_HPP_ */
