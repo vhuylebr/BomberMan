@@ -311,7 +311,7 @@ static bool keyPressed(Actions &actions, bool changeState)
 	|| actions.up || actions.down || actions.escape || changeState == true);
 }
 
-bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
+bool 	Menu::getState(Actions &actions, STATE &state)
 {
 	if (_step == 2 && actions.buttonPressed == 7) {
 		state = STATE::GAME;
@@ -334,7 +334,7 @@ std::vector<MenuItem> &Menu::getMenuItems()
 	return _item;
 }
 
-void Menu::getMenu(char &to_write, Actions &actions, STATE &state)
+void Menu::getMenu(Actions &actions, STATE &state)
 {
 	if (_change_menu == true)
 		changeMenu();

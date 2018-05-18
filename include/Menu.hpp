@@ -19,7 +19,7 @@ class Menu {
 public:
 	Menu();
 	~Menu();
-	void getMenu(char &to_write, Actions &actions, STATE &state);
+	void getMenu(Actions &actions, STATE &state);
 	bool isHost() const;
 	void deselectAll();
 	std::string getIP() const { return _ip; }
@@ -27,7 +27,7 @@ public:
 	unsigned char getNbPlayer() const { return _nbPlayer; }
 	std::vector<MenuItem> &getMenuItems();
 	void changeMenu();
-	bool getState(char &to_write, Actions &actions, STATE &state);
+	bool getState(Actions &actions, STATE &state);
 	std::vector<eItem> &getBonus();
 	MenuItem &getItemByID(int);
 	bool 	stepChanged(STATE &state);
