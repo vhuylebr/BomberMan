@@ -261,6 +261,12 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 
 void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 {
+	if (actions.escape == true) {
+		_change_menu = true;
+		_step = 1;
+		_changeState = true;
+		_changed = true;
+	}
 	if (actions.buttonPressed == 7)
 		state = STATE::GAME;
 	else if (actions.buttonPressed == 2) {
@@ -279,6 +285,12 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 {
+	if (actions.escape == true) {
+		_change_menu = true;
+		_changed = true;
+		_step = 1;
+		return ;
+	}
 	if (actions.buttonPressed == 3)
 		state = STATE::GAME;
 }
@@ -293,13 +305,19 @@ bool 	Menu::stepChanged(STATE &state)
 	return false;
 }
 
+static bool keyPressed(Actions &actions, bool changeState)
+{
+	return (actions.buttonPressed != -1 || actions.enter || actions.space
+	|| actions.up || actions.down || actions.escape || changeState == true);
+}
+
 bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
 {
 	if (_step == 2 && actions.buttonPressed == 7) {
 		state = STATE::GAME;
 		return false;
 	}
-	if (actions.buttonPressed != -1 || actions.enter || actions.space || actions.up || actions.down || _changeState == true) {
+	if (keyPressed(actions, _changeState)) {
 		_changeState = false;
 		return true;
 	}
@@ -331,5 +349,4 @@ void Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 			handleThirdMenu(actions, state);
 			break;
 	}
-	clearAction(actions);
 }
