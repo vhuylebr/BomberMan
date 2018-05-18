@@ -36,8 +36,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
-	_camPos = irr::core::vector3df(10, 20, 10);
-	_camera->setPosition(_camPos);
+	_camTarget = irr::core::vector3df(10, 0, 10);
+	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 }
 
 IrrLib::~IrrLib()
@@ -158,9 +158,8 @@ bool IrrLib::getRun()
 
 void IrrLib::displayBackground()
 {
-	_camPos.rotateXZBy(-0.2, irr::core::vector3df(20, 20, 20));
-	_camera->setTarget(_camPos);
-	_camera->setRotation(_camPos);
+	_camTarget.rotateXZBy(-0.2, irr::core::vector3df(0, 0, 0));
+	_camera->setTarget(_camTarget);
 }
 
 void IrrLib::initMenu(std::vector<MenuItem> &menuItems)

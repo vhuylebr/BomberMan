@@ -71,7 +71,7 @@ class IrrLib {
 		std::vector<irr::gui::IGUIStaticText*> _labels;
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
-		irr::core::vector3df		_camPos;
+		irr::core::vector3df		_camTarget;
 };
 
 #endif /* !IRRLIB_HPP_ */
