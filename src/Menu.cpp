@@ -331,5 +331,4 @@ void Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 			handleThirdMenu(actions, state);
 			break;
 	}
-	clearAction(actions);
 }
