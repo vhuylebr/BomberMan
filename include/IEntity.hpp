@@ -19,7 +19,8 @@ enum class Entity {
     BUTTON,
     CHECKBOX,
     INPUT,
-    LABEL
+    LABEL,
+    LISTBOX
 };
 
 class IEntity {

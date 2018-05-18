@@ -29,6 +29,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(Entity::LISTBOX, std::bind(&IrrLib::addListBox, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -36,8 +38,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
-	_camPos = irr::core::vector3df(10, 20, 10);
-	_camera->setPosition(_camPos);
+	_camTarget = irr::core::vector3df(10, 0, 10);
+	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 }
 
 IrrLib::~IrrLib()
@@ -155,6 +157,25 @@ void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
 	_checkboxes.push_back(checkbox);
 }
 
+void IrrLib::addListBox(std::unique_ptr<IEntity> &entity)
+{
+	auto item = static_cast<MenuItem*>(entity.get());
+
+	_listbox = _guienv->addListBox(irr::core::rect<irr::s32>(item->getPos().first, 
+		item->getPos().second,	item->getPos().first + item->getSize().first, 
+		item->getPos().second + item->getSize().second));
+	_listbox->setItemHeight(20);
+//	_listbox->setAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
+	int idx = 0;
+	for (auto &i : item->getChoices())
+	{
+		const wchar_t* kek = i.c_str();
+		_listbox->addItem(kek);
+		_listbox->setItemOverrideColor(idx, irr::video::SColor(255,255,255,255));
+		idx++;
+	}
+}
+
 bool IrrLib::getRun()
 {
 	return _device->run();
@@ -162,9 +183,8 @@ bool IrrLib::getRun()
 
 void IrrLib::displayBackground()
 {
-	_camPos.rotateXZBy(-0.2, irr::core::vector3df(20, 20, 20));
-	_camera->setTarget(_camPos);
-	_camera->setRotation(_camPos);
+	_camTarget.rotateXZBy(-0.2, irr::core::vector3df(0, 0, 0));
+	_camera->setTarget(_camTarget);
 }
 
 void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
@@ -230,6 +250,13 @@ std::wstring  IrrLib::getLabelText(std::unique_ptr<IEntity> &item)
 	}
 	return (L"");
 }
+
+std::wstring	IrrLib::getListBoxChoice(std::unique_ptr<IEntity> &item)
+{
+	int toto = _listbox->getSelected();
+	return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
+}
+
 
 int IrrLib::getIdButtonPressed() const
 {

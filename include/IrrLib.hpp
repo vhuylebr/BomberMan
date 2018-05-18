@@ -41,6 +41,7 @@ class IrrLib {
 		void addStaticText(std::unique_ptr<IEntity>&);
 		void addEditBox(std::unique_ptr<IEntity>&);
 		void addCheckBox(std::unique_ptr<IEntity>&);
+		void addListBox(std::unique_ptr<IEntity>&);
 		
 		std::wstring getInputText(std::unique_ptr<IEntity> &item);
 		bool getCheckboxState(std::unique_ptr<IEntity> &item);
@@ -51,6 +52,7 @@ class IrrLib {
 		void drop();
 		void drawMenu();
 		int getIdButtonPressed() const;
+		std::wstring getListBoxChoice(std::unique_ptr<IEntity>&);
 		void displayBackground();
 		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 			std::pair<std::size_t, std::size_t> size);
@@ -72,9 +74,10 @@ class IrrLib {
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
+		irr::gui::IGUIListBox *_listbox;
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
-		irr::core::vector3df		_camPos;
+		irr::core::vector3df		_camTarget;
 };
 
 #endif /* !IRRLIB_HPP_ */

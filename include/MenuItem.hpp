@@ -10,6 +10,7 @@
 
 # include <utility>
 # include <string>
+# include <vector>
 # include "IEntity.hpp"
 
 typedef std::pair<std::size_t, std::size_t> pairUC;
@@ -25,6 +26,7 @@ public:
     void select() { _selected = true; }
     void setCoord(unsigned int x, unsigned int y);
     void setSize(unsigned int x, unsigned int y);
+    void setChoices(std::vector<std::wstring> choices) { _choices = choices; };
     void setTexture() {}
     void deselect() { _selected = false; }
     bool isSelected() const { return _selected; }
@@ -33,6 +35,7 @@ public:
     pairUC getSize() const { return _size; }
     void setType(Entity type) { _type = type; }
     Entity getType() const { return _type; }
+    std::vector<std::wstring> getChoices() const { return _choices; }
     void setId(int id) { _id = id; }
     int getId() const { return _id; }
 
@@ -43,6 +46,7 @@ private:
     std::pair<std::size_t, std::size_t> _coord;
     std::pair<std::size_t, std::size_t> _size;
     bool _selected;
+    std::vector<std::wstring> _choices;
 };
 
 #endif /* !MENUITEM_HPP_ */

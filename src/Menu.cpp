@@ -32,6 +32,44 @@ void 	Menu::makeJoinMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 1, "Game1 : ", 950, 150, 350, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Connect", 950, 550, 350, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, "Game name : ", 350, 150, 350, 100)));
+	std::vector<std::wstring> toto;
+	toto.push_back(L"Hello1");
+	toto.push_back(L"there1");
+	toto.push_back(L"Hello2");
+	toto.push_back(L"there2");
+	toto.push_back(L"Hello3");
+	toto.push_back(L"there3");
+	toto.push_back(L"Hello4");
+	toto.push_back(L"there4");
+	toto.push_back(L"Hello5");
+	toto.push_back(L"there5");
+	toto.push_back(L"Hello6");
+	toto.push_back(L"there6");
+	toto.push_back(L"Hello7");
+	toto.push_back(L"there7");
+	toto.push_back(L"Hello8");
+	toto.push_back(L"there8");
+	toto.push_back(L"Hello9");
+	toto.push_back(L"there9");
+	toto.push_back(L"Hello10");
+	toto.push_back(L"there10");
+	toto.push_back(L"Hello11");
+	toto.push_back(L"there11");
+	toto.push_back(L"Hello12");
+	toto.push_back(L"there12");
+	toto.push_back(L"Hello13");
+	toto.push_back(L"there13");
+	toto.push_back(L"Hello14");
+	toto.push_back(L"there14");
+	toto.push_back(L"Hello15");
+	toto.push_back(L"there15");
+	toto.push_back(L"Hello16");
+	toto.push_back(L"there16");
+
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 1, "", 500, 250, 600, 400)));
+	static_cast<MenuItem*>(_item[0].get())->setChoices(toto);
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", 500, 150, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Connect", 500, 700, 600, 100)));
 }
 
 void    Menu::makeOptionMenu()
