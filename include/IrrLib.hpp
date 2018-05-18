@@ -35,7 +35,7 @@ class IrrLib {
 		bool getRun();
 		void createPlane(std::pair<std::size_t, std::size_t> &size);
 		void affGameEntities(std::vector<std::unique_ptr<IEntity>>&);
-		void affMenuItems(std::vector<MenuItem>&);
+		// void affMenuItems(std::vector<MenuItem>&);
 		void addButton(const MenuItem &item);
 		void addStaticText(const MenuItem &item);
 		void addEditBox(const MenuItem &item);
@@ -52,6 +52,7 @@ class IrrLib {
 		void drawGame();
 		void cleanMenu();
 		void initMenu(std::vector<MenuItem> &);
+		void updateLabel(MenuItem &item);
 		// void AffEntities(std::vector<GameEntities>);
 
 	private:

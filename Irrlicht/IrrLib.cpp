@@ -183,11 +183,13 @@ void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
 	}
 }
 
-void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
+void IrrLib::updateLabel(MenuItem &item)
 {
-	// for (auto &it : menuItems) {
-	// 	_factory[it.getType()](it);
-	// }
+	for (auto &it : _labels) {
+		if (item.getId() == it.getID()) {
+			it.setText(item.getText());
+		}
+	}
 }
 
 std::wstring IrrLib::getInputText(MenuItem &item)
