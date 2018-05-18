@@ -185,10 +185,11 @@ void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
 
 void IrrLib::updateLabel(MenuItem &item)
 {
-	std::wstring newlabel;
-	std::copy(item.getText().begin(), item.getText().end(), std::back_inserter(newlabel));
-	const wchar_t* newnewlabel = newlabel.c_str();
+	std::wstring wText;
 
+	for (unsigned int i = 0; i < item.getText().size(); ++i)
+		wText += wchar_t(item.getText()[i]);
+	const wchar_t* newnewlabel = wText.c_str();
 	for (auto &it : _labels) {
 		if (item.getId() == (*it).getID()) {
 			(*it).setText(newnewlabel);
@@ -210,13 +211,6 @@ bool IrrLib::getCheckboxState(MenuItem &item)
 {
 	for (auto it = _checkboxes.begin(); it != _checkboxes.end(); ++it) {
 		if ((*it)->getID() == item.getId()) {
-
-//			(*it)->setChecked(true);
-			if ((*it)->isChecked() == true)
-				std::cout << "c'est true" << std::endl;
-			if ((*it)->isChecked() == false)
-				std::cout << "c'est false" << std::endl;
-
 			return ((*it)->isChecked());
 		}
 	}
@@ -233,7 +227,6 @@ std::wstring  IrrLib::getLabelText(MenuItem &item)
 	return (L"");
 }
 
-
 int IrrLib::getIdButtonPressed() const
 {
 	return _eventReceiver.getIdButtonPressed();
@@ -241,6 +234,7 @@ int IrrLib::getIdButtonPressed() const
 
 void IrrLib::drawMenu()
 {
+	_eventReceiver.resetIdButtonPressed();
 	if (_device->isWindowActive()) {
 		_driver->beginScene(true, true);
 		_smgr->drawAll();
