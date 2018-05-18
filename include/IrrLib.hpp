@@ -51,6 +51,7 @@ class IrrLib {
 			std::pair<std::size_t, std::size_t> size);
 		void drawGame();
 		void cleanMenu();
+		void initMenu(std::vector<MenuItem> &);
 		// void AffEntities(std::vector<GameEntities>);
 
 	private:

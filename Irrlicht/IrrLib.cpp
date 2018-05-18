@@ -163,7 +163,7 @@ void IrrLib::displayBackground()
 	_camera->setRotation(_camPos);
 }
 
-void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
+void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
 {
 	_guienv->clear();
 	_inputs.clear();
@@ -177,10 +177,17 @@ void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
 		skin->setFont(font);
 	else
 		std::cout << "font not set" << std::endl;
+	_skybox->setVisible(true);
 	for (auto &it : menuItems) {
 		_factory[it.getType()](it);
 	}
-	_skybox->setVisible(true);
+}
+
+void IrrLib::affMenuItems(std::vector<MenuItem> &menuItems)
+{
+	// for (auto &it : menuItems) {
+	// 	_factory[it.getType()](it);
+	// }
 }
 
 std::wstring IrrLib::getInputText(MenuItem &item)
