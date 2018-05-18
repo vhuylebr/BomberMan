@@ -7,24 +7,19 @@
 
 #ifndef MENUITEM_HPP_
 # define MENUITEM_HPP_
+
 # include <utility>
 # include <string>
+# include "IEntity.hpp"
 
-typedef std::pair<unsigned int, unsigned int> pairUC;
-
-enum class TypeItem {
-    BUTTON,
-    CHECKBOX,
-    INPUT,
-    LABEL
-};
+typedef std::pair<std::size_t, std::size_t> pairUC;
 
 using ui = unsigned int;
 
-class MenuItem {
+class MenuItem : public IEntity {
 public:
     MenuItem(std::string text = std::string());
-    MenuItem(TypeItem type, int id, std::string text, ui x, ui y, ui lenght, ui height);
+    MenuItem(Entity type, int id, std::string text, ui x, ui y, ui lenght, ui height);
     ~MenuItem() {}
     void setText(const std::string &text) { _text = text; }
     void select() { _selected = true; }
@@ -34,19 +29,19 @@ public:
     void deselect() { _selected = false; }
     bool isSelected() const { return _selected; }
     std::string getText() const { return _text; }
-    pairUC getCoord() const { return _coord; }
+    pairUC getPos() const { return _coord; }
     pairUC getSize() const { return _size; }
-    void setType(TypeItem type) { _type = type; }
-    TypeItem getType() const { return _type; }
+    void setType(Entity type) { _type = type; }
+    Entity getType() const { return _type; }
     void setId(int id) { _id = id; }
     int getId() const { return _id; }
 
 private:
-    TypeItem _type;
+    Entity _type;
     int _id;
     std::string _text;
-    std::pair<unsigned int, unsigned int> _coord;
-    std::pair<unsigned int, unsigned int> _size;
+    std::pair<std::size_t, std::size_t> _coord;
+    std::pair<std::size_t, std::size_t> _size;
     bool _selected;
 };
 

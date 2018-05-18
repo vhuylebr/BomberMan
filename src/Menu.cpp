@@ -29,42 +29,42 @@ void Menu::deselectAll()
 void 	Menu::makeJoinMenu()
 {
 	_item.clear();
-	_item.push_back(MenuItem(TypeItem::INPUT, 1, "Game1 : ", 950, 150, 350, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "Connect", 950, 550, 350, 100));
-	_item.push_back(MenuItem(TypeItem::LABEL, 3, "Game name : ", 350, 150, 350, 100));
+	_item.push_back(MenuItem(Entity::INPUT, 1, "Game1 : ", 950, 150, 350, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 2, "Connect", 950, 550, 350, 100));
+	_item.push_back(MenuItem(Entity::LABEL, 3, "Game name : ", 350, 150, 350, 100));
 }
 
 void    Menu::makeOptionMenu()
 {
 	_item.clear();
-	_item.push_back(MenuItem(TypeItem::LABEL, 1, "Number Player : ", 200, 150, 300, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "+", 300, 325, 100, 100));
-	_item.push_back(MenuItem(TypeItem::LABEL, 3, std::to_string(_nbPlayer), 300, 475, 100, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 4, "-", 300, 625, 100, 100));
-	_item.push_back(MenuItem(TypeItem::LABEL, 5, "Game name : ", 800, 250, 300, 100));
-	_item.push_back(MenuItem(TypeItem::INPUT, 6, "Game1" , 800, 500, 300, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 7, "Start Game", 850, 700, 200, 100));
-	_item.push_back(MenuItem(TypeItem::LABEL, 8, "", 1250, 0, 820, 1000));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 200, 50, 50));
-	_item.push_back(MenuItem(TypeItem::LABEL, 10, "Bomb Up", 1500, 200, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 11, "", 1400, 300, 50, 50));
-	_item.push_back(MenuItem(TypeItem::LABEL, 12, "Power Up", 1500, 300, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 400, 50, 50));
-	_item.push_back(MenuItem(TypeItem::LABEL, 14, "Penetration", 1500, 400, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 500, 50, 50));
-	_item.push_back(MenuItem(TypeItem::LABEL, 16, "Speed", 1500, 500, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 600, 50, 50));
-	_item.push_back(MenuItem(TypeItem::LABEL, 18, "Wall Pass", 1500, 600, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 700, 50, 50));
-	_item.push_back(MenuItem(TypeItem::LABEL, 20, "Kick", 1500, 700, 100, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 1, "Number Player : ", 200, 150, 300, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 2, "+", 300, 325, 100, 100));
+	_item.push_back(MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 300, 475, 100, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 4, "-", 300, 625, 100, 100));
+	_item.push_back(MenuItem(Entity::LABEL, 5, "Game name : ", 800, 250, 300, 100));
+	_item.push_back(MenuItem(Entity::INPUT, 6, "Game1" , 800, 500, 300, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 7, "Start Game", 850, 700, 200, 100));
+	_item.push_back(MenuItem(Entity::LABEL, 8, "", 1250, 0, 820, 1000));
+	_item.push_back(MenuItem(Entity::CHECKBOX, 9, "", 1400, 200, 50, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 10, "Bomb Up", 1500, 200, 100, 50));
+	_item.push_back(MenuItem(Entity::CHECKBOX, 11, "", 1400, 300, 50, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 12, "Power Up", 1500, 300, 100, 50));
+	_item.push_back(MenuItem(Entity::CHECKBOX, 9, "", 1400, 400, 50, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 14, "Penetration", 1500, 400, 100, 50));
+	_item.push_back(MenuItem(Entity::CHECKBOX, 9, "", 1400, 500, 50, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 16, "Speed", 1500, 500, 100, 50));
+	_item.push_back(MenuItem(Entity::CHECKBOX, 9, "", 1400, 600, 50, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 18, "Wall Pass", 1500, 600, 100, 50));
+	_item.push_back(MenuItem(Entity::CHECKBOX, 9, "", 1400, 700, 50, 50));
+	_item.push_back(MenuItem(Entity::LABEL, 20, "Kick", 1500, 700, 100, 50));
 }
 
 void    Menu::makeMainMenu()
 {
 	_item.clear();
-	_item.push_back(MenuItem(TypeItem::BUTTON, 1, "Start Game", 500, 280, 500, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "Join Game", 500, 430, 500, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 3, "Quit", 500, 580, 500, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 1, "Start Game", 500, 280, 500, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 2, "Join Game", 500, 430, 500, 100));
+	_item.push_back(MenuItem(Entity::BUTTON, 3, "Quit", 500, 580, 500, 100));
 }
 
 void Menu::changeMenu()

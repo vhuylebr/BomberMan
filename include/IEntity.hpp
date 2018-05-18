@@ -15,7 +15,11 @@ enum class Entity {
     WALL,
     BOMB,
     PLAYER,
-    ITEM
+    ITEM,
+    BUTTON,
+    CHECKBOX,
+    INPUT,
+    LABEL
 };
 
 class IEntity {
@@ -28,7 +32,6 @@ public:
     //virtual void insertInfo() = 0;
     virtual Entity getType() const = 0;
     virtual std::pair<std::size_t, std::size_t> getPos() const = 0;
-    virtual bool isAlive() const = 0;
-};
+    };
 
 #endif /* !IENTITY_HPP_ */

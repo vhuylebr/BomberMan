@@ -12,7 +12,7 @@ MenuItem::MenuItem(std::string text)
 {
 }
 
-MenuItem::MenuItem(TypeItem type, int id, std::string text, ui x, ui y, ui lenght, ui height)
+MenuItem::MenuItem(Entity type, int id, std::string text, ui x, ui y, ui lenght, ui height)
 	: _type(type), _id(id), _text(text),_coord(x, y), _size(lenght, height)
 {
 

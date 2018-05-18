@@ -53,6 +53,7 @@ class IrrLib {
 		void cleanMenu();
 		void initMenu(std::vector<MenuItem> &);
 		void updateLabel(MenuItem &item);
+		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
 
 	private:
@@ -64,7 +65,7 @@ class IrrLib {
 		const irr::scene::IGeometryCreator *_geomentryCreator;
 		std::vector<irr::scene::ISceneNode*> _cubes;
 		Actions _actions;
-		std::map<TypeItem, std::function<void(const MenuItem&)>> _factory;
+		std::map<Entity, std::function<void(const MenuItem&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _gameFactory;
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;

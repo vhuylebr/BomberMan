@@ -19,13 +19,13 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
-	_factory.insert(std::make_pair(TypeItem::INPUT, std::bind(&IrrLib::addEditBox, this,
+	_factory.insert(std::make_pair(Entity::INPUT, std::bind(&IrrLib::addEditBox, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(TypeItem::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
+	_factory.insert(std::make_pair(Entity::CHECKBOX, std::bind(&IrrLib::addCheckBox, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(TypeItem::LABEL, std::bind(&IrrLib::addStaticText, this,
+	_factory.insert(std::make_pair(Entity::LABEL, std::bind(&IrrLib::addStaticText, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(TypeItem::BUTTON, std::bind(&IrrLib::addButton, this,
+	_factory.insert(std::make_pair(Entity::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
 	_gameFactory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
@@ -98,9 +98,9 @@ void IrrLib::addButton(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getCoord().first,
-		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second), 0, item.getId(),
+	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getPos().first,
+		item.getPos().second, item.getPos().first + item.getSize().first,
+			item.getPos().second + item.getSize().second), 0, item.getId(),
 				wText.c_str());
 	button->setPressed(item.isSelected());
 	button->setDrawBorder(true);
@@ -114,9 +114,9 @@ void IrrLib::addStaticText(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
-		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second), item.isSelected());
+	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getPos().first,
+		item.getPos().second, item.getPos().first + item.getSize().first,
+			item.getPos().second + item.getSize().second), item.isSelected());
 	text->setDrawBackground(true);
 	text->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	text->setID(item.getId());
@@ -130,9 +130,9 @@ void IrrLib::addEditBox(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUIEditBox *editbox = _guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getCoord().first,
-		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second));
+	irr::gui::IGUIEditBox *editbox = _guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getPos().first,
+		item.getPos().second, item.getPos().first + item.getSize().first,
+			item.getPos().second + item.getSize().second));
 	editbox->setID(item.getId());
 	_inputs.push_back(editbox);
 }
@@ -144,9 +144,9 @@ void IrrLib::addCheckBox(const MenuItem &item)
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getCoord().first,
-		item.getCoord().second, item.getCoord().first + item.getSize().first,
-			item.getCoord().second + item.getSize().second));
+	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getPos().first,
+		item.getPos().second, item.getPos().first + item.getSize().first,
+			item.getPos().second + item.getSize().second));
 	checkbox->setID(item.getId());
 	_checkboxes.push_back(checkbox);
 }
@@ -162,6 +162,23 @@ void IrrLib::displayBackground()
 	_camera->setTarget(_camPos);
 	_camera->setRotation(_camPos);
 }
+
+// void IrrLib::addStaticText(std::unique_ptr<IEntity> &item)
+// {
+// 	std::wstring wText;
+// 	std::string str = item.getText();
+// 	irr::gui::IGUIStaticText	*text;
+
+// 	for (unsigned int i = 0; i < str.size(); ++i)
+// 		wText += wchar_t(str[i]);
+// 	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getPos().first,
+// 		item.getPos().second, item.getPos().first + item.getSize().first,
+// 			item.getPos().second + item.getSize().second), item.isSelected());
+// 	text->setDrawBackground(true);
+// 	text->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
+// 	text->setID(item.getId());
+// 	_labels.push_back(text);
+// }
 
 void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
 {

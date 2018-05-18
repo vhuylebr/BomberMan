@@ -55,10 +55,10 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 			y1 += 1;
 		}
 	}
-	std::cout << "Here" << std::endl;
-	for (auto &a : _entities) {
-		a->isAlive();
-	}
+	// std::cout << "Here" << std::endl;
+	// for (auto &a : _entities) {
+	// 	a->isAlive();
+	// }
 }
 
 std::pair<std::size_t, std::size_t>	GameCore::getSize() const

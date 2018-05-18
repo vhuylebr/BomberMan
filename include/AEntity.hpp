@@ -19,7 +19,7 @@ public:
     int getY() const { return _y; }
     bool isSuperpoz() const override { return _superposable; }
     bool isDestruct() const override { return _destructible; }
-    Entity getType() const { return _type; }
+    Entity getType() const { return _type; };
 
 private:
     bool _alive;

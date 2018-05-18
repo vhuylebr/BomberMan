@@ -32,7 +32,7 @@ public:
 
 	void 	poke();
 	Entity 	getType() const final;
-	bool	isAlive() const final;
+	bool	isAlive() const;
 	std::pair<std::size_t, std::size_t> getPos() const;	
 private:
 };
