@@ -6,23 +6,25 @@ Core::Core()
 {
 }
 
-void    Core::menuManager(STATE &last)
+void 	Core::menuManager(STATE &last)
 {
 	char a = 'a';
 	_act = _lib.getActions();
 	_lib.displayBackground();
-	if (_menu.getState(a, _act, _state) == true || _menu.stepChanged() == true) {
-		_lib.affMenuItems(_menu.getMenu(a, _act, _state));
+	if (_menu.getState(a, _act, _state) == true)
+		_menu.getMenu(a, _act, _state);
+
+	if (_menu.stepChanged(last) == true)
+		_menu.getMenu(a, _act, _state);
+
+	if (last == STATE::GAME || last == STATE::INIT) {
+		_lib.initMenu(_menu.getMenuItems());
+		_menu.getMenu(a, _act, _state);
+		_state = STATE::MENU;
+		last = STATE::MENU;
 	}
 	_lib.drawMenu();
-
-	last = STATE::MENU;
 }
-
-// void    Core::lobbyManager(STATE &last)
-// {
-//     //last = state;
-// }
 
 void 	Core::getParameters()
 {
@@ -43,6 +45,9 @@ void 	Core::getParameters()
 			_param.bonuses.push_back(eItem::WALL_PASS);
 		if (_lib.getCheckboxState(_menu.getItemByID(19)) == true)
 			_param.bonuses.push_back(eItem::KICK);
+
+		std::wcout << L"game name : " << _param.gameName << std::endl;
+		std::cout << "nb players : " << _param.nbPlayers << std::endl;
 	}
 	else if (_menu.getStep() == 3)
 	{
@@ -65,7 +70,8 @@ void    Core::gameManager(STATE &last)
 
 int     Core::loop()
 {
-	STATE   lstate = STATE::MENU;
+	STATE   lstate = STATE::INIT;
+
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);

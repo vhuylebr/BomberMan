@@ -185,9 +185,13 @@ void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
 
 void IrrLib::updateLabel(MenuItem &item)
 {
+	std::wstring newlabel;
+	std::copy(item.getText().begin(), item.getText().end(), std::back_inserter(newlabel));
+	const wchar_t* newnewlabel = newlabel.c_str();
+
 	for (auto &it : _labels) {
-		if (item.getId() == it.getID()) {
-			it.setText(item.getText());
+		if (item.getId() == (*it).getID()) {
+			(*it).setText(newnewlabel);
 		}
 	}
 }

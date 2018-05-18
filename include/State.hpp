@@ -12,6 +12,7 @@ enum class STATE {
     MENU,
     LOBBY,
     GAME,
+    INIT,
     EXIT
 };
 

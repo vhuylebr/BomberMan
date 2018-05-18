@@ -212,7 +212,7 @@ static int findSelected(std::vector<MenuItem> &item)
 
 void Menu::firstMenuKey(Actions &actions, STATE &state)
 {
-	if (actions.space || actions.enter || actions.buttonPressed != -1) { // gérer le clic et changé le selectionné si l'on a cliqué ailleurs
+	if (actions.space || actions.enter || actions.buttonPressed != -1) {
 		if (actions.buttonPressed != -1)
 			_step = actions.buttonPressed;
 		else
@@ -220,11 +220,11 @@ void Menu::firstMenuKey(Actions &actions, STATE &state)
 		if (_step == 3)
 			state = STATE::EXIT;
 		if (_step == 2) {
-			_step = 3; // Join a Game;
+			_step = 3;
 			_changed = true;
 		}
 		if (_step == 1) {
-			_step = 2; // Create new Game
+			_step = 2;
 			_changed = true;
 		}
 		_change_menu = true;
@@ -283,11 +283,12 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 		state = STATE::GAME;
 }
 
-bool 	Menu::stepChanged()
+bool 	Menu::stepChanged(STATE &state)
 {
 	if (_changed == true) {
 		_changed = false;
-		return true;	
+		state = STATE::INIT;
+		return true;
 	}
 	return false;
 }
@@ -295,7 +296,6 @@ bool 	Menu::stepChanged()
 bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
 {
 	if (_step == 2 && actions.buttonPressed == 7) {
-		std::cout << "salut toi " << std::endl;
 		state = STATE::GAME;
 		return false;
 	}
@@ -310,8 +310,13 @@ MenuItem &Menu::getItemByID(int id)
 {
 	return _item[id - 1];
 }
- 
-std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &state)
+
+std::vector<MenuItem> &Menu::getMenuItems()
+{
+	return _item;
+}
+
+void Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 {
 	if (_change_menu == true)
 		changeMenu();
@@ -327,5 +332,4 @@ std::vector<MenuItem> &Menu::getMenu(char &to_write, Actions &actions, STATE &st
 			break;
 	}
 	clearAction(actions);
-	return _item;
 }

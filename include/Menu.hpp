@@ -19,18 +19,20 @@ class Menu {
 public:
 	Menu();
 	~Menu();
-	std::vector<MenuItem> &getMenu(char &to_write, Actions &actions, STATE &state);
+	void getMenu(char &to_write, Actions &actions, STATE &state);
 	bool isHost() const;
 	void deselectAll();
 	std::string getIP() const { return _ip; }
 	std::string getPseudo() const { return _pseudo; }
 	unsigned char getNbPlayer() const { return _nbPlayer; }
+	std::vector<MenuItem> &getMenuItems();
 	void changeMenu();
 	bool getState(char &to_write, Actions &actions, STATE &state);
 	std::vector<eItem> &getBonus();
 	MenuItem &getItemByID(int);
-	bool 	stepChanged();
+	bool 	stepChanged(STATE &state);
 	int getStep() const {return _step;};
+
 
 private:
 	void firstMenuKey(Actions &actions, STATE &state);
