@@ -46,10 +46,10 @@ IrrLib::~IrrLib()
 
 void IrrLib::createPlane(std::pair<std::size_t, std::size_t> &size)
 {
-	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(5, 5),
-		irr::core::dimension2d<irr::u32>(5, 5));
+	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
+		irr::core::dimension2d<irr::u32>(size.second, size.second));
 	irr::scene::ISceneNode* ground = _smgr->addMeshSceneNode(plane);
-	ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
+	ground->setPosition(irr::core::vector3df(0, 0, 0));
 	ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
