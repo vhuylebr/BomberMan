@@ -8,8 +8,14 @@
 #include "MenuItem.hpp"
 
 MenuItem::MenuItem(std::string text)
-    : _selected(false), _text(text)
+    : _text(text), _selected(false)
 {
+}
+
+MenuItem::MenuItem(TypeItem type, int id, std::string text, ui x, ui y, ui lenght, ui height)
+	: _type(type), _id(id), _text(text),_coord(x, y), _size(lenght, height)
+{
+
 }
 
 void MenuItem::setCoord(unsigned int x, unsigned int y)
