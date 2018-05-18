@@ -91,63 +91,67 @@ Actions	IrrLib::getActions()
 	return (_actions);
 }
 
-void IrrLib::addButton(const MenuItem &item)
+void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 {
+	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
-	std::string str = item.getText();
+	std::string str = item->getText();
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item.getPos().first,
-		item.getPos().second, item.getPos().first + item.getSize().first,
-			item.getPos().second + item.getSize().second), 0, item.getId(),
+	irr::gui::IGUIButton *button = _guienv->addButton(irr::core::rect<irr::s32>(item->getPos().first,
+		item->getPos().second, item->getPos().first + item->getSize().first,
+			item->getPos().second + item->getSize().second), 0, item->getId(),
 				wText.c_str());
-	button->setPressed(item.isSelected());
+	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
 }
 
-void IrrLib::addStaticText(const MenuItem &item)
+void IrrLib::addStaticText(std::unique_ptr<IEntity> &entity)
 {
+	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
-	std::string str = item.getText();
+	std::string str = item->getText();
 	irr::gui::IGUIStaticText	*text;
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getPos().first,
-		item.getPos().second, item.getPos().first + item.getSize().first,
-			item.getPos().second + item.getSize().second), item.isSelected());
+	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item->getPos().first,
+		item->getPos().second, item->getPos().first + item->getSize().first,
+			item->getPos().second + item->getSize().second), item->isSelected());
 	text->setDrawBackground(true);
 	text->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	text->setID(item.getId());
+	text->setID(item->getId());
 	_labels.push_back(text);
 }
 
-void IrrLib::addEditBox(const MenuItem &item)
+void IrrLib::addEditBox(std::unique_ptr<IEntity> &entity)
 {
+	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
-	std::string str = item.getText();
+	std::string str = item->getText();
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUIEditBox *editbox = _guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item.getPos().first,
-		item.getPos().second, item.getPos().first + item.getSize().first,
-			item.getPos().second + item.getSize().second));
-	editbox->setID(item.getId());
+	irr::gui::IGUIEditBox *editbox = _guienv->addEditBox(wText.c_str(), irr::core::rect<irr::s32>(item->getPos().first,
+		item->getPos().second, item->getPos().first + item->getSize().first,
+			item->getPos().second + item->getSize().second));
+	editbox->setID(item->getId());
 	_inputs.push_back(editbox);
 }
 
-void IrrLib::addCheckBox(const MenuItem &item)
+void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
 {
+	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
-	std::string str = item.getText();
+	std::string str = item->getText();
 
 	for (unsigned int i = 0; i < str.size(); ++i)
 		wText += wchar_t(str[i]);
-	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item.getPos().first,
-		item.getPos().second, item.getPos().first + item.getSize().first,
-			item.getPos().second + item.getSize().second));
-	checkbox->setID(item.getId());
+	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item->getPos().first,
+		item->getPos().second, item->getPos().first + item->getSize().first,
+			item->getPos().second + item->getSize().second));
+	checkbox->setID(item->getId());
 	_checkboxes.push_back(checkbox);
 }
 
@@ -163,7 +167,7 @@ void IrrLib::displayBackground()
 	_camera->setRotation(_camPos);
 }
 
-// void IrrLib::addStaticText(std::unique_ptr<IEntity> &item)
+// void IrrLib::addStaticText(std::unique_ptr<IEntity> &item->
 // {
 // 	std::wstring wText;
 // 	std::string str = item.getText();
@@ -180,7 +184,7 @@ void IrrLib::displayBackground()
 // 	_labels.push_back(text);
 // }
 
-void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
+void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
 	_guienv->clear();
 	_inputs.clear();
@@ -196,48 +200,48 @@ void IrrLib::initMenu(std::vector<MenuItem> &menuItems)
 		std::cout << "font not set" << std::endl;
 	_skybox->setVisible(true);
 	for (auto &it : menuItems) {
-		_factory[it.getType()](it);
+		_factory[it->getType()](it);
 	}
 }
 
-void IrrLib::updateLabel(MenuItem &item)
+void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
 {
 	std::wstring wText;
 
-	for (unsigned int i = 0; i < item.getText().size(); ++i)
-		wText += wchar_t(item.getText()[i]);
+	for (unsigned int i = 0; i < static_cast<MenuItem*>(item.get())->getText().size(); ++i)
+		wText += wchar_t(static_cast<MenuItem*>(item.get())->getText()[i]);
 	const wchar_t* newnewlabel = wText.c_str();
 	for (auto &it : _labels) {
-		if (item.getId() == (*it).getID()) {
+		if (static_cast<MenuItem*>(item.get())->getId() == (*it).getID()) {
 			(*it).setText(newnewlabel);
 		}
 	}
 }
 
-std::wstring IrrLib::getInputText(MenuItem &item)
+std::wstring IrrLib::getInputText(std::unique_ptr<IEntity> &item)
 {
 	for (auto it = _inputs.begin(); it != _inputs.end(); it++) {
-		if ((*it)->getID() == item.getId()) {
+		if ((*it)->getID() == static_cast<MenuItem*>(item.get())->getId()) {
 			return ((*it)->getText());
 		}
 	}
 	return (L"");
 }
 
-bool IrrLib::getCheckboxState(MenuItem &item)
+bool IrrLib::getCheckboxState(std::unique_ptr<IEntity> &item)
 {
 	for (auto it = _checkboxes.begin(); it != _checkboxes.end(); ++it) {
-		if ((*it)->getID() == item.getId()) {
+		if ((*it)->getID() == static_cast<MenuItem*>(item.get())->getId()) {
 			return ((*it)->isChecked());
 		}
 	}
 	return (false);
 }
 
-std::wstring  IrrLib::getLabelText(MenuItem &item)
+std::wstring  IrrLib::getLabelText(std::unique_ptr<IEntity> &item)
 {
 	for (auto it = _labels.begin(); it != _labels.end(); ++it) {
-		if ((*it)->getID() == item.getId()) {
+		if ((*it)->getID() == static_cast<MenuItem*>(item.get())->getId()) {
 			return ((*it)->getText());
 		}
 	}

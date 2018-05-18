@@ -10,6 +10,7 @@
 
 # include <vector>
 # include <map>
+# include <memory>
 # include "Actions.hpp"
 # include "MenuItem.hpp"
 # include "Item.hpp"
@@ -25,11 +26,11 @@ public:
 	std::string getIP() const { return _ip; }
 	std::string getPseudo() const { return _pseudo; }
 	unsigned char getNbPlayer() const { return _nbPlayer; }
-	std::vector<MenuItem> &getMenuItems();
+	std::vector<std::unique_ptr<IEntity>> &getMenuItems();
 	void changeMenu();
 	bool getState(Actions &actions, STATE &state);
 	std::vector<eItem> &getBonus();
-	MenuItem &getItemByID(int);
+	std::unique_ptr<IEntity> &getItemByID(int);
 	bool 	stepChanged(STATE &state);
 	int getStep() const {return _step;};
 
@@ -51,7 +52,7 @@ private:
 	std::string _pseudo;
 	std::string _ip;
 	std::map<eItem, bool> _map_bonus;
-	std::vector<MenuItem> _item;
+	std::vector<std::unique_ptr<IEntity>> _item;
 	std::vector<eItem> _bonus;
 	int     _changeState;
 	bool 	_changed;
