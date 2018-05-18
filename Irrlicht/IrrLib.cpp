@@ -27,7 +27,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
-	_gameFactory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
+	_factory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
@@ -167,23 +167,6 @@ void IrrLib::displayBackground()
 	_camera->setRotation(_camPos);
 }
 
-// void IrrLib::addStaticText(std::unique_ptr<IEntity> &item->
-// {
-// 	std::wstring wText;
-// 	std::string str = item.getText();
-// 	irr::gui::IGUIStaticText	*text;
-
-// 	for (unsigned int i = 0; i < str.size(); ++i)
-// 		wText += wchar_t(str[i]);
-// 	text = _guienv->addStaticText(wText.c_str(), irr::core::rect<irr::s32>(item.getPos().first,
-// 		item.getPos().second, item.getPos().first + item.getSize().first,
-// 			item.getPos().second + item.getSize().second), item.isSelected());
-// 	text->setDrawBackground(true);
-// 	text->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-// 	text->setID(item.getId());
-// 	_labels.push_back(text);
-// }
-
 void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
 	_guienv->clear();
@@ -285,14 +268,14 @@ void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 	_camera->setTarget(irr::core::vector3df(0, 0, 0));
 	createPlane(size);
 	for (auto &it : gameEntities) {
-		_gameFactory[it->getType()](it);
+		_factory[it->getType()](it);
 	}
 }
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
 	for (auto &it : gameEntities) {
-		_gameFactory[it->getType()](it);
+		_factory[it->getType()](it);
 	}
 }
 

@@ -69,7 +69,6 @@ class IrrLib {
 		std::vector<irr::scene::ISceneNode*> _cubes;
 		Actions _actions;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
-		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _gameFactory;
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
