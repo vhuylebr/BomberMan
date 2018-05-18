@@ -195,7 +195,7 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	_checkboxes.clear();
 	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
-	irr::gui::IGUIFont* font = _guienv->getFont("./media/fontlucida.png");
+	irr::gui::IGUIFont* font = _guienv->getFont("./media/myfont.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
 	if (font)
 		skin->setFont(font);
