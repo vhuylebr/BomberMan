@@ -8,18 +8,20 @@ Core::Core()
 
 void 	Core::menuManager(STATE &last)
 {
-	char a = 'a';
 	_act = _lib.getActions();
 	_lib.displayBackground();
-	if (_menu.getState(a, _act, _state) == true)
-		_menu.getMenu(a, _act, _state);
 
-	if (_menu.stepChanged(last) == true)
-		_menu.getMenu(a, _act, _state);
-
+	if (_menu.getState( _act, _state) == true) {
+		_menu.getMenu(_act, _state);
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 2 || _act.buttonPressed == 4))
+			_lib.updateLabel(_menu.getItemByID(3));
+	}
+	if (_menu.stepChanged(last) == true) {
+		_menu.getMenu(_act, _state);
+	}
 	if (last == STATE::GAME || last == STATE::INIT) {
 		_lib.initMenu(_menu.getMenuItems());
-		_menu.getMenu(a, _act, _state);
+		_menu.getMenu(_act, _state);
 		_state = STATE::MENU;
 		last = STATE::MENU;
 	}
@@ -45,7 +47,6 @@ void 	Core::getParameters()
 			_param.bonuses.push_back(eItem::WALL_PASS);
 		if (_lib.getCheckboxState(_menu.getItemByID(19)) == true)
 			_param.bonuses.push_back(eItem::KICK);
-
 		std::wcout << L"game name : " << _param.gameName << std::endl;
 		std::cout << "nb players : " << _param.nbPlayers << std::endl;
 	}

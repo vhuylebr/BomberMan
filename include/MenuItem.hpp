@@ -19,9 +19,12 @@ enum class TypeItem {
     LABEL
 };
 
+using ui = unsigned int;
+
 class MenuItem {
 public:
     MenuItem(std::string text = std::string());
+    MenuItem(TypeItem type, int id, std::string text, ui x, ui y, ui lenght, ui height);
     ~MenuItem() {}
     void setText(const std::string &text) { _text = text; }
     void select() { _selected = true; }
@@ -40,12 +43,11 @@ public:
 
 private:
     TypeItem _type;
-    bool _selected;
-	std::string _text;
     int _id;
-	// texture
-	std::pair<unsigned int, unsigned int> _coord;
-	std::pair<unsigned int, unsigned int> _size;
+    std::string _text;
+    std::pair<unsigned int, unsigned int> _coord;
+    std::pair<unsigned int, unsigned int> _size;
+    bool _selected;
 };
 
 #endif /* !MENUITEM_HPP_ */

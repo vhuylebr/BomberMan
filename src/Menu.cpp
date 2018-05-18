@@ -19,35 +19,6 @@ Menu::~Menu()
 {
 }
 
-static void addItemList(std::vector<MenuItem> &item)
-{
-	MenuItem tmp;
-	MenuItem bonus[NB_ITEMS] =
-	{   MenuItem("Bomb Up"),
-		MenuItem("Power Up"),
-		MenuItem("Penetration"), // Peut-être renommer ça en "Super Bomb"
-		MenuItem("Speed"),
-		MenuItem("Wall Pass"),
-		MenuItem("Kick")
-	};
-	// c'est la ligne de séparation ?
-	tmp.setType(TypeItem::LABEL);
-	tmp.setCoord(1250, 0);
-	tmp.setSize(820, 1080);
-	item.push_back(tmp);
-
-	for (int i = 0; i < NB_ITEMS; i++) {
-		tmp.setType(TypeItem::CHECKBOX);
-		tmp.setCoord(1400, (i + 1) * 100 + 100 );
-		tmp.setSize(50, 50);
-		item.push_back(tmp);
-		bonus[i].setType(TypeItem::LABEL);
-		bonus[i].setCoord(1500, ((i + 1) * 100 + 100));
-		bonus[i].setSize(100, 50);
-		item.push_back(bonus[i]);
-	}
-}
-
 void Menu::deselectAll()
 {
 	for (auto &i : _item) {
@@ -55,124 +26,45 @@ void Menu::deselectAll()
 	}
 }
 
-static void attributeId(std::vector<MenuItem> &item)
-{
-	int id = 1;
-
-	for (auto &i : item) {
-		i.setId(id);
-		id++;
-	}
-}
-
 void 	Menu::makeJoinMenu()
 {
-	MenuItem tmp;
-
 	_item.clear();
-	 tmp.setType(TypeItem::INPUT);
-	tmp.select();
-	tmp.setCoord(950, 150);
-	tmp.setSize(350, 100);
-	tmp.setText("Game1 : ");
-	_item.push_back(tmp);
-	// tmp.setCoord(950, 350);
-	// tmp.setText("Enter your Username here");
-	// tmp.deselect();
-	_item.push_back(tmp);
-	tmp.setType(TypeItem::BUTTON);
-	tmp.setCoord(950, 550);
-	tmp.setText("Connect");
-	tmp.deselect();
-	_item.push_back(tmp);
-	tmp.setType(TypeItem::LABEL);
-	tmp.setCoord(350, 150);
-	tmp.setText("Game name : ");
-	tmp.select();
-	_item.push_back(tmp);
-	// tmp.setCoord(350, 350);
-	// tmp.setText("Pseudo : ");
-	// tmp.select();
-	// _item.push_back(tmp);
-	attributeId(_item);
+	_item.push_back(MenuItem(TypeItem::INPUT, 1, "Game1 : ", 950, 150, 350, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "Connect", 950, 550, 350, 100));
+	_item.push_back(MenuItem(TypeItem::LABEL, 3, "Game name : ", 350, 150, 350, 100));
 }
 
 void    Menu::makeOptionMenu()
 {
-	MenuItem tmp;
-
-	// Number Player
 	_item.clear();
-	tmp.setType(TypeItem::LABEL);
-	tmp.setCoord(200, 150);
-	tmp.setSize(300, 100);
-	tmp.setText("Number Player : ");
-	_item.push_back(tmp);
-
-	// +
-	tmp.setType(TypeItem::BUTTON);
-	tmp.setCoord(300, 325);
-	tmp.setSize(100, 100);
-	tmp.setText("+");
-	_item.push_back(tmp);
-
-	// Number Player effectif
-	tmp.setType(TypeItem::LABEL);
-	tmp.setCoord(300, 475);
-	tmp.setSize(100, 100);
-	tmp.setText(std::to_string(_nbPlayer));
-	_item.push_back(tmp);
-
-	// -
-	tmp.setType(TypeItem::BUTTON);
-	tmp.setCoord(300, 625);
-	tmp.setSize(100, 100);
-	tmp.setText("-");
-	_item.push_back(tmp);
-
-	// Pseudo text
-	tmp.setType(TypeItem::LABEL);
-	tmp.setCoord(800, 250);
-	tmp.setSize(300, 100);
-	tmp.setText("Game name : ");
-	_item.push_back(tmp);
-
-	// Pseudo input
-	tmp.setType(TypeItem::INPUT);
-	tmp.setCoord(800, 500);
-	tmp.setSize(300, 100);
-	tmp.setText("Game1");
-	_item.push_back(tmp);
-
-	// Quit
-	tmp.setType(TypeItem::BUTTON);
-	tmp.setCoord(850, 700);
-	tmp.setSize(200, 100);
-	tmp.setText("Start Game");
-	_item.push_back(tmp);
-	addItemList(_item);
-	attributeId(_item);
+	_item.push_back(MenuItem(TypeItem::LABEL, 1, "Number Player : ", 200, 150, 300, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "+", 300, 325, 100, 100));
+	_item.push_back(MenuItem(TypeItem::LABEL, 3, std::to_string(_nbPlayer), 300, 475, 100, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 4, "-", 300, 625, 100, 100));
+	_item.push_back(MenuItem(TypeItem::LABEL, 5, "Game name : ", 800, 250, 300, 100));
+	_item.push_back(MenuItem(TypeItem::INPUT, 6, "Game1" , 800, 500, 300, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 7, "Start Game", 850, 700, 200, 100));
+	_item.push_back(MenuItem(TypeItem::LABEL, 8, "", 1250, 0, 820, 1000));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 200, 50, 50));
+	_item.push_back(MenuItem(TypeItem::LABEL, 10, "Bomb Up", 1500, 200, 100, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 11, "", 1400, 300, 50, 50));
+	_item.push_back(MenuItem(TypeItem::LABEL, 12, "Power Up", 1500, 300, 100, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 400, 50, 50));
+	_item.push_back(MenuItem(TypeItem::LABEL, 14, "Penetration", 1500, 400, 100, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 500, 50, 50));
+	_item.push_back(MenuItem(TypeItem::LABEL, 16, "Speed", 1500, 500, 100, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 600, 50, 50));
+	_item.push_back(MenuItem(TypeItem::LABEL, 18, "Wall Pass", 1500, 600, 100, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 700, 50, 50));
+	_item.push_back(MenuItem(TypeItem::LABEL, 20, "Kick", 1500, 700, 100, 50));
 }
 
 void    Menu::makeMainMenu()
 {
-	MenuItem tmp;
-
 	_item.clear();
-	tmp.select();
-	tmp.setType(TypeItem::BUTTON);
-	tmp.setText("Start game");
-	tmp.setCoord(500, 280);
-	tmp.setSize(500, 100);
-	_item.push_back(tmp);
-	tmp.deselect();
-	tmp.setText("Join game");
-	tmp.setCoord(500, 430);
-	_item.push_back(tmp);
-	tmp.setText("Quit");
-	tmp.setCoord(500, 580);
-	_item.push_back(tmp);
-	attributeId(_item);
+	_item.push_back(MenuItem(TypeItem::BUTTON, 1, "Start Game", 500, 280, 500, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "Join Game", 500, 430, 500, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 3, "Quit", 500, 580, 500, 100));
 }
 
 void Menu::changeMenu()
@@ -261,6 +153,12 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 
 void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 {
+	if (actions.escape == true) {
+		_change_menu = true;
+		_step = 1;
+		_changeState = true;
+		_changed = true;
+	}
 	if (actions.buttonPressed == 7)
 		state = STATE::GAME;
 	else if (actions.buttonPressed == 2) {
@@ -279,6 +177,12 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 
 void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 {
+	if (actions.escape == true) {
+		_change_menu = true;
+		_changed = true;
+		_step = 1;
+		return ;
+	}
 	if (actions.buttonPressed == 3)
 		state = STATE::GAME;
 }
@@ -293,13 +197,19 @@ bool 	Menu::stepChanged(STATE &state)
 	return false;
 }
 
-bool 	Menu::getState(char &to_write, Actions &actions, STATE &state)
+static bool keyPressed(Actions &actions, bool changeState)
+{
+	return (actions.buttonPressed != -1 || actions.enter || actions.space
+	|| actions.up || actions.down || actions.escape || changeState == true);
+}
+
+bool 	Menu::getState(Actions &actions, STATE &state)
 {
 	if (_step == 2 && actions.buttonPressed == 7) {
 		state = STATE::GAME;
 		return false;
 	}
-	if (actions.buttonPressed != -1 || actions.enter || actions.space || actions.up || actions.down || _changeState == true) {
+	if (keyPressed(actions, _changeState)) {
 		_changeState = false;
 		return true;
 	}
@@ -316,7 +226,7 @@ std::vector<MenuItem> &Menu::getMenuItems()
 	return _item;
 }
 
-void Menu::getMenu(char &to_write, Actions &actions, STATE &state)
+void Menu::getMenu(Actions &actions, STATE &state)
 {
 	if (_change_menu == true)
 		changeMenu();
@@ -331,5 +241,4 @@ void Menu::getMenu(char &to_write, Actions &actions, STATE &state)
 			handleThirdMenu(actions, state);
 			break;
 	}
-	clearAction(actions);
 }
