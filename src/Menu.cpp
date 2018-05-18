@@ -29,9 +29,6 @@ void Menu::deselectAll()
 void 	Menu::makeJoinMenu()
 {
 	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 1, "Game1 : ", 950, 150, 350, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Connect", 950, 550, 350, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, "Game name : ", 350, 150, 350, 100)));
 	std::vector<std::wstring> toto;
 	toto.push_back(L"Hello1");
 	toto.push_back(L"there1");
