@@ -29,7 +29,7 @@ void Menu::deselectAll()
 void 	Menu::makeJoinMenu()
 {
 	_item.clear();
-	_item.push_back(MenuItem(TypeItem::INPUT, 1, "Game1 : ", 950, 150, 350, 100));
+	_item.push_back(MenuItem(TypeItem::INPUT, 1, "Game1", 950, 150, 350, 100));
 	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "Connect", 950, 550, 350, 100));
 	_item.push_back(MenuItem(TypeItem::LABEL, 3, "Game name : ", 350, 150, 350, 100));
 }
@@ -49,13 +49,13 @@ void    Menu::makeOptionMenu()
 	_item.push_back(MenuItem(TypeItem::LABEL, 10, "Bomb Up", 1500, 200, 100, 50));
 	_item.push_back(MenuItem(TypeItem::CHECKBOX, 11, "", 1400, 300, 50, 50));
 	_item.push_back(MenuItem(TypeItem::LABEL, 12, "Power Up", 1500, 300, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 400, 50, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 13, "", 1400, 400, 50, 50));
 	_item.push_back(MenuItem(TypeItem::LABEL, 14, "Penetration", 1500, 400, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 500, 50, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 15, "", 1400, 500, 50, 50));
 	_item.push_back(MenuItem(TypeItem::LABEL, 16, "Speed", 1500, 500, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 600, 50, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 17, "", 1400, 600, 50, 50));
 	_item.push_back(MenuItem(TypeItem::LABEL, 18, "Wall Pass", 1500, 600, 100, 50));
-	_item.push_back(MenuItem(TypeItem::CHECKBOX, 9, "", 1400, 700, 50, 50));
+	_item.push_back(MenuItem(TypeItem::CHECKBOX, 19, "", 1400, 700, 50, 50));
 	_item.push_back(MenuItem(TypeItem::LABEL, 20, "Kick", 1500, 700, 100, 50));
 }
 
@@ -183,7 +183,7 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 		_step = 1;
 		return ;
 	}
-	if (actions.buttonPressed == 3)
+	if (actions.buttonPressed == 2)
 		state = STATE::GAME;
 }
 

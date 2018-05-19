@@ -28,32 +28,34 @@ void 	Core::menuManager(STATE &last)
 	_lib.drawMenu();
 }
 
-void 	Core::getParameters()
+static const t_bonus bonusButton[NB_ITEMS] {
+	{9, eItem::BOMB_UP},
+	{11, eItem::POWER_UP},
+	{13, eItem::SUPER_BOMB},
+	{15, eItem::SPEED},
+	{17, eItem::WALL_PASS},
+	{19, eItem::KICK},
+};
+
+void 	Core::getParametersFromMenu()
 {
 	if (_menu.getStep() == 2) {
+		_param.state = GameState::NEWGAME;
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
 		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));
 		_param.mapSize = std::make_pair(10, 10);
-
-		if (_lib.getCheckboxState(_menu.getItemByID(9)) == true)
-			_param.bonuses.push_back(eItem::BOMB_UP);
-		if (_lib.getCheckboxState(_menu.getItemByID(11)) == true)
-			_param.bonuses.push_back(eItem::POWER_UP);
-		if (_lib.getCheckboxState(_menu.getItemByID(13)) == true)
-			_param.bonuses.push_back(eItem::SUPER_BOMB);
-		if (_lib.getCheckboxState(_menu.getItemByID(15)) == true)
-			_param.bonuses.push_back(eItem::SPEED);
-		if (_lib.getCheckboxState(_menu.getItemByID(17)) == true)
-			_param.bonuses.push_back(eItem::WALL_PASS);
-		if (_lib.getCheckboxState(_menu.getItemByID(19)) == true)
-			_param.bonuses.push_back(eItem::KICK);
+		for (int i = 0; i < NB_ITEMS; i++)
+			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
+				_param.bonuses.push_back(bonusButton[i].bonus);
 		std::wcout << L"game name : " << _param.gameName << std::endl;
 		std::cout << "nb players : " << _param.nbPlayers << std::endl;
+		std::cout << "size : " << _param.bonuses.size() << std::endl;;
 	}
 	else if (_menu.getStep() == 3)
 	{
-		std::wcout << L"file name : " << _lib.getInputText(_menu.getItemByID(1)) << std::endl; // Get nom du fichier à charger
-		// read file toussa toussa
+		_param.state = GameState::LOADGAME;
+		_param.gameName = _lib.getInputText(_menu.getItemByID(1));
+		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
 }
 
@@ -77,7 +79,7 @@ int     Core::loop()
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
-				getParameters();
+				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
 		} else if (_state == STATE::GAME)
