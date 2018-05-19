@@ -270,7 +270,7 @@ void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
-	for (auto &it : gameEntities) {//.begin(); it != gameEntities.end(); ++it) {
+	for (auto &it : gameEntities) {
 		_gameFactory[it->getType()](it);
 	}
 }
