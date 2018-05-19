@@ -29,9 +29,44 @@ void Menu::deselectAll()
 void 	Menu::makeJoinMenu()
 {
 	_item.clear();
-	_item.push_back(MenuItem(TypeItem::INPUT, 1, "Game1", 950, 150, 350, 100));
-	_item.push_back(MenuItem(TypeItem::BUTTON, 2, "Connect", 950, 550, 350, 100));
-	_item.push_back(MenuItem(TypeItem::LABEL, 3, "Game name : ", 350, 150, 350, 100));
+	std::vector<std::wstring> toto;
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+	toto.push_back(L"Hello");
+	toto.push_back(L"there");
+
+	_item.push_back(MenuItem(TypeItem::LISTBOX, 2, "", 500, 250, 600, 400));
+	_item[0].setChoices(toto);
+	_item.push_back(MenuItem(TypeItem::LABEL, 1, "Select Game to load : ", 500, 150, 600, 100));
+	_item.push_back(MenuItem(TypeItem::BUTTON, 3, "Connect", 500, 700, 600, 100));
 }
 
 void    Menu::makeOptionMenu()

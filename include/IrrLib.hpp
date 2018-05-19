@@ -40,6 +40,8 @@ class IrrLib {
 		void addStaticText(const MenuItem &item);
 		void addEditBox(const MenuItem &item);
 		void addCheckBox(const MenuItem &item);
+		void addListBox(const MenuItem &item);
+
 		void drop();
 		void drawMenu();
 		int getIdButtonPressed() const;
@@ -69,6 +71,7 @@ class IrrLib {
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
+		irr::gui::IGUIListBox *_listbox;
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
 		irr::core::vector3df		_camTarget;

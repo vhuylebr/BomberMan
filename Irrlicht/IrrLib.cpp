@@ -27,6 +27,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(TypeItem::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(TypeItem::LISTBOX, std::bind(&IrrLib::addListBox, this,
+		std::placeholders::_1)));
 	_gameFactory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
@@ -149,6 +151,28 @@ void IrrLib::addCheckBox(const MenuItem &item)
 			item.getCoord().second + item.getSize().second));
 	checkbox->setID(item.getId());
 	_checkboxes.push_back(checkbox);
+}
+
+void IrrLib::addListBox(const MenuItem &item)
+{
+	std::cout << "salut, allons créer une listbox ensemble" << std::endl;
+
+	_listbox = _guienv->addListBox(irr::core::rect<irr::s32>(item.getCoord().first, 
+		item.getCoord().second,	item.getCoord().first + item.getSize().first, 
+		item.getCoord().second + item.getSize().second));
+
+	_listbox->setItemHeight(20);
+	std::vector<std::wstring> toto = item.getChoices();
+
+	int idx = 0;
+	_listbox->setAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
+	for (auto &i : toto)
+	{
+		const wchar_t* kek = i.c_str();
+		_listbox->addItem(kek);
+		_listbox->setItemOverrideColor(idx, irr::video::SColor(255,255,255,255));
+		idx++;
+	}
 }
 
 bool IrrLib::getRun()
