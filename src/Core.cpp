@@ -54,7 +54,7 @@ void 	Core::getParametersFromMenu()
 	else if (_menu.getStep() == 3)
 	{
 		_param.state = GameState::LOADGAME;
-		_param.gameName = _lib.getInputText(_menu.getItemByID(1));
+		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
 		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
 }

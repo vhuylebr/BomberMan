@@ -41,6 +41,7 @@ class IrrLib {
 		void addEditBox(const MenuItem &item);
 		void addCheckBox(const MenuItem &item);
 		void addListBox(const MenuItem &item);
+		
 
 		void drop();
 		void drawMenu();
@@ -48,6 +49,7 @@ class IrrLib {
 		std::wstring getInputText(MenuItem &item);
 		bool getCheckboxState(MenuItem &item);
 		std::wstring getLabelText(MenuItem &item);
+		std::wstring getListBoxChoice(MenuItem &item);
 		void displayBackground();
 		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 			std::pair<std::size_t, std::size_t> size);

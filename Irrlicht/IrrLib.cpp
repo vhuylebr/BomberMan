@@ -155,18 +155,13 @@ void IrrLib::addCheckBox(const MenuItem &item)
 
 void IrrLib::addListBox(const MenuItem &item)
 {
-	std::cout << "salut, allons créer une listbox ensemble" << std::endl;
-
 	_listbox = _guienv->addListBox(irr::core::rect<irr::s32>(item.getCoord().first, 
 		item.getCoord().second,	item.getCoord().first + item.getSize().first, 
 		item.getCoord().second + item.getSize().second));
-
 	_listbox->setItemHeight(20);
-	std::vector<std::wstring> toto = item.getChoices();
-
+//	_listbox->setAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	int idx = 0;
-	_listbox->setAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	for (auto &i : toto)
+	for (auto &i : item.getChoices())
 	{
 		const wchar_t* kek = i.c_str();
 		_listbox->addItem(kek);
@@ -230,7 +225,7 @@ std::wstring IrrLib::getInputText(MenuItem &item)
 	return (L"");
 }
 
-bool IrrLib::getCheckboxState(MenuItem &item)
+bool	IrrLib::getCheckboxState(MenuItem &item)
 {
 	for (auto it = _checkboxes.begin(); it != _checkboxes.end(); ++it) {
 		if ((*it)->getID() == item.getId()) {
@@ -240,7 +235,7 @@ bool IrrLib::getCheckboxState(MenuItem &item)
 	return (false);
 }
 
-std::wstring  IrrLib::getLabelText(MenuItem &item)
+std::wstring	IrrLib::getLabelText(MenuItem &item)
 {
 	for (auto it = _labels.begin(); it != _labels.end(); ++it) {
 		if ((*it)->getID() == item.getId()) {
@@ -249,6 +244,13 @@ std::wstring  IrrLib::getLabelText(MenuItem &item)
 	}
 	return (L"");
 }
+
+std::wstring	IrrLib::getListBoxChoice(MenuItem &item)
+{
+	int toto = _listbox->getSelected();
+	return (item.getChoices()[toto]);
+}
+
 
 int IrrLib::getIdButtonPressed() const
 {
