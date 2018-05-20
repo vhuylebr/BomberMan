@@ -19,7 +19,8 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(GAME)GameCore.cpp\
 		$(IRR)IrrLib.cpp\
 		$(IRR)MyEventReceiver.cpp	\
-		$(GAME)Wall.cpp	
+		$(GAME)Wall.cpp	\
+		$(GAME)Crate.cpp	
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 		#$(GAME)Bomb.cpp	

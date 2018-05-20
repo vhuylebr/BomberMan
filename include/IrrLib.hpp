@@ -31,6 +31,7 @@ class IrrLib {
 		IrrLib(Actions &);
 		~IrrLib();
 		void addCube(std::unique_ptr<IEntity>&);
+		void addCubeCrate(std::unique_ptr<IEntity> &);
 		Actions getActions();
 		bool getRun();
 		void createPlane(std::pair<std::size_t, std::size_t> &size);
@@ -78,6 +79,7 @@ class IrrLib {
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
 		irr::core::vector3df		_camTarget;
+		irr::scene::ISceneNode* _ground;
 };
 
 #endif /* !IRRLIB_HPP_ */

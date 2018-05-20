@@ -17,6 +17,7 @@
 #include "Actions.hpp"
 #include "IEntity.hpp"
 #include "Wall.hpp"
+#include "Crate.hpp"
 
 class GameCore {
 	public:

@@ -20,8 +20,15 @@ enum class Entity {
     CHECKBOX,
     INPUT,
     LABEL,
-    LISTBOX
+    LISTBOX,
+    CRATE
 };
+
+struct coords {
+	std::size_t	x;
+	std::size_t	y;
+};
+
 
 class IEntity {
 public:

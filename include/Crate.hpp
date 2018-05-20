@@ -2,19 +2,19 @@
 ** EPITECH PROJECT, 2018
 ** indie_studio
 ** File description:
-** Wall hpp
+** Crate hpp
 */
 
-#ifndef WALL_HPP_
-	#define WALL_HPP_
+#ifndef CRATE_HPP_
+	#define CRATE_HPP_
 
 #include <cstddef>
 # include "IEntity.hpp"
 
-class Wall : public IEntity {
+class Crate : public IEntity {
 	public:
-		Wall(std::size_t, std::size_t);
-		~Wall() {};
+		Crate(std::size_t, std::size_t);
+		~Crate() {};
 		void 	poke();
 		Entity 	getType() const final;
 		bool	isAlive() const;
@@ -24,4 +24,4 @@ class Wall : public IEntity {
 	coords			_pos;
 };
 
-#endif /* !WALL_HPP_ */
+#endif /* !CRATE_HPP_ */

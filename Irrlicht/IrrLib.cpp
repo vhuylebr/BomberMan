@@ -29,6 +29,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(Entity::CRATE, std::bind(&IrrLib::addCubeCrate, this,
+		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::LISTBOX, std::bind(&IrrLib::addListBox, this,
 		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
@@ -50,10 +52,10 @@ void IrrLib::createPlane(std::pair<std::size_t, std::size_t> &size)
 {
 	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
 		irr::core::dimension2d<irr::u32>(size.second, size.second));
-	irr::scene::ISceneNode* ground = _smgr->addMeshSceneNode(plane);
-	ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
-	ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
-	ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+	_ground = _smgr->addMeshSceneNode(plane);
+	_ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
+	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
+	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
@@ -61,6 +63,16 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 	cube->setMaterialTexture(0, _driver->getTexture("./media/wall.bmp"));
+	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+	cube->render();
+	_cubes.push_back(cube);
+}
+
+void IrrLib::addCubeCrate(std::unique_ptr<IEntity> &entity)
+{
+	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
+	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+	cube->setMaterialTexture(0, _driver->getTexture("./media/crate.jpg"));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	cube->render();
 	_cubes.push_back(cube);
@@ -281,7 +293,6 @@ void IrrLib::cleanMenu()
 
 void IrrLib::drawGame()
 {
-	_skybox->setVisible(false);
 	_driver->beginScene(true, true);
 	_smgr->drawAll();
 	_guienv->drawAll();
@@ -291,9 +302,11 @@ void IrrLib::drawGame()
 void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 	std::pair<std::size_t, std::size_t> size)
 {
-	_camera->setPosition(irr::core::vector3df(30, 50, 0));
-	_camera->setTarget(irr::core::vector3df(0, 0, 0));
+	_skybox->setVisible(false);
 	createPlane(size);
+	irr::core::vector3df groundPos = _ground->getPosition();
+	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z));
+	_camera->setTarget(groundPos);
 	for (auto &it : gameEntities) {
 		_factory[it->getType()](it);
 	}

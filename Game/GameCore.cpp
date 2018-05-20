@@ -27,28 +27,20 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 	std::cout << "Initializing new game" << std::endl;
 	_size.x = size.first;
 	_size.y = size.second;
-	for (std::size_t i = 0 ; i < _size.x * 3; i += 1) {
-		_entities.push_back(std::unique_ptr<IEntity>(new Wall(i, 0)));
-		_entities.push_back(std::unique_ptr<IEntity>(new Wall(i, _size.y *3 - 1)));
-	}
-	for (std::size_t i = 0 ; i < _size.y *3; i += 1) {
-		_entities.push_back(std::unique_ptr<IEntity>(new Wall(0, i)));
-		_entities.push_back(std::unique_ptr<IEntity>(new Wall(_size.x *3 - 1, i)));
-	}
-
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
 	if (!file.is_open()) {
 		std::cout << "Open has failed\n";
 	} else {
 		std::cout << "Open success\n";
-		// std::cout << getline(file, line);
 		while (getline(file, line)) {
 			std::cout << "toto\n";
 			x1 = 0;
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
 					_entities.push_back(std::unique_ptr<IEntity>(new Wall(x1, y1)));
+				} else if (line[j] == '1') {
+					_entities.push_back(std::unique_ptr<IEntity>(new Crate(x1, y1)));
 				}
 				x1 += 1;
 			}
