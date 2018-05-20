@@ -8,7 +8,6 @@
 #ifndef WALL_HPP_
 	#define WALL_HPP_
 
-#include <cstddef>
 # include "IEntity.hpp"
 
 class Wall : public IEntity {

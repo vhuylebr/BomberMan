@@ -41,6 +41,8 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 					_entities.push_back(std::unique_ptr<IEntity>(new Wall(x1, y1)));
 				} else if (line[j] == '1') {
 					_entities.push_back(std::unique_ptr<IEntity>(new Crate(x1, y1)));
+				} else if (line[j] == '2') {
+					_entities.push_back(std::unique_ptr<IEntity>(new Player(x1, y1)));
 				}
 				x1 += 1;
 			}

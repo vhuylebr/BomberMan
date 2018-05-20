@@ -17,6 +17,7 @@
 #include "MyEventReceiver.hpp"
 #include "Actions.hpp"
 #include "MenuItem.hpp"
+#include "Player.hpp"
 
 enum
 {
@@ -32,6 +33,7 @@ class IrrLib {
 		~IrrLib();
 		void addCube(std::unique_ptr<IEntity>&);
 		void addCubeCrate(std::unique_ptr<IEntity> &);
+		void addPlayer(std::unique_ptr<IEntity> &);
 		Actions getActions();
 		bool getRun();
 		void createPlane(std::pair<std::size_t, std::size_t> &size);
@@ -59,6 +61,10 @@ class IrrLib {
 			std::pair<std::size_t, std::size_t> size);
 		void drawGame();
 		void cleanMenu();
+		void initMenu(std::vector<MenuItem> &);
+		void updateLabel(MenuItem &item);
+		void updatePlayer(std::unique_ptr<IEntity> &entity);
+		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
 
@@ -80,6 +86,7 @@ class IrrLib {
 		irr::scene::ISceneNode	*_skybox;
 		irr::core::vector3df		_camTarget;
 		irr::scene::ISceneNode* _ground;
+		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
 };
 
 #endif /* !IRRLIB_HPP_ */

@@ -20,12 +20,12 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(IRR)IrrLib.cpp\
 		$(IRR)MyEventReceiver.cpp	\
 		$(GAME)Wall.cpp	\
-		$(GAME)Crate.cpp	
+		$(GAME)Crate.cpp	\
+		$(GAME)Player.cpp
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 		#$(GAME)Bomb.cpp	
 		#$(GAME)Box.cpp	
-		#$(GAME)Player.cpp
 
 CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lGL -LGLU
 

@@ -33,6 +33,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::LISTBOX, std::bind(&IrrLib::addListBox, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(Entity::PLAYER, std::bind(&IrrLib::addPlayer, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -297,6 +299,29 @@ void IrrLib::drawGame()
 	_smgr->drawAll();
 	_guienv->drawAll();
 	_driver->endScene();
+}
+
+void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _players) {
+		if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+		}
+	}
+}
+
+void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
+{
+	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh("./media/METAL_SONIC.md2");
+	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
+	if (node) {
+		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		node->setMD2Animation(irr::scene::EMAT_STAND);
+		node->setMaterialTexture( 0, _driver->getTexture("./media/sydney.bmp") );
+		node->setScale(irr::core::vector3df(0.02f, 0.02f, 0.02f));
+		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+		_players.push_back(node);
+	}
 }
 
 void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,

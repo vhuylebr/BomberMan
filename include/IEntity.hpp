@@ -9,6 +9,7 @@
 # define IENTITY_HPP_
 
 #include <utility>
+#include <cstddef>
 
 enum class Entity {
     BOX,

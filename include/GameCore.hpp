@@ -18,6 +18,7 @@
 #include "IEntity.hpp"
 #include "Wall.hpp"
 #include "Crate.hpp"
+#include "Player.hpp"
 
 class GameCore {
 	public:

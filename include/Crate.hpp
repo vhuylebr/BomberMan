@@ -8,7 +8,6 @@
 #ifndef CRATE_HPP_
 	#define CRATE_HPP_
 
-#include <cstddef>
 # include "IEntity.hpp"
 
 class Crate : public IEntity {
