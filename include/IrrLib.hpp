@@ -34,6 +34,7 @@ class IrrLib {
 		void addCube(std::unique_ptr<IEntity>&);
 		void addCubeCrate(std::unique_ptr<IEntity> &);
 		void addPlayer(std::unique_ptr<IEntity> &);
+		void addSphere(std::unique_ptr<IEntity> &entity);
 		Actions getActions();
 		bool getRun();
 		void createPlane(std::pair<std::size_t, std::size_t> &size);

@@ -9,19 +9,19 @@
 # define BOMB_HPP_
 
 # include "AEntity.hpp"
-# include ""
 
-class Bomb : public AEntity {
+class Bomb : public IEntity {
 public:
-    Bomb(int x, int y);
+    Bomb(size_t x, size_t y);
     ~Bomb();
-    bool isSuperpoz() const override;
-    void hit() override;
-    bool isDestruct() override;
-    struct s_bomb extractInfo();
-    void insertInfo();
-    IEntity::Entity getType() const override;
-    int getStartingTime() const;
+    // bool isSuperpoz() const;
+    // void hit();
+    // bool isDestruct();
+    // struct s_bomb extractInfo();
+    // void insertInfo();
+	std::pair<std::size_t, std::size_t> getPos() const;
+    Entity getType() const;
+    // int getStartingTime() const;
 
 private:
 //    Timer _timer;
@@ -31,7 +31,8 @@ private:
     char _power;
     bool _penetration;
     bool _portable;
-    Direction _direction;
+    coords _pos;
+    // Direction _direction;
 };
 
 #endif /* !BOMB_HPP_ */

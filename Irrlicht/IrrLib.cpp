@@ -35,6 +35,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::PLAYER, std::bind(&IrrLib::addPlayer, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::addSphere, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -58,6 +60,15 @@ void IrrLib::createPlane(std::pair<std::size_t, std::size_t> &size)
 	_ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
 	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+}
+
+void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
+{
+	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
+	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
+	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
+	ball->setMaterialTexture(0, _driver->getTexture("./media/bomb.png"));
+	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)

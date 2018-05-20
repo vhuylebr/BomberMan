@@ -22,7 +22,8 @@ enum class Entity {
     INPUT,
     LABEL,
     LISTBOX,
-    CRATE
+    CRATE,
+    SPHERE
 };
 
 struct coords {

@@ -17,8 +17,8 @@ public:
     bool isAlive() const { return _alive; }
     int getX() const { return _x; }
     int getY() const { return _y; }
-    bool isSuperpoz() const override { return _superposable; }
-    bool isDestruct() const override { return _destructible; }
+    bool isSuperpoz() const { return _superposable; }
+    bool isDestruct() const { return _destructible; }
     Entity getType() const { return _type; };
 
 private:
