@@ -8,9 +8,10 @@
 #include <iostream>
 #include "Wall.hpp"
 
-Wall::Wall(float x, float y)
+Wall::Wall(float x, float y, unsigned int id)
 	: ACube(x, y, "./media/wall.bmp")
 {
+	_id = id;
 }
 
 void 	Wall::poke()

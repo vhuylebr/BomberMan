@@ -7,31 +7,27 @@
 
 #include "Player.hpp"
 
-Player::Player(float x, float y)
-	:_pos{x, y}
+Player::Player(float x, float y, unsigned int id)
 {
+	_x = x;
+	_y = y;
+	_id = id;
 }
 
 void 	Player::poke()
 {
-	std::cout << "Player here, pos " << _pos.x << ":" << _pos.y << std::endl;
+	std::cout << "Player here, pos " << _x << ":" << _y << std::endl;
 }
 
 bool 	Player::isAlive() const
 {
-	std::cout << "Player here, pos " << _pos.x << ":" << _pos.y << std::endl;
-	return (true);
+	std::cout << "Player here, pos " << _x << ":" << _y << std::endl;
+	return (_alive);
 }
 
 pairUC	Player::getPos() const
 {
-	return std::make_pair(_pos.x, _pos.y);
-}
-
-void Player::setPos(float x, float y)
-{
-	_pos.x = x;
-	_pos.y = y;
+	return std::make_pair(_x, _y);
 }
 
 Entity	Player::getType() const

@@ -12,8 +12,8 @@
 
 class Bomb : public AEntity {
 public:
-    Bomb(float x, float y);
-    ~Bomb();
+    Bomb(float x, float y, unsigned int id);
+    ~Bomb() {}
     // void hit();
     // struct s_bomb extractInfo();
     // void insertInfo();

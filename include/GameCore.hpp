@@ -22,21 +22,22 @@
 # include "Bomb.hpp"
 
 class GameCore {
-	public:
-		GameCore();
-		~GameCore();
+public:
+	GameCore() : _id(1) {}
+	~GameCore();
+	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
+	std::vector<std::unique_ptr<IEntity>>	&getEntities();
+	void	init(pairUC);
+	void	init(const std::string &);
+	pairUC	getSize() const;
+	void releaseUpdateEntities();
 
-		std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
-		std::vector<std::unique_ptr<IEntity>>	&getEntities();
-		void	init(pairUC);
-		void	init(const std::string &);
-		pairUC	getSize() const;
-
-	private:
-		std::vector<std::unique_ptr<IEntity>>	_entities;
-		coords				_size;
-		Player *_player1;
-		std::vector<std::unique_ptr<IEntity>>	_updateEntities;
+private:
+	std::vector<std::unique_ptr<IEntity>>	_entities;
+	coords				_size;
+	Player *_player1;
+	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
+	unsigned int _id;
 };
 
 #endif /* !GAMECORE_HPP_ */

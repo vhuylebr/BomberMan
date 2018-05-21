@@ -7,13 +7,11 @@
 
 #include "Bomb.hpp"
 
-Bomb::Bomb(float x, float y)
-    : _pos({x, y})
+Bomb::Bomb(float x, float y, unsigned int id)
 {
-}
-
-Bomb::~Bomb()
-{
+	_x = x;
+	_y = y;
+	_id = id;
 }
 
 pairUC	Bomb::getPos() const

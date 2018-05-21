@@ -9,22 +9,18 @@
 	#define PLAYER_HPP_
 
 #include <iostream>
-#include "IEntity.hpp"
+#include "AEntity.hpp"
 
-class Player : public IEntity {
-	public:
-		Player(float, float);
-		~Player() {};
-		void 	poke();
-		Entity 	getType() const final;
-		bool	isAlive() const;
-		int	getId() const {return _id;};
-		pairUC getPos() const;
-		void setPos(float, float);
-	protected:
-	private:
-		coords _pos;
-		int _id;
+class Player : public AEntity {
+public:
+	Player(float, float, unsigned int);
+	~Player() {};
+	void 	poke();
+	Entity 	getType() const final;
+	bool	isAlive() const;
+	pairUC getPos() const;
+protected:
+private:
 };
 
 #endif /* !PLAYER_HPP_ */
