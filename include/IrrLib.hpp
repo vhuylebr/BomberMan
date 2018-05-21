@@ -19,6 +19,7 @@
 #include "MenuItem.hpp"
 #include "Player.hpp"
 #include "ACube.hpp"
+#include "Bomb.hpp"
 
 enum
 {

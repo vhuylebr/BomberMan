@@ -71,16 +71,16 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
 	ball->setMaterialTexture(0, _driver->getTexture("./media/bomb.png"));
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	ball->setVisible(false);
+	// ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
 	_spheres.push_back(ball);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
-		if (static_cast<unsigned int>(it->getID()) == static_cast<Player*>(entity.get())->getId()) {
+		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-			it->setVisible(false);
+			// it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
 		}
 	}
 }
