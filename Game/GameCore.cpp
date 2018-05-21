@@ -41,7 +41,8 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 				} else if (line[j] == '1') {
 					_entities.push_back(std::unique_ptr<IEntity>(new Crate(x1, y1)));
 				} else if (line[j] == '2') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Player(x1, y1)));
+					_player1 = new Player(x1, y1);
+					_entities.push_back(std::unique_ptr<IEntity>(_player1));
 				} else if (line[j] == '3') {
 					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(x1, y1)));
 				}
@@ -74,8 +75,15 @@ std::vector<std::unique_ptr<IEntity>>	&GameCore::getEntities()
 
 std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 {
- //   for (auto &i : _entities) {
-        //i.poke(act, _entities);
-   // }
-    return (_entities);
+	_updateEntities.clear();
+	if (act.up == true)
+		_player1->setPos(_player1->getPos().first, _player1->getPos().second + 1);
+	if (act.down == true)
+		_player1->setPos(_player1->getPos().first, _player1->getPos().second - 1);
+	if (act.left == true)
+		_player1->setPos(_player1->getPos().first - 1, _player1->getPos().second);
+	if (act.right == true)
+		_player1->setPos(_player1->getPos().first + 1, _player1->getPos().second);
+	_updateEntities.push_back(static_cast<std::unique_ptr<IEntity>>(_player1));
+    return (_updateEntities);
 }

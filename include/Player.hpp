@@ -20,6 +20,7 @@ class Player : public IEntity {
 		bool	isAlive() const;
 		int	getId() const {return _id;};
 		std::pair<std::size_t, std::size_t> getPos() const;
+		void setPos(std::size_t, std::size_t);
 	protected:
 	private:
 		coords _pos;

@@ -28,6 +28,12 @@ std::pair<std::size_t, std::size_t>	Player::getPos() const
 	return std::make_pair(_pos.x, _pos.y);
 }
 
+void Player::setPos(std::size_t x, std::size_t y)
+{
+	_pos.x = x;
+	_pos.y = y;
+}
+
 Entity	Player::getType() const
 {
 	return Entity::PLAYER;

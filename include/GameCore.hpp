@@ -35,6 +35,8 @@ class GameCore {
 	private:
 		std::vector<std::unique_ptr<IEntity>>	_entities;
 		coords				_size;
+		Player *_player1;
+		std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 };
 
 #endif /* !GAMECORE_HPP_ */
