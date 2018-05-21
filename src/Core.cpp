@@ -79,23 +79,16 @@ int     Core::loop()
 
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
-			// if (!music.openFromFile("./media/Sound/TitleScreen.ogg"))
-			// 	return -1;
-			// music.play();
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
-				// music.stop();
-				if (!music.openFromFile("./media/Sound/MenuSelection.ogg"))
+				if (!music.openFromFile("./media/Sound/MenuSelect.ogg"))
 					return -1;
 				music.play();
+				music.setLoop(true);
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
 		} else if (_state == STATE::GAME) {
-			// music.stop();
-			// if (!music.openFromFile("./media/Sound/TitleScreen.ogg"))
-			// 	return -1;
-			// music.play();
 			gameManager(lstate);
 		}
 	}
