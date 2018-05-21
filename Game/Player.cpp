@@ -34,3 +34,8 @@ Entity	Player::getType() const
 {
 	return Entity::PLAYER;
 }
+
+void Player::setRotation(float rotation)
+{
+	_rotation = rotation;
+}

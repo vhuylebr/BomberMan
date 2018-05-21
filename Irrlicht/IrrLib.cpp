@@ -37,6 +37,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::PLAYER, std::bind(&IrrLib::updatePlayer, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::updateSphere, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -69,6 +71,20 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
 	ball->setMaterialTexture(0, _driver->getTexture("./media/bomb.png"));
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+	// ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+	_spheres.push_back(ball);
+}
+
+void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _spheres) {
+		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			// it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+			return ;
+		}
+	}
+	addSphere(entity);
 }
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
@@ -81,10 +97,16 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	_cubes.push_back(cube);
 }
 
-// void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
-// {
-
-// }
+void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _cubes) {
+		if (it->getID() == static_cast<ACube*>(entity.get())->getId()) {
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setVisible(false);
+			return ;
+		}
+	}
+}
 
 Actions	IrrLib::getActions()
 {
@@ -277,7 +299,6 @@ std::wstring	IrrLib::getListBoxChoice(std::unique_ptr<IEntity> &item)
 	return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
 }
 
-
 int IrrLib::getIdButtonPressed() const
 {
 	return _eventReceiver.getIdButtonPressed();
@@ -310,9 +331,10 @@ void IrrLib::drawGame()
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _players) {
-		// if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
+		if (static_cast<unsigned int>(it->getID()) == static_cast<Player*>(entity.get())->getId()) {
+			it->setRotation(irr::core::vector3df(0, static_cast<Player*>(entity.get())->getRotation(), 0));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-		// }
+		}
 	}
 }
 
@@ -326,6 +348,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 		node->setMaterialTexture( 0, _driver->getTexture("./media/sydney.bmp") );
 		node->setScale(irr::core::vector3df(0.02f, 0.02f, 0.02f));
 		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+		node->setID(static_cast<Player*>(entity.get())->getId());
 		_players.push_back(node);
 	}
 }
