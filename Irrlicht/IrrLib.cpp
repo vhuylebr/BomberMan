@@ -332,6 +332,7 @@ void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _players) {
 		if (static_cast<unsigned int>(it->getID()) == static_cast<Player*>(entity.get())->getId()) {
+			it->setRotation(irr::core::vector3df(0, static_cast<Player*>(entity.get())->getRotation(), 0));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		}
 	}
