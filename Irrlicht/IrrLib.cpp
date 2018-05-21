@@ -309,7 +309,6 @@ void IrrLib::drawGame()
 
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 {
-	std::cout << "updatePlayer\n";
 	for (auto &it : _players) {
 		// if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
