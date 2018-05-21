@@ -31,7 +31,7 @@ public:
 	void	init(const std::string &);
 	pairUC	getSize() const;
 	void releaseUpdateEntities();
-
+	void afterCalc();
 private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;

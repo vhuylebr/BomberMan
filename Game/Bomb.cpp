@@ -10,6 +10,7 @@
 Bomb::Bomb(float x, float y, unsigned int id)
 	:_counter(300)
 {
+	_alive = true;
 	_x = x;
 	_y = y;
 	_id = id;

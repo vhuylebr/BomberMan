@@ -67,6 +67,7 @@ void    Core::gameManager(STATE &last)
 		_lib.initGame(_game.getEntities(), _game.getSize());
 	} else if (_host || true) { // Forcing true for now
 		_lib.affGameEntities(_game.calc(_lib.getActions()));
+		_game.afterCalc();
 		_lib.drawGame();
 	}
 	last = STATE::GAME;

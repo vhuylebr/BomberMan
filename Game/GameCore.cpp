@@ -109,21 +109,39 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 		_player1.setRotation(90.0f);
 		changed = true;
 	}
+	if (changed)
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 	if (act.space == true) {
-		Bomb	tmp(_player1.getPos().first, _player1.getPos().second, _id++);
-		_bombs.push_back(tmp);
+		// if (_bombs.front().isAlive() == false) {
+		// 	_bombs.front().setPos(_player1.getPos().first, _player1.getPos().second);
+		// 	_bombs.front();
+		// 	_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.front()));
+		// } else {
+			Bomb	tmp(_player1.getPos().first, _player1.getPos().second, _id++);
+			_bombs.push_back(tmp);
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+		// }	
+		std::cout << "create Bomb" << std::endl;
 	}
 	std::cout << "In" << std::endl;
-	for (auto it = _bombs.begin() ; it != _bombs.end() ; ++it) {
+	for (auto &it: _bombs) {
 		std::cout << "In2" << std::endl;
-		it->tick();
-		if (!it->isAlive()) {
-			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+		it.tick();
+		if (!it.isAlive()) {
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
 			std::cout << "Boom" << std::endl;
 		}
 	}
 	std::cout << "OUt" << std::endl;
-	if (changed)
-		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 	return (_updateEntities);
+}
+
+void GameCore::afterCalc()
+{
+	for (auto it = _bombs.begin(); it != _bombs.end(); ++it) {
+		if (!it->isAlive()) {
+			// _bombs.erase(it);
+			// ++it;
+		}
+	}
 }
