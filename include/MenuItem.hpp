@@ -13,8 +13,6 @@
 # include <vector>
 # include "IEntity.hpp"
 
-typedef std::pair<std::size_t, std::size_t> pairUC;
-
 using ui = unsigned int;
 
 class MenuItem : public IEntity {
@@ -43,8 +41,8 @@ private:
     Entity _type;
     int _id;
     std::string _text;
-    std::pair<std::size_t, std::size_t> _coord;
-    std::pair<std::size_t, std::size_t> _size;
+    pairUC _coord;
+    pairUC _size;
     bool _selected;
     std::vector<std::wstring> _choices;
 };

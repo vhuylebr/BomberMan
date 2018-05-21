@@ -9,22 +9,18 @@
 	#define PLAYER_HPP_
 
 #include <iostream>
-#include "IEntity.hpp"
+#include "AEntity.hpp"
 
-class Player : public IEntity {
-	public:
-		Player(std::size_t, std::size_t);
-		~Player() {};
-		void 	poke();
-		Entity 	getType() const final;
-		bool	isAlive() const;
-		int	getId() const {return _id;};
-		std::pair<std::size_t, std::size_t> getPos() const;
-		void setPos(std::size_t, std::size_t);
-	protected:
-	private:
-		coords _pos;
-		int _id;
+class Player : public AEntity {
+public:
+	Player(float, float, unsigned int);
+	~Player() {};
+	void 	poke();
+	Entity 	getType() const final;
+	bool	isAlive() const;
+	pairUC getPos() const;
+protected:
+private:
 };
 
 #endif /* !PLAYER_HPP_ */

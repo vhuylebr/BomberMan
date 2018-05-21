@@ -9,20 +9,11 @@
 #include <fstream>
 #include <iostream>
 
-GameCore::GameCore()
-{
-}
-
-GameCore::~GameCore()
-{
-}
-
-void    GameCore::init(std::pair<std::size_t, std::size_t> size)
+void    GameCore::init(pairUC size)
 {
 	std::string filename = "./media/map1.txt";
 	std::ifstream file(filename);
 	std::string line;
-
 
 	std::cout << "Initializing new game" << std::endl;
 	_size.x = size.first;
@@ -37,27 +28,34 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 			x1 = 0;
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Wall(x1, y1)));
+					_entities.push_back(std::unique_ptr<IEntity>(new Wall(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					_id++;
 				} else if (line[j] == '1') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Crate(x1, y1)));
+					_entities.push_back(std::unique_ptr<IEntity>(new Crate(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					_id++;
 				} else if (line[j] == '2') {
-					_player1 = new Player(x1, y1);
+					_player1 = new Player(static_cast<float>(x1), static_cast<float>(y1), _id);
+					_id++;
 					_entities.push_back(std::unique_ptr<IEntity>(_player1));
 				} else if (line[j] == '3') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(x1, y1)));
+					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					_id++;
 				}
 				x1 += 1;
 			}
 			y1 += 1;
 		}
 	}
-	// std::cout << "Here" << std::endl;
-	// for (auto &a : _entities) {
-	// 	a->isAlive();
-	// }
 }
 
-std::pair<std::size_t, std::size_t>	GameCore::getSize() const
+GameCore::~GameCore()
+{
+	if (_updateEntities.size() > 0)
+		releaseUpdateEntities();
+	_entities.clear();
+}
+
+pairUC	GameCore::getSize() const
 {
     return (std::make_pair(_size.x, _size.y));
 }
@@ -73,23 +71,35 @@ std::vector<std::unique_ptr<IEntity>>	&GameCore::getEntities()
 	return _entities;
 }
 
+void GameCore::releaseUpdateEntities()
+{
+	for (auto &i : _updateEntities) {
+		i.release();
+	}
+	_updateEntities.clear();
+}
+
 std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 {
-	if (_updateEntities.size() > 0) {
-		_updateEntities[0].release();
-		_updateEntities.clear();
-	}
+	bool changed = false;
+
+	if (_updateEntities.size() > 0)
+		releaseUpdateEntities();
 	if (act.up == true)
-		_player1->setPos(_player1->getPos().first, _player1->getPos().second + 1);
+		_player1->setCoord(_player1->getPos().first, _player1->getPos().second + 1);
+		changed = true;
 	if (act.down == true)
-		_player1->setPos(_player1->getPos().first, _player1->getPos().second - 1);
+		_player1->setCoord(_player1->getPos().first, _player1->getPos().second - 1);
+		changed = true;
 	if (act.left == true) {
-		_player1->setPos(_player1->getPos().first - 1, _player1->getPos().second);
-		_updateEntities.push_back(std::unique_ptr<IEntity>(_player1));
+		_player1->setCoord(_player1->getPos().first - 1, _player1->getPos().second);
+		changed = true;
 	}
 	if (act.right == true) {
-		_player1->setPos(_player1->getPos().first + 1, _player1->getPos().second);
-		_updateEntities.push_back(std::unique_ptr<IEntity>(_player1));
+		_player1->setCoord(_player1->getPos().first + 1, _player1->getPos().second);
+		changed = true;
 	}
+	if (changed)
+		_updateEntities.push_back(std::unique_ptr<IEntity>(_player1));
 	return (_updateEntities);
 }

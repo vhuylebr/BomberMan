@@ -8,7 +8,7 @@
 #ifndef ITEM_HPP_
 # define ITEM_HPP_
 
-# include "IEntity.hpp"
+# include "AEntity.hpp"
 # include <string>
 
 # define NB_ITEMS 6 // Nombre d'items implémentés
@@ -25,15 +25,15 @@ enum class eItem {
 
 std::string itemToStr(eItem item);
 
-class Item : public IEntity {
+class Item : public AEntity {
 public:
-	Item();
+	Item(float, float, unsigned int);
 	~Item();
 
 	void 	poke();
 	Entity 	getType() const final;
 	bool	isAlive() const;
-	std::pair<std::size_t, std::size_t> getPos() const;	
+	pairUC getPos() const;	
 private:
 };
 

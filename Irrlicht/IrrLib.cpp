@@ -52,7 +52,7 @@ IrrLib::~IrrLib()
 {
 }
 
-void IrrLib::createPlane(std::pair<std::size_t, std::size_t> &size)
+void IrrLib::createPlane(pairUC &size)
 {
 	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
 		irr::core::dimension2d<irr::u32>(size.second, size.second));
@@ -332,7 +332,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 }
 
 void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
-	std::pair<std::size_t, std::size_t> size)
+	pairUC size)
 {
 	_skybox->setVisible(false);
 	createPlane(size);

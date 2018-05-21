@@ -7,16 +7,14 @@
 
 #include "Bomb.hpp"
 
-Bomb::Bomb(size_t x, size_t y)
-    : _pos({x, y})
+Bomb::Bomb(float x, float y, unsigned int id)
 {
+	_x = x;
+	_y = y;
+	_id = id;
 }
 
-Bomb::~Bomb()
-{
-}
-
-std::pair<std::size_t, std::size_t>	Bomb::getPos() const
+pairUC	Bomb::getPos() const
 {
 	return std::make_pair(_pos.x, _pos.y);
 }

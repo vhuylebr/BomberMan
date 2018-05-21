@@ -11,11 +11,14 @@
 # include "ACube.hpp"
 
 class Crate : public ACube {
-	public:
-		Crate(std::size_t, std::size_t);
-		~Crate() {};
-		void 	poke();
-		bool	isAlive() const;
+public:
+	Crate(float, float, unsigned int);
+	~Crate() {};
+	void 	poke();
+	bool	isAlive() const;
+	unsigned int getId() const { return _id; }
+private:
+	unsigned int _id;
 };
 
 #endif /* !CRATE_HPP_ */

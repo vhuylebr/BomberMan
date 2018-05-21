@@ -7,8 +7,10 @@
 
 #include "Item.hpp"
 
-Item::Item()
+Item::Item(float x, float y, unsigned int id)
 {
+	setCoord(x, y);
+	_id = id;
 }
 
 Item::~Item()
