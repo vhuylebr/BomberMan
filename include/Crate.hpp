@@ -8,19 +8,14 @@
 #ifndef CRATE_HPP_
 	#define CRATE_HPP_
 
-# include "IEntity.hpp"
+# include "ACube.hpp"
 
-class Crate : public IEntity {
+class Crate : public ACube {
 	public:
 		Crate(std::size_t, std::size_t);
 		~Crate() {};
 		void 	poke();
-		Entity 	getType() const final;
 		bool	isAlive() const;
-		std::pair<std::size_t, std::size_t> getPos() const;
-
-	private:
-	coords			_pos;
 };
 
 #endif /* !CRATE_HPP_ */

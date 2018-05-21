@@ -27,9 +27,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::BUTTON, std::bind(&IrrLib::addButton, this,
 		std::placeholders::_1)));
-	_factory.insert(std::make_pair(Entity::WALL, std::bind(&IrrLib::addCube, this,
-		std::placeholders::_1)));
-	_factory.insert(std::make_pair(Entity::CRATE, std::bind(&IrrLib::addCubeCrate, this,
+	_factory.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::addCube, this,
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::LISTBOX, std::bind(&IrrLib::addListBox, this,
 		std::placeholders::_1)));
@@ -75,17 +73,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 {
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-	cube->setMaterialTexture(0, _driver->getTexture("./media/wall.bmp"));
-	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	cube->render();
-	_cubes.push_back(cube);
-}
-
-void IrrLib::addCubeCrate(std::unique_ptr<IEntity> &entity)
-{
-	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
-	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-	cube->setMaterialTexture(0, _driver->getTexture("./media/crate.jpg"));
+	cube->setMaterialTexture(0, _driver->getTexture(static_cast<ACube*>(entity.get())->getTexture().c_str()));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	cube->render();
 	_cubes.push_back(cube);

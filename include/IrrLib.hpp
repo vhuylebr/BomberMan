@@ -18,6 +18,7 @@
 #include "Actions.hpp"
 #include "MenuItem.hpp"
 #include "Player.hpp"
+#include "ACube.hpp"
 
 enum
 {
@@ -32,7 +33,6 @@ class IrrLib {
 		IrrLib(Actions &);
 		~IrrLib();
 		void addCube(std::unique_ptr<IEntity>&);
-		void addCubeCrate(std::unique_ptr<IEntity> &);
 		void addPlayer(std::unique_ptr<IEntity> &);
 		void addSphere(std::unique_ptr<IEntity> &entity);
 		Actions getActions();

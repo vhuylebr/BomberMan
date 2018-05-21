@@ -22,12 +22,12 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(GAME)Wall.cpp	\
 		$(GAME)Crate.cpp	\
 		$(GAME)Player.cpp	\
-		$(GAME)Bomb.cpp	
+		$(GAME)Bomb.cpp	\
+		$(GAME)ACube.cpp	
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
-		#$(GAME)Box.cpp	
 
-CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lGL -LGLU
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht
 
 CC	=	g++
 

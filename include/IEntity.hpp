@@ -13,7 +13,6 @@
 
 enum class Entity {
     BOX,
-    WALL,
     BOMB,
     PLAYER,
     ITEM,
@@ -22,8 +21,8 @@ enum class Entity {
     INPUT,
     LABEL,
     LISTBOX,
-    CRATE,
-    SPHERE
+    SPHERE,
+    CUBE
 };
 
 struct coords {
