@@ -167,8 +167,10 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 		_changeState = true;
 		_changed = true;
 	}
-	if (actions.buttonPressed == 7)
+	if (actions.buttonPressed == 7) {
+		_changed = -1;
 		state = STATE::GAME;
+	}
 	else if (actions.buttonPressed == 2) {
 		if (_nbPlayer < 4)
 			_nbPlayer += 1;
@@ -191,8 +193,10 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 		_step = 1;
 		return ;
 	}
-	if (actions.buttonPressed == 3)
+	if (actions.buttonPressed == 3) {
 		state = STATE::GAME;
+		_changed = -1;
+	}
 }
 
 bool 	Menu::stepChanged(STATE &state)
