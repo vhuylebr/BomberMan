@@ -81,8 +81,10 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			// it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+			return ;
 		}
 	}
+	addSphere(entity);
 }
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
@@ -101,6 +103,7 @@ void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == static_cast<ACube*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(false);
+			return ;
 		}
 	}
 }
