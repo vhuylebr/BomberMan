@@ -338,9 +338,9 @@ void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
-	for (auto &it : gameEntities) {
-		_factory[it->getType()](it);
-	}
+	// for (auto &it : gameEntities) {
+	// 	_factory[it->getType()](it);
+	// }
 }
 
 void IrrLib::drop()

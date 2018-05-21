@@ -34,7 +34,6 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 	} else {
 		std::cout << "Open success\n";
 		while (getline(file, line)) {
-			std::cout << "toto\n";
 			x1 = 0;
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
