@@ -35,6 +35,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::addSphere, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::PLAYER, std::bind(&IrrLib::updatePlayer, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -78,6 +80,11 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	cube->render();
 	_cubes.push_back(cube);
 }
+
+// void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
+// {
+
+// }
 
 Actions	IrrLib::getActions()
 {
@@ -302,10 +309,11 @@ void IrrLib::drawGame()
 
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 {
+	std::cout << "updatePlayer\n";
 	for (auto &it : _players) {
-		if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
+		// if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-		}
+		// }
 	}
 }
 
@@ -338,9 +346,9 @@ void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
-	// for (auto &it : gameEntities) {
-	// 	_factory[it->getType()](it);
-	// }
+	for (auto &it : gameEntities) {
+		_factoryUpdate[it->getType()](it);
+	}
 }
 
 void IrrLib::drop()

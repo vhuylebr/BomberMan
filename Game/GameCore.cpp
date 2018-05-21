@@ -64,26 +64,32 @@ std::pair<std::size_t, std::size_t>	GameCore::getSize() const
 
 void    GameCore::init(const std::string &file)
 {
-    init(std::make_pair(100, 100));
-    std::cout << "Loading " << file << std::endl;
+	init(std::make_pair(100, 100));
+	std::cout << "Loading " << file << std::endl;
 }
 
 std::vector<std::unique_ptr<IEntity>>	&GameCore::getEntities()
 {
-    return _entities;
+	return _entities;
 }
 
 std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 {
-	_updateEntities.clear();
+	if (_updateEntities.size() > 0) {
+		_updateEntities[0].release();
+		_updateEntities.clear();
+	}
 	if (act.up == true)
 		_player1->setPos(_player1->getPos().first, _player1->getPos().second + 1);
 	if (act.down == true)
 		_player1->setPos(_player1->getPos().first, _player1->getPos().second - 1);
-	if (act.left == true)
+	if (act.left == true) {
 		_player1->setPos(_player1->getPos().first - 1, _player1->getPos().second);
-	if (act.right == true)
+		_updateEntities.push_back(std::unique_ptr<IEntity>(_player1));
+	}
+	if (act.right == true) {
 		_player1->setPos(_player1->getPos().first + 1, _player1->getPos().second);
-	_updateEntities.push_back(static_cast<std::unique_ptr<IEntity>>(_player1));
-    return (_updateEntities);
+		_updateEntities.push_back(std::unique_ptr<IEntity>(_player1));
+	}
+	return (_updateEntities);
 }

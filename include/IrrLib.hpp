@@ -88,6 +88,7 @@ class IrrLib {
 		irr::core::vector3df		_camTarget;
 		irr::scene::ISceneNode* _ground;
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
+		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 };
 
 #endif /* !IRRLIB_HPP_ */
