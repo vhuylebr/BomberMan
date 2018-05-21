@@ -13,14 +13,14 @@
 
 class Player : public IEntity {
 	public:
-		Player(std::size_t, std::size_t);
+		Player(float, float);
 		~Player() {};
 		void 	poke();
 		Entity 	getType() const final;
 		bool	isAlive() const;
 		int	getId() const {return _id;};
-		std::pair<std::size_t, std::size_t> getPos() const;
-		void setPos(std::size_t, std::size_t);
+		pairUC getPos() const;
+		void setPos(float, float);
 	protected:
 	private:
 		coords _pos;

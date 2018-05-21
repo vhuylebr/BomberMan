@@ -12,7 +12,7 @@
 
 class Wall : public ACube {
 	public:
-		Wall(std::size_t, std::size_t);
+		Wall(float, float);
 		~Wall() {};
 		void 	poke();
 		bool	isAlive() const;

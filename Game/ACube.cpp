@@ -7,7 +7,7 @@
 
 #include "ACube.hpp"
 
-ACube::ACube(std::size_t x, std::size_t y, std::string texture)
+ACube::ACube(float x, float y, std::string texture)
     : _pos({x, y}), _texture(texture)
 {
 }
@@ -21,7 +21,7 @@ Entity	ACube::getType() const
 	return Entity::CUBE;
 }
 
-std::pair<std::size_t, std::size_t>	ACube::getPos() const
+pairUC	ACube::getPos() const
 {
 	return std::make_pair(_pos.x, _pos.y);
 }

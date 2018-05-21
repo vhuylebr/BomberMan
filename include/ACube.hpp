@@ -13,10 +13,10 @@
 
 class ACube: public IEntity {
 	public:
-		ACube(std::size_t, std::size_t, std::string);
+		ACube(float, float, std::string);
 		~ACube();
 		Entity getType() const;
-    	std::pair<std::size_t, std::size_t> getPos() const;
+    	pairUC getPos() const;
 		std::string getTexture() const;
 	protected:
 		coords _pos;

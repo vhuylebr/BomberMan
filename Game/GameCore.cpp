@@ -17,7 +17,7 @@ GameCore::~GameCore()
 {
 }
 
-void    GameCore::init(std::pair<std::size_t, std::size_t> size)
+void    GameCore::init(pairUC size)
 {
 	std::string filename = "./media/map1.txt";
 	std::ifstream file(filename);
@@ -37,27 +37,23 @@ void    GameCore::init(std::pair<std::size_t, std::size_t> size)
 			x1 = 0;
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Wall(x1, y1)));
+					_entities.push_back(std::unique_ptr<IEntity>(new Wall(static_cast<float>(x1), static_cast<float>(y1))));
 				} else if (line[j] == '1') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Crate(x1, y1)));
+					_entities.push_back(std::unique_ptr<IEntity>(new Crate(static_cast<float>(x1), static_cast<float>(y1))));
 				} else if (line[j] == '2') {
-					_player1 = new Player(x1, y1);
+					_player1 = new Player(static_cast<float>(x1), static_cast<float>(y1));
 					_entities.push_back(std::unique_ptr<IEntity>(_player1));
 				} else if (line[j] == '3') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(x1, y1)));
+					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(static_cast<float>(x1), static_cast<float>(y1))));
 				}
 				x1 += 1;
 			}
 			y1 += 1;
 		}
 	}
-	// std::cout << "Here" << std::endl;
-	// for (auto &a : _entities) {
-	// 	a->isAlive();
-	// }
 }
 
-std::pair<std::size_t, std::size_t>	GameCore::getSize() const
+pairUC	GameCore::getSize() const
 {
     return (std::make_pair(_size.x, _size.y));
 }

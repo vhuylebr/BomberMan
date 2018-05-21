@@ -11,6 +11,8 @@
 #include <utility>
 #include <cstddef>
 
+typedef std::pair<float, float> pairUC;
+
 enum class Entity {
     BOX,
     BOMB,
@@ -26,8 +28,8 @@ enum class Entity {
 };
 
 struct coords {
-	std::size_t	x;
-	std::size_t	y;
+	float	x;
+	float	y;
 };
 
 
@@ -40,7 +42,7 @@ public:
     //virtual void extractInfo() = 0;
     //virtual void insertInfo() = 0;
     virtual Entity getType() const = 0;
-    virtual std::pair<std::size_t, std::size_t> getPos() const = 0;
+    virtual std::pair<float, float> getPos() const = 0;
     };
 
 #endif /* !IENTITY_HPP_ */

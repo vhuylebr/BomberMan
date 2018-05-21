@@ -37,7 +37,7 @@ class IrrLib {
 		void addSphere(std::unique_ptr<IEntity> &entity);
 		Actions getActions();
 		bool getRun();
-		void createPlane(std::pair<std::size_t, std::size_t> &size);
+		void createPlane(pairUC &size);
 		void affGameEntities(std::vector<std::unique_ptr<IEntity>>&);
 		
 		// void affMenuItems(std::vector<MenuItem>&);
@@ -59,7 +59,7 @@ class IrrLib {
 		std::wstring getListBoxChoice(std::unique_ptr<IEntity>&);
 		void displayBackground();
 		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
-			std::pair<std::size_t, std::size_t> size);
+			pairUC size);
 		void drawGame();
 		void cleanMenu();
 		void initMenu(std::vector<MenuItem> &);

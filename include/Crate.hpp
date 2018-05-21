@@ -12,7 +12,7 @@
 
 class Crate : public ACube {
 	public:
-		Crate(std::size_t, std::size_t);
+		Crate(float, float);
 		~Crate() {};
 		void 	poke();
 		bool	isAlive() const;

@@ -15,8 +15,8 @@ class AEntity : public IEntity {
 public:
     ~AEntity() {}
     bool isAlive() const { return _alive; }
-    int getX() const { return _x; }
-    int getY() const { return _y; }
+    float getX() const { return _x; }
+    float getY() const { return _y; }
     bool isSuperpoz() const { return _superposable; }
     bool isDestruct() const { return _destructible; }
     Entity getType() const { return _type; };
@@ -26,8 +26,8 @@ private:
     bool _superposable;
     bool _destructible;
     Entity _type;
-    int _x;
-    int _y;
+    float _x;
+    float _y;
 };
 
 #endif /* !AENTITY_HPP_ */

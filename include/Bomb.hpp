@@ -10,16 +10,14 @@
 
 # include "AEntity.hpp"
 
-class Bomb : public IEntity {
+class Bomb : public AEntity {
 public:
-    Bomb(size_t x, size_t y);
+    Bomb(float x, float y);
     ~Bomb();
-    // bool isSuperpoz() const;
     // void hit();
-    // bool isDestruct();
     // struct s_bomb extractInfo();
     // void insertInfo();
-	std::pair<std::size_t, std::size_t> getPos() const;
+	pairUC getPos() const;
     Entity getType() const;
     // int getStartingTime() const;
 

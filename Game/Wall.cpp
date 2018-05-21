@@ -8,7 +8,7 @@
 #include <iostream>
 #include "Wall.hpp"
 
-Wall::Wall(size_t x, size_t y)
+Wall::Wall(float x, float y)
 	: ACube(x, y, "./media/wall.bmp")
 {
 }

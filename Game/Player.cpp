@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-Player::Player(size_t x, size_t y)
+Player::Player(float x, float y)
 	:_pos{x, y}
 {
 }
@@ -23,12 +23,12 @@ bool 	Player::isAlive() const
 	return (true);
 }
 
-std::pair<std::size_t, std::size_t>	Player::getPos() const
+pairUC	Player::getPos() const
 {
 	return std::make_pair(_pos.x, _pos.y);
 }
 
-void Player::setPos(std::size_t x, std::size_t y)
+void Player::setPos(float x, float y)
 {
 	_pos.x = x;
 	_pos.y = y;
