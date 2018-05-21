@@ -75,16 +75,29 @@ void    Core::gameManager(STATE &last)
 int     Core::loop()
 {
 	STATE   lstate = STATE::INIT;
+	sf::Music music;
 
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
+			// if (!music.openFromFile("./media/Sound/TitleScreen.ogg"))
+			// 	return -1;
+			// music.play();
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
+				// music.stop();
+				if (!music.openFromFile("./media/Sound/MenuSelection.ogg"))
+					return -1;
+				music.play();
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
-		} else if (_state == STATE::GAME)
+		} else if (_state == STATE::GAME) {
+			// music.stop();
+			// if (!music.openFromFile("./media/Sound/TitleScreen.ogg"))
+			// 	return -1;
+			// music.play();
 			gameManager(lstate);
+		}
 	}
 	return 0;
 }
