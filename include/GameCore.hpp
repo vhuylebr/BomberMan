@@ -31,10 +31,10 @@ public:
 	void	init(pairUC);
 	void	init(const std::string &);
 	pairUC	getSize() const;
-	void 	releaseUpdateEntities();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 	void 	handlePause(Actions actions, STATE &state);
-
+	void releaseUpdateEntities();
+	void afterCalc();
 
 private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;

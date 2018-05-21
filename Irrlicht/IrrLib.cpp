@@ -66,21 +66,24 @@ void IrrLib::createPlane(pairUC &size)
 
 void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 {
+	std::cout << "add sphere\n";
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
 	ball->setMaterialTexture(0, _driver->getTexture("./media/bomb.png"));
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	// ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+	ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+	ball->setID(static_cast<Bomb*>(entity.get())->getId());
 	_spheres.push_back(ball);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
+	std::cout << "update bomb\n";
 	for (auto &it : _spheres) {
 		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-			// it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
 			return ;
 		}
 	}
