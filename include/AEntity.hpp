@@ -32,6 +32,7 @@ protected:
 	Entity _type;
 	float _x;
 	float _y;
+	float _rotation;
 };
 
 #endif /* !AENTITY_HPP_ */

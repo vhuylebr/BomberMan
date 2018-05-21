@@ -19,8 +19,10 @@ public:
 	Entity 	getType() const final;
 	bool	isAlive() const;
 	pairUC getPos() const;
-protected:
+	float getRotation() const {return _rotation;};
+	void setRotation(float);
 private:
+	float _rotation;
 };
 
 #endif /* !PLAYER_HPP_ */

@@ -8,8 +8,8 @@
 #include <iostream>
 #include "Crate.hpp"
 
-Crate::Crate(float x, float y, unsigned int id)
-	: ACube(x, y, "./media/crate.jpg"), _id(id)
+Crate::Crate(float x, float y, int id)
+	: ACube(x, y, "./media/crate.jpg", id)
 {
 }
 

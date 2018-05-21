@@ -7,8 +7,8 @@
 
 #include "ACube.hpp"
 
-ACube::ACube(float x, float y, std::string texture)
-    : _pos({x, y}), _texture(texture)
+ACube::ACube(float x, float y, std::string texture, int id)
+    : _pos({x, y}), _texture(texture), _id(id)
 {
 }
 
