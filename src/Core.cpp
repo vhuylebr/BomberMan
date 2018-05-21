@@ -76,14 +76,20 @@ int     Core::loop()
 {
 	STATE   lstate = STATE::INIT;
 	sf::Music music;
+	sf::Music music2;
 
+	if (!music.openFromFile("./media/Sound/MenuSelect.ogg"))
+		return -1;
+	if (!music2.openFromFile("./media/Sound/TitleScreen.ogg"))
+		return -1;		
+	music.play();
+	music.setLoop(true);
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
-				if (!music.openFromFile("./media/Sound/MenuSelect.ogg"))
-					return -1;
-				music.play();
+				music.stop();
+				music2.play();
 				music.setLoop(true);
 				getParametersFromMenu();
 				_lib.cleanMenu();
