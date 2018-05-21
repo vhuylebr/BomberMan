@@ -9,6 +9,11 @@
 #include <fstream>
 #include <iostream>
 
+GameCore::GameCore()
+	:_id(1), _player1(-1, -1, _id)
+{
+}
+
 void    GameCore::init(pairUC size)
 {
 	std::string filename = "./media/map1.txt";
@@ -34,9 +39,8 @@ void    GameCore::init(pairUC size)
 					_entities.push_back(std::unique_ptr<IEntity>(new Crate(static_cast<float>(x1), static_cast<float>(y1), _id)));
 					_id++;
 				} else if (line[j] == '2') {
-					_player1 = new Player(static_cast<float>(x1), static_cast<float>(y1), _id);
-					_id++;
-					_entities.push_back(std::unique_ptr<IEntity>(_player1));
+					_player1.setPos(static_cast<float>(x1), static_cast<float>(y1));
+					_entities.push_back(std::unique_ptr<IEntity>(&_player1));
 				} else if (line[j] == '3') {
 					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(static_cast<float>(x1), static_cast<float>(y1), _id)));
 					_id++;
@@ -86,20 +90,32 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
 	if (act.up == true)
-		_player1->setCoord(_player1->getPos().first, _player1->getPos().second + 1);
-		changed = true;
+		_player1.setPos(_player1.getPos().first, _player1.getPos().second + 1);
 	if (act.down == true)
-		_player1->setCoord(_player1->getPos().first, _player1->getPos().second - 1);
-		changed = true;
+		_player1.setPos(_player1.getPos().first, _player1.getPos().second - 1);
 	if (act.left == true) {
-		_player1->setCoord(_player1->getPos().first - 1, _player1->getPos().second);
-		changed = true;
+		_player1.setPos(_player1.getPos().first - 1, _player1.getPos().second);
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 	}
 	if (act.right == true) {
-		_player1->setCoord(_player1->getPos().first + 1, _player1->getPos().second);
-		changed = true;
+		_player1.setPos(_player1.getPos().first + 1, _player1.getPos().second);
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 	}
+	if (act.space == true) {
+		Bomb	tmp(_player1.getPos().first, _player1.getPos().second, _id++);
+		_bombs.push_back(tmp);
+	}
+	std::cout << "In" << std::endl;
+	for (auto it = _bombs.begin() ; it != _bombs.end() ; ++it) {
+		std::cout << "In2" << std::endl;
+		it->tick();
+		if (!it->isAlive()) {
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+			std::cout << "Boom" << std::endl;
+		}
+	}
+	std::cout << "OUt" << std::endl;
 	if (changed)
-		_updateEntities.push_back(std::unique_ptr<IEntity>(_player1));
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 	return (_updateEntities);
 }

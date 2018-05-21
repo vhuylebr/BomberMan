@@ -17,15 +17,13 @@ public:
     // void hit();
     // struct s_bomb extractInfo();
     // void insertInfo();
-	pairUC getPos() const;
     Entity getType() const;
+    bool   isAlive() const;
+    void   tick();
     // int getStartingTime() const;
 
 private:
-//    Timer _timer;
-//    Timer _starting_time;
-    int _timer;
-    int _starting_time;
+    int _counter;
     char _power;
     bool _penetration;
     bool _portable;

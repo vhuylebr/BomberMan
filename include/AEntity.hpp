@@ -21,8 +21,8 @@ public:
 	bool isDestruct() const { return _destructible; }
 	Entity getType() const { return _type; }
 	unsigned int getId() const { return _id; }
-	void setCoord(float x, float y) { _x = x; _y = y; }
-	pairUC getPos() const { return {_x, _y} ; }
+	void setPos(float x, float y) { _x = x; _y = y; }
+	pairUC getPos() const { return {_x, _y} ;}
 
 protected:
 	unsigned int _id;

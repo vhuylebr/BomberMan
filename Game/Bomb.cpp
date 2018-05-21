@@ -8,48 +8,24 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb(float x, float y, unsigned int id)
+	:_counter(300)
 {
 	_x = x;
 	_y = y;
 	_id = id;
 }
 
-pairUC	Bomb::getPos() const
-{
-	return std::make_pair(_pos.x, _pos.y);
-}
-
-// bool Bomb::isSuperpoz() const
-// {
-
-// }
-
-// void Bomb::hit()
-// {
-
-// }
-
-// void Bomb::poke()
-// {
-
-// }
-
-// bool Bomb::isDestruct()
-// {
-
-// }
-
-// void Bomb::extractInfo()
-// {
-
-// }
-
-// void Bomb::insertInfo()
-// {
-
-// }
-
-Entity Bomb::getType() const
+Entity	Bomb::getType() const
 {
     return (Entity::SPHERE);
+}
+
+void	Bomb::tick()
+{
+	_counter -= 1;
+}
+
+bool 	Bomb::isAlive() const
+{
+	return (_counter > 0);
 }

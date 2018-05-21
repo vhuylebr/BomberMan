@@ -19,11 +19,11 @@
 # include "Wall.hpp"
 # include "Crate.hpp"
 # include "Player.hpp"
-# include "Bomb.hpp"
+# include "BombFactory.hpp"
 
 class GameCore {
 public:
-	GameCore() : _id(1) {}
+	GameCore();
 	~GameCore();
 	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
 	std::vector<std::unique_ptr<IEntity>>	&getEntities();
@@ -35,9 +35,11 @@ public:
 private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;
-	Player *_player1;
-	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	unsigned int _id;
+	Player 				_player1;
+	std::vector<Bomb>		_bombs;
+	//BombFactory			_bfact;
+	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 };
 
 #endif /* !GAMECORE_HPP_ */
