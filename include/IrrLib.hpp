@@ -35,6 +35,8 @@ class IrrLib {
 		void addCube(std::unique_ptr<IEntity>&);
 		void addPlayer(std::unique_ptr<IEntity> &);
 		void addSphere(std::unique_ptr<IEntity> &entity);
+		void updateSphere(std::unique_ptr<IEntity> &entity);
+		
 		Actions getActions();
 		bool getRun();
 		void createPlane(pairUC &size);
@@ -65,6 +67,7 @@ class IrrLib {
 		void initMenu(std::vector<MenuItem> &);
 		void updateLabel(MenuItem &item);
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
+		void updateCube(std::unique_ptr<IEntity> &entity);
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
@@ -89,6 +92,7 @@ class IrrLib {
 		irr::scene::ISceneNode* _ground;
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
+		std::vector<irr::scene::ISceneNode*> _spheres;
 };
 
 #endif /* !IRRLIB_HPP_ */

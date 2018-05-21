@@ -12,13 +12,10 @@
 
 class Wall : public ACube {
 public:
-	Wall(float, float, unsigned int);
+	Wall(float, float, int);
 	~Wall() {};
 	void 	poke();
 	bool	isAlive() const;
-	unsigned int getId() const { return _id; }
-private:
-	unsigned int _id;
 };
 
 #endif /* !WALL_HPP_ */

@@ -13,14 +13,16 @@
 
 class ACube: public IEntity {
 	public:
-		ACube(float, float, std::string);
+		ACube(float, float, std::string, int);
 		~ACube();
 		Entity getType() const;
-    	pairUC getPos() const;
+		pairUC getPos() const;
 		std::string getTexture() const;
+		int getId() const { return _id; }
 	protected:
 		coords _pos;
 		std::string _texture;
+		int _id;
 };
 
 #endif /* !ACUBE_HPP_ */
