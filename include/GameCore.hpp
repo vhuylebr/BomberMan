@@ -19,6 +19,7 @@
 # include "Wall.hpp"
 # include "Crate.hpp"
 # include "Player.hpp"
+# include "State.hpp"
 # include "BombFactory.hpp"
 
 class GameCore {
@@ -30,7 +31,10 @@ public:
 	void	init(pairUC);
 	void	init(const std::string &);
 	pairUC	getSize() const;
-	void releaseUpdateEntities();
+	void 	releaseUpdateEntities();
+	std::vector<std::unique_ptr<IEntity>> 	&createPause();
+	void 	handlePause(Actions actions, STATE &state);
+
 
 private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;
@@ -40,6 +44,7 @@ private:
 	std::vector<Bomb>		_bombs;
 	//BombFactory			_bfact;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
+	std::vector<std::unique_ptr<IEntity>>	_pause;
 };
 
 #endif /* !GAMECORE_HPP_ */

@@ -13,7 +13,8 @@ enum class STATE {
     LOBBY,
     GAME,
     INIT,
-    EXIT
+    EXIT,
+    PAUSE
 };
 
 #endif /* STATE_HPP_ */

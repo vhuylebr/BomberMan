@@ -35,9 +35,10 @@ public:
 
 	int loop();
 	void menuManager(STATE &last);
-	// void lobbyManager(STATE &last);
 	void gameManager(STATE &last);
-	void  getParametersFromMenu();
+//	void pauseManager(STATE &last);
+	void getParametersFromMenu();
+
 
 private:
 	parameters _param;

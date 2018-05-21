@@ -6,6 +6,7 @@
 */
 
 #include "GameCore.hpp"
+#include "MenuItem.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -126,4 +127,21 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 	if (changed)
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 	return (_updateEntities);
+}
+
+std::vector<std::unique_ptr<IEntity>> 	&GameCore::createPause()
+{
+	_pause.clear();
+	_pause.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Resume", 600, 200, 400, 100)));
+	_pause.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Save and Quit", 600, 400, 400, 100)));
+	_pause.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3	, "Quit", 600, 600, 400, 100)));
+	return (_pause);
+}
+
+void 	GameCore::handlePause(Actions actions, STATE &state)
+{
+	if (actions.buttonPressed == 1)
+		state = STATE::GAME;
+	if (actions.buttonPressed == 3)
+		state = STATE::EXIT;
 }

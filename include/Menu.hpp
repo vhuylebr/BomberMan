@@ -34,7 +34,6 @@ public:
 	bool 	stepChanged(STATE &state);
 	int getStep() const {return _step;};
 
-
 private:
 	void firstMenuKey(Actions &actions, STATE &state);
 	void checkBonus(Actions &actions);

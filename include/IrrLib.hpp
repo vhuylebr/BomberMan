@@ -65,10 +65,13 @@ class IrrLib {
 			pairUC size);
 		void drawGame();
 		void cleanMenu();
+
+		void createPause(std::vector<std::unique_ptr<IEntity>> &menuItems);
 		void initMenu(std::vector<MenuItem> &);
 		void updateLabel(MenuItem &item);
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
+		void deletePause();
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);

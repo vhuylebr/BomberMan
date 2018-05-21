@@ -211,8 +211,8 @@ void IrrLib::addListBox(std::unique_ptr<IEntity> &entity)
 	int idx = 0;
 	for (auto &i : item->getChoices())
 	{
-		const wchar_t* kek = i.c_str();
-		_listbox->addItem(kek);
+		const wchar_t* tmp = i.c_str();
+		_listbox->addItem(tmp);
 		_listbox->setItemOverrideColor(idx, irr::video::SColor(255,255,255,255));
 		idx++;
 	}
@@ -247,6 +247,12 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);
 	}
+}
+
+void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
+{
+	for (auto &it : menuItems)
+		_factory[it->getType()](it);
 }
 
 void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
@@ -322,6 +328,7 @@ void IrrLib::cleanMenu()
 
 void IrrLib::drawGame()
 {
+	_eventReceiver.resetIdButtonPressed();
 	_driver->beginScene(true, true);
 	_smgr->drawAll();
 	_guienv->drawAll();
@@ -376,4 +383,9 @@ void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities
 void IrrLib::drop()
 {
 	_device->drop();
+}
+
+void IrrLib::deletePause()
+{
+	_guienv->drop();
 }
