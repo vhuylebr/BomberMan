@@ -27,7 +27,7 @@ SRCS	=	$(SRC)Menu.cpp	\
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 
-CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lsfml-graphics -lsfml-window -lsfml-system -lsfml-system -lsfml-window -lsfml-network -lsfml-graphics -lsfml-audio
 
 CC	=	g++
 

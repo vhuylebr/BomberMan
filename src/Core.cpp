@@ -1,3 +1,4 @@
+#include <SFML/Audio.hpp>
 #include <unistd.h>
 #include "Core.hpp"
 
