@@ -33,7 +33,7 @@ public:
 	GameCore();
 	~GameCore();
 	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
-	std::vector<std::unique_ptr<IEntity>>	&getEntities();
+	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void	init(pairUC);
 	void	init(const std::string &);
 	pairUC	getSize() const;
@@ -51,7 +51,7 @@ private:
 	Player 				_player1;
 	std::vector<Bomb>		_bombs;
 	//BombFactory			_bfact;
-	std::array<std::array<std::unique_ptr<EntityPos>, 20>, 20> _arrayEntities;
+	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
 	int _pauseid;

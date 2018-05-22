@@ -29,15 +29,16 @@ void    GameCore::init(pairUC size)
 		std::cout << "Open success\n";
 		while (getline(file, line)) {
 			x1 = 0;
+			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos> >());
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
-					_arrayEntities[y1][x1] = std::make_unique<EntityPos>(ItemStatic::Wall, static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
 				} else if (line[j] == '1') {
-					_arrayEntities[y1][x1] = std::make_unique<EntityPos>(ItemStatic::Crate, static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
 				} else  {
-					_arrayEntities[y1][x1] = std::make_unique<EntityPos>();
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}
 				x1 += 1;
 			}
@@ -53,7 +54,6 @@ GameCore::~GameCore()
 {
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
-	_entities.clear();
 }
 
 pairUC	GameCore::getSize() const
@@ -67,9 +67,9 @@ void    GameCore::init(const std::string &file)
 	std::cout << "Loading " << file << std::endl;
 }
 
-std::vector<std::unique_ptr<IEntity>>	&GameCore::getEntities()
+std::vector<std::vector<std::unique_ptr<EntityPos> > >	&GameCore::getEntities()
 {
-	return _entities;
+	return _vectorEntities;
 }
 
 void GameCore::releaseUpdateEntities()
@@ -106,14 +106,14 @@ void	GameCore::bombManager(Actions &act)
 					break ;
 				}
 			}
-			for (auto &a : _entities) {
-				if (a->getPos().first == std::ceil(pos.first - 0.5) && 
-					std::ceil(pos.second - 0.5) == a->getPos().second) {
-					pos.first = -1;
-					pos.second = -1;
-					break ;
-				}
-			}
+			// for (auto &a : _entities) {
+			// 	if (a->getPos().first == std::ceil(pos.first - 0.5) && 
+			// 		std::ceil(pos.second - 0.5) == a->getPos().second) {
+			// 		pos.first = -1;
+			// 		pos.second = -1;
+			// 		break ;
+			// 	}
+			// }
 			if (pos.first != -1 && pos.second != -1) {
 				Bomb	tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player1.getId());
 				_player1.dropBomb();

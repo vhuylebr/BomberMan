@@ -20,6 +20,15 @@ EntityPos::EntityPos()
     _functionMap[ItemStatic::WALL] = addItem<Wall>;
 }
 
+Entity EntityPos::getType() const
+{
+    return _entities.begin()->get()->getType();
+}
+
+std::vector<std::unique_ptr<IEntity>> &EntityPos::getEntity() const
+{
+    return _entities;
+}
 
 EntityPos::~EntityPos()
 {

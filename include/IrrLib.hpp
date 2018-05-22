@@ -20,6 +20,7 @@
 #include "Player.hpp"
 #include "ACube.hpp"
 #include "Bomb.hpp"
+#include "EntityPos.hpp"
 
 enum
 {
@@ -61,7 +62,7 @@ class IrrLib {
 		int getIdButtonPressed() const;
 		std::wstring getListBoxChoice(std::unique_ptr<IEntity>&);
 		void displayBackground();
-		void initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
+		void initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &,
 			pairUC size);
 		void drawGame();
 		void cleanMenu();

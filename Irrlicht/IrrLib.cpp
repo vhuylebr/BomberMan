@@ -358,7 +358,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 	}
 }
 
-void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
+void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size)
 {
 	_skybox->setVisible(false);
@@ -367,7 +367,11 @@ void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z));
 	_camera->setTarget(groundPos);
 	for (auto &it : gameEntities) {
-		_factory[it->getType()](it);
+		for (auto &it2 : it) {
+			for (auto &it3 : it2->getEntity()) {
+				_factory[it3->getType()](it3);
+			} 
+		}
 	}
 }
 

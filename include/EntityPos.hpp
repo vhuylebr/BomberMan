@@ -13,6 +13,8 @@
 #include <functional>
 #include <map>
 #include "IEntity.hpp"
+#include "Crate.hpp"
+#include "Wall.hpp"
 
 enum class ItemStatic {
 	WALL,
@@ -33,6 +35,8 @@ class EntityPos {
 		EntityPos();
 		~EntityPos();
 		bool isEmpty() const { return (!_entities.size());};
+		Entity getType() const;
+		std::vector<std::unique_ptr<IEntity> > &getEntity() const;
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);
 	private:
