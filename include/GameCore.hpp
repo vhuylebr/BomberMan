@@ -21,25 +21,27 @@
 # include "Player.hpp"
 # include "BombFactory.hpp"
 
+
 class GameCore {
 public:
 	GameCore();
 	~GameCore();
-	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
-	std::vector<std::unique_ptr<IEntity>>	&getEntities();
+	std::vector<std::shared_ptr<IEntity>>	&calc(Actions);
+	std::vector<std::shared_ptr<IEntity>>	&getEntities();
 	void	init(pairUC);
 	void	init(const std::string &);
 	pairUC	getSize() const;
 	void releaseUpdateEntities();
 
 private:
-	std::vector<std::unique_ptr<IEntity>>	_entities;
+	std::vector<std::shared_ptr<IEntity>>	_entities;
 	coords				_size;
 	unsigned int _id;
+	std::vector<std::shared_ptr<IEntity>> **_arrayEntities;
 	Player 				_player1;
 	std::vector<Bomb>		_bombs;
 	//BombFactory			_bfact;
-	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
+	std::vector<std::shared_ptr<IEntity>>	_updateEntities;
 };
 
 #endif /* !GAMECORE_HPP_ */

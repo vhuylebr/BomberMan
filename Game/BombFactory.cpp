@@ -15,7 +15,7 @@ BombFactory::BombFactory()
 void	BombFactory::loadNb(std::size_t nb, std::size_t &id)
 {
 	while (nb) {
-		_pool.push_back(std::unique_ptr<Bomb>(new Bomb(-1, -1, id++)));
+		_pool.push_back(std::shared_ptr<Bomb>(new Bomb(-1, -1, id++)));
 		nb -= 1;
 	}
 }
@@ -24,7 +24,7 @@ BombFactory::~BombFactory()
 {
 }
 
-std::unique_ptr<Bomb>	BombFactory::getBomb()
+std::shared_ptr<Bomb>	BombFactory::getBomb()
 {
 	if (_pool.size() == 0)
 		loadNb(50);

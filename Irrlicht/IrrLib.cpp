@@ -64,7 +64,7 @@ void IrrLib::createPlane(pairUC &size)
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
-void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
+void IrrLib::addSphere(std::shared_ptr<IEntity> &entity)
 {
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
@@ -75,7 +75,7 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	_spheres.push_back(ball);
 }
 
-void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
+void IrrLib::updateSphere(std::shared_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
 		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
@@ -87,7 +87,7 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 	addSphere(entity);
 }
 
-void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
+void IrrLib::addCube(std::shared_ptr<IEntity> &entity)
 {
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
@@ -97,7 +97,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	_cubes.push_back(cube);
 }
 
-void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
+void IrrLib::updateCube(std::shared_ptr<IEntity> &entity)
 {
 	for (auto &it : _cubes) {
 		if (it->getID() == static_cast<ACube*>(entity.get())->getId()) {
@@ -135,7 +135,7 @@ Actions	IrrLib::getActions()
 	return (_actions);
 }
 
-void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
+void IrrLib::addButton(std::shared_ptr<IEntity> &entity)
 {
 	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
@@ -151,7 +151,7 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 	button->setDrawBorder(true);
 }
 
-void IrrLib::addStaticText(std::unique_ptr<IEntity> &entity)
+void IrrLib::addStaticText(std::shared_ptr<IEntity> &entity)
 {
 	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
@@ -169,7 +169,7 @@ void IrrLib::addStaticText(std::unique_ptr<IEntity> &entity)
 	_labels.push_back(text);
 }
 
-void IrrLib::addEditBox(std::unique_ptr<IEntity> &entity)
+void IrrLib::addEditBox(std::shared_ptr<IEntity> &entity)
 {
 	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
@@ -184,7 +184,7 @@ void IrrLib::addEditBox(std::unique_ptr<IEntity> &entity)
 	_inputs.push_back(editbox);
 }
 
-void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
+void IrrLib::addCheckBox(std::shared_ptr<IEntity> &entity)
 {
 	auto item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
@@ -199,7 +199,7 @@ void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
 	_checkboxes.push_back(checkbox);
 }
 
-void IrrLib::addListBox(std::unique_ptr<IEntity> &entity)
+void IrrLib::addListBox(std::shared_ptr<IEntity> &entity)
 {
 	auto item = static_cast<MenuItem*>(entity.get());
 
@@ -229,7 +229,7 @@ void IrrLib::displayBackground()
 	_camera->setTarget(_camTarget);
 }
 
-void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
+void IrrLib::initMenu(std::vector<std::shared_ptr<IEntity>> &menuItems)
 {
 	_guienv->clear();
 	_inputs.clear();
@@ -249,7 +249,7 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	}
 }
 
-void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
+void IrrLib::updateLabel(std::shared_ptr<IEntity> &item)
 {
 	std::wstring wText;
 
@@ -263,7 +263,7 @@ void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
 	}
 }
 
-std::wstring IrrLib::getInputText(std::unique_ptr<IEntity> &item)
+std::wstring IrrLib::getInputText(std::shared_ptr<IEntity> &item)
 {
 	for (auto it = _inputs.begin(); it != _inputs.end(); it++) {
 		if ((*it)->getID() == static_cast<MenuItem*>(item.get())->getId()) {
@@ -273,7 +273,7 @@ std::wstring IrrLib::getInputText(std::unique_ptr<IEntity> &item)
 	return (L"");
 }
 
-bool IrrLib::getCheckboxState(std::unique_ptr<IEntity> &item)
+bool IrrLib::getCheckboxState(std::shared_ptr<IEntity> &item)
 {
 	for (auto it = _checkboxes.begin(); it != _checkboxes.end(); ++it) {
 		if ((*it)->getID() == static_cast<MenuItem*>(item.get())->getId()) {
@@ -283,7 +283,7 @@ bool IrrLib::getCheckboxState(std::unique_ptr<IEntity> &item)
 	return (false);
 }
 
-std::wstring  IrrLib::getLabelText(std::unique_ptr<IEntity> &item)
+std::wstring  IrrLib::getLabelText(std::shared_ptr<IEntity> &item)
 {
 	for (auto it = _labels.begin(); it != _labels.end(); ++it) {
 		if ((*it)->getID() == static_cast<MenuItem*>(item.get())->getId()) {
@@ -293,7 +293,7 @@ std::wstring  IrrLib::getLabelText(std::unique_ptr<IEntity> &item)
 	return (L"");
 }
 
-std::wstring	IrrLib::getListBoxChoice(std::unique_ptr<IEntity> &item)
+std::wstring	IrrLib::getListBoxChoice(std::shared_ptr<IEntity> &item)
 {
 	int toto = _listbox->getSelected();
 	return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
@@ -328,7 +328,7 @@ void IrrLib::drawGame()
 	_driver->endScene();
 }
 
-void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
+void IrrLib::updatePlayer(std::shared_ptr<IEntity> &entity)
 {
 	for (auto &it : _players) {
 		if (static_cast<unsigned int>(it->getID()) == static_cast<Player*>(entity.get())->getId()) {
@@ -338,7 +338,7 @@ void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 	}
 }
 
-void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
+void IrrLib::addPlayer(std::shared_ptr<IEntity> &entity)
 {
 	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh("./media/METAL_SONIC.md2");
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
@@ -353,7 +353,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 	}
 }
 
-void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
+void IrrLib::initGame(std::vector<std::shared_ptr<IEntity>> &gameEntities,
 	pairUC size)
 {
 	_skybox->setVisible(false);
@@ -366,7 +366,7 @@ void IrrLib::initGame(std::vector<std::unique_ptr<IEntity>> &gameEntities,
 	}
 }
 
-void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
+void IrrLib::affGameEntities(std::vector<std::shared_ptr<IEntity>> &gameEntities)
 {
 	for (auto &it : gameEntities) {
 		_factoryUpdate[it->getType()](it);

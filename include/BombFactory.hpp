@@ -17,11 +17,11 @@ public:
 	BombFactory();
 	~BombFactory();
 
-	std::unique_ptr<Bomb>	getBomb();
+	std::shared_ptr<Bomb>	getBomb();
 	void			loadNb(std::size_t, std::size_t &);
 
 private:
-	std::vector<std::unique_ptr<Bomb>>	_pool;
+	std::vector<std::shared_ptr<Bomb>>	_pool;
 };
 
 #endif /* !BOMBFACTORY_HPP_ */

@@ -19,35 +19,43 @@ void    GameCore::init(pairUC size)
 	std::string filename = "./media/map1.txt";
 	std::ifstream file(filename);
 	std::string line;
+	std::vector<std::shared_ptr<IEntity>> lineEntity;
 
 	std::cout << "Initializing new game" << std::endl;
 	_size.x = size.first;
 	_size.y = size.second;
-	unsigned int x1 = 0;
-	unsigned int y1 = 0;
+	unsigned int x = 0;
+	unsigned int y = 0;
 	if (!file.is_open()) {
 		std::cout << "Open has failed\n";
 	} else {
 		std::cout << "Open success\n";
 		while (getline(file, line)) {
-			x1 = 0;
+			lineEntity.clear();
+			x = 0;
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Wall(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					std::cout << "y = " << y << std::endl;
+					lineEntity.push_back(std::shared_ptr<IEntity>(new Wall(static_cast<float>(x), static_cast<float>(y), _id)));
+//					_arrayEntities[y][x].push_back(std::shared_ptr<IEntity>(new Wall(static_cast<float>(x), static_cast<float>(y), _id)));
+					_entities.push_back(std::shared_ptr<IEntity>(new Wall(static_cast<float>(x), static_cast<float>(y), _id)));
 					_id++;
 				} else if (line[j] == '1') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Crate(static_cast<float>(x1), static_cast<float>(y1), _id)));
+//					_arrayEntities[y][x].push_back(std::shared_ptr<IEntity>(new Crate(static_cast<float>(x), static_cast<float>(y), _id)));
+					_entities.push_back(std::shared_ptr<IEntity>(new Crate(static_cast<float>(x), static_cast<float>(y), _id)));
 					_id++;
 				} else if (line[j] == '2') {
-					_player1.setPos(static_cast<float>(x1), static_cast<float>(y1));
-					_entities.push_back(std::unique_ptr<IEntity>(&_player1));
+//					_arrayEntities[y][x].push_back(std::shared_ptr<IEntity>(new Player(static_cast<float>(x), static_cast<float>(y), _id)));
+					_player1.setPos(static_cast<float>(x), static_cast<float>(y));
+					_entities.push_back(std::shared_ptr<IEntity>(&_player1));
 				} else if (line[j] == '3') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(static_cast<float>(x1), static_cast<float>(y1), _id)));
+//					_arrayEntities[y][x].push_back(std::shared_ptr<IEntity>(new Bomb(static_cast<float>(x), static_cast<float>(y), _id)));
+					_entities.push_back(std::shared_ptr<IEntity>(new Bomb(static_cast<float>(x), static_cast<float>(y), _id)));
 					_id++;
 				}
-				x1 += 1;
+				x += 1;
 			}
-			y1 += 1;
+			y += 1;
 		}
 	}
 }
@@ -70,20 +78,17 @@ void    GameCore::init(const std::string &file)
 	std::cout << "Loading " << file << std::endl;
 }
 
-std::vector<std::unique_ptr<IEntity>>	&GameCore::getEntities()
+std::vector<std::shared_ptr<IEntity>>	&GameCore::getEntities()
 {
 	return _entities;
 }
 
 void GameCore::releaseUpdateEntities()
 {
-	for (auto &i : _updateEntities) {
-		i.release();
-	}
 	_updateEntities.clear();
 }
 
-std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
+std::vector<std::shared_ptr<IEntity>>    &GameCore::calc(Actions act)
 {
 	bool changed = false;
 
@@ -113,17 +118,15 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 		Bomb	tmp(_player1.getPos().first, _player1.getPos().second, _id++);
 		_bombs.push_back(tmp);
 	}
-	std::cout << "In" << std::endl;
 	for (auto it = _bombs.begin() ; it != _bombs.end() ; ++it) {
-		std::cout << "In2" << std::endl;
 		it->tick();
 		if (!it->isAlive()) {
-			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+			_updateEntities.push_back(std::shared_ptr<IEntity>(&_bombs.back()));
 			std::cout << "Boom" << std::endl;
 		}
 	}
 	std::cout << "OUt" << std::endl;
 	if (changed)
-		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
+		_updateEntities.push_back(std::shared_ptr<IEntity>(&_player1));
 	return (_updateEntities);
 }

@@ -26,11 +26,11 @@ public:
 	std::string getIP() const { return _ip; }
 	std::string getPseudo() const { return _pseudo; }
 	unsigned char getNbPlayer() const { return _nbPlayer; }
-	std::vector<std::unique_ptr<IEntity>> &getMenuItems();
+	std::vector<std::shared_ptr<IEntity>> &getMenuItems();
 	void changeMenu();
 	bool getState(Actions &actions, STATE &state);
 	std::vector<eItem> &getBonus();
-	std::unique_ptr<IEntity> &getItemByID(int);
+	std::shared_ptr<IEntity> &getItemByID(int);
 	bool 	stepChanged(STATE &state);
 	int getStep() const {return _step;};
 
@@ -52,7 +52,7 @@ private:
 	std::string _pseudo;
 	std::string _ip;
 	std::map<eItem, bool> _map_bonus;
-	std::vector<std::unique_ptr<IEntity>> _item;
+	std::vector<std::shared_ptr<IEntity>> _item;
 	std::vector<eItem> _bonus;
 	int     _changeState;
 	bool 	_changed;

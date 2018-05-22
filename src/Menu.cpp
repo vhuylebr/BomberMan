@@ -63,43 +63,43 @@ void 	Menu::makeJoinMenu()
 	toto.push_back(L"Hello16");
 	toto.push_back(L"there16");
 
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 1, "", 500, 250, 600, 400)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 1, "", 500, 250, 600, 400)));
 	static_cast<MenuItem*>(_item[0].get())->setChoices(toto);
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", 500, 150, 600, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Connect", 500, 700, 600, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", 500, 150, 600, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Connect", 500, 700, 600, 100)));
 }
 
 void    Menu::makeOptionMenu()
 {
 	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Number Player : ", 200, 150, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 300, 325, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 300, 475, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 300, 625, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 800, 250, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 800, 500, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 850, 700, 200, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", 1250, 0, 820, 1000)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 200, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", 1500, 200, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 11, "", 1400, 300, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 12, "Power Up", 1500, 300, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 400, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 14, "Penetration", 1500, 400, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 500, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", 1500, 500, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 600, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", 1500, 600, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 700, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", 1500, 700, 100, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Number Player : ", 200, 150, 300, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 300, 325, 100, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 300, 475, 100, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 300, 625, 100, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 800, 250, 300, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 800, 500, 300, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 850, 700, 200, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", 1250, 0, 820, 1000)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 200, 50, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", 1500, 200, 100, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 11, "", 1400, 300, 50, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 12, "Power Up", 1500, 300, 100, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 400, 50, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 14, "Penetration", 1500, 400, 100, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 500, 50, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", 1500, 500, 100, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 600, 50, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", 1500, 600, 100, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 700, 50, 50)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", 1500, 700, 100, 50)));
 }
 
 void    Menu::makeMainMenu()
 {
 	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", 500, 280, 500, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Join Game", 500, 430, 500, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", 500, 580, 500, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", 500, 280, 500, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Join Game", 500, 430, 500, 100)));
+	_item.push_back(std::shared_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", 500, 580, 500, 100)));
 }
 
 void Menu::changeMenu()
@@ -119,14 +119,14 @@ void Menu::changeMenu()
 }
 
 static void selectAnother(int before, int after,
-	std::vector<std::unique_ptr<IEntity>> &item)
+	std::vector<std::shared_ptr<IEntity>> &item)
 {
 	static_cast<MenuItem*>(item[before].get())->deselect();
 	static_cast<MenuItem*>(item[after].get())->select();
 }
 
 
-static int findSelected(std::vector<std::unique_ptr<IEntity>> &item)
+static int findSelected(std::vector<std::shared_ptr<IEntity>> &item)
 {
 	int id = 0;
 
@@ -159,7 +159,7 @@ void Menu::firstMenuKey(Actions &actions, STATE &state)
 	}
 }
 
-static void actionIsUp(std::vector<std::unique_ptr<IEntity>> &_item)
+static void actionIsUp(std::vector<std::shared_ptr<IEntity>> &_item)
 {
 	if (static_cast<MenuItem*>(_item[0].get())->isSelected()) {
 		static_cast<MenuItem*>(_item[_item.size() - 1].get())->select();
@@ -168,7 +168,7 @@ static void actionIsUp(std::vector<std::unique_ptr<IEntity>> &_item)
 		selectAnother(findSelected(_item), findSelected(_item) - 1, _item);
 }
 
-static void actionIsDown(std::vector<std::unique_ptr<IEntity>> &_item)
+static void actionIsDown(std::vector<std::shared_ptr<IEntity>> &_item)
 {
 	if (static_cast<unsigned int>(findSelected(_item)) == _item.size() - 1) {
 		static_cast<MenuItem*>(_item[_item.size() - 1].get())->deselect();
@@ -252,12 +252,12 @@ bool 	Menu::getState(Actions &actions, STATE &state)
 	return false;
 }
 
-std::unique_ptr<IEntity> &Menu::getItemByID(int id)
+std::shared_ptr<IEntity> &Menu::getItemByID(int id)
 {
 	return _item[id - 1];
 }
 
-std::vector<std::unique_ptr<IEntity>> &Menu::getMenuItems()
+std::vector<std::shared_ptr<IEntity>> &Menu::getMenuItems()
 {
 	return _item;
 }

@@ -5,6 +5,8 @@
 ## Makefile
 ##
 
+CXX	=	g++ -g3
+
 SRC		= 	src/
 
 GAME	=	Game/
@@ -27,9 +29,7 @@ SRCS	=	$(SRC)Menu.cpp	\
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 
-CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lsfml-graphics -lsfml-window -lsfml-system -lsfml-system -lsfml-window -lsfml-network -lsfml-graphics -lsfml-audio
-
-CC	=	g++
+CXXFLAGS	= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lsfml-graphics -lsfml-window -lsfml-system -lsfml-system -lsfml-window -lsfml-network -lsfml-graphics -lsfml-audio
 
 RM	=	rm -f
 
@@ -40,7 +40,7 @@ NAME	=	bomberman
 all: $(NAME)
 
 $(NAME):	$(OBJS)
-	$(CC) $(OBJS) -o $(NAME) $(CPPFLAGS)
+	$(CXX) $(OBJS) -o $(NAME) $(CXXFLAGS)
 
 clean:
 	$(RM) $(OBJS)
