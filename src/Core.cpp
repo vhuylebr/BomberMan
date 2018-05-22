@@ -91,7 +91,7 @@ int     Core::loop()
 			if (_state == STATE::GAME) {
 				music.stop();
 				music2.play();
-				music.setLoop(true);
+				music2.setLoop(true);
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
