@@ -52,7 +52,6 @@ private:
 	//BombFactory			_bfact;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
-	int _pauseid;
 };
 
 #endif /* !GAMECORE_HPP_ */

@@ -15,9 +15,15 @@ Music::~Music()
 {
 }
 
+void 	playMusic(sf::Music *music)
+{
+	music->play();
+}
+
 void 	Music::play(SOUND id)
 {
-	_sounds[id]->play();
+	std::thread tmp(playMusic, _sounds[id]);
+	tmp.detach();
 }
 
 bool 	Music::load(SOUND id, std::string pathname)

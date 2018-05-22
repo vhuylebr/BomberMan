@@ -10,6 +10,7 @@
 
 #include <SFML/Audio.hpp>
 #include <map>
+#include <thread>
 
 enum class SOUND {
 	MENU,
