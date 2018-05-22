@@ -140,22 +140,22 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
 	if (act.up == true) {
-		_player1.setPos(_player1.getPos().first + 0.1, _player1.getPos().second);
+		_player1.setPos(_player1.getPos().first + 0.07, _player1.getPos().second);
 		_player1.setRotation(0.0f);
 		changed = true;
 	}
 	if (act.down == true) {
-		_player1.setPos(_player1.getPos().first - 0.1, _player1.getPos().second);
+		_player1.setPos(_player1.getPos().first - 0.07, _player1.getPos().second);
 		_player1.setRotation(180.0f);
 		changed = true;
 	}
 	if (act.left == true) {
-		_player1.setPos(_player1.getPos().first, _player1.getPos().second + 0.1);
+		_player1.setPos(_player1.getPos().first, _player1.getPos().second + 0.07);
 		_player1.setRotation(-90.0f);
 		changed = true;
 	}
 	if (act.right == true) {
-		_player1.setPos(_player1.getPos().first, _player1.getPos().second - 0.1);
+		_player1.setPos(_player1.getPos().first, _player1.getPos().second - 0.07);
 		_player1.setRotation(90.0f);
 		changed = true;
 	}
