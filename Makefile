@@ -24,7 +24,8 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(GAME)Player.cpp	\
 		$(GAME)Bomb.cpp	\
 		$(GAME)ACube.cpp	\
-		$(GAME)Fire.cpp	
+		$(GAME)Fire.cpp		\
+		$(SRC)Music.cpp
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 
