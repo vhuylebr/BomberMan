@@ -21,6 +21,7 @@
 #include "ACube.hpp"
 #include "Bomb.hpp"
 #include "EntityPos.hpp"
+#include "Music.hpp"
 
 enum
 {
@@ -101,6 +102,7 @@ class IrrLib {
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 		std::vector<irr::scene::ISceneNode*> _spheres;
+		Music	_gamemusic;
 };
 
 #endif /* !IRRLIB_HPP_ */

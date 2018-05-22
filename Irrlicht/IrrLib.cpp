@@ -48,6 +48,12 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
+	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
+	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplose.wav");
+//	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplosion.wav");
+	_gamemusic.load(SOUND::POWERUP, "./media/Sound/powerup.wav");
+	_gamemusic.load(SOUND::LOSE, "./media/Sound/lose.wav");
+	_gamemusic.load(SOUND::WIN, "./media/Sound/lose.wav");
 }
 
 IrrLib::~IrrLib()
@@ -75,6 +81,7 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
 	ball->setID(static_cast<Bomb*>(entity.get())->getId());
 	_spheres.push_back(ball);
+	_gamemusic.play(SOUND::TICTAC);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
@@ -84,6 +91,7 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+			_gamemusic.play(SOUND::BOOM);
 			return ;
 		}
 	}

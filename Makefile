@@ -25,11 +25,12 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(GAME)Bomb.cpp	\
 		$(GAME)ACube.cpp	\
 		$(GAME)Fire.cpp	\
-		$(GAME)EntityPos.cpp
+		$(GAME)EntityPos.cpp	\
+		$(SRC)Music.cpp
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 
-CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lsfml-audio
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -lpthread
 
 CXX	=	g++
 

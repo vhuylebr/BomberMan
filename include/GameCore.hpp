@@ -54,7 +54,6 @@ private:
 	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
-	int _pauseid;
 };
 
 #endif /* !GAMECORE_HPP_ */
