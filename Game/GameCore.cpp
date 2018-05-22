@@ -6,9 +6,6 @@
 */
 
 #include "GameCore.hpp"
-#include "MenuItem.hpp"
-#include <fstream>
-#include <iostream>
 
 GameCore::GameCore()
 	:_id(1), _player1(-1, -1, _id)
@@ -44,6 +41,9 @@ void    GameCore::init(pairUC size)
 					_entities.push_back(std::unique_ptr<IEntity>(&_player1));
 				} else if (line[j] == '3') {
 					_entities.push_back(std::unique_ptr<IEntity>(new Bomb(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					_id++;
+				} else if (line[j] == '4') {
+					_entities.push_back(std::unique_ptr<IEntity>(new Fire(static_cast<float>(x1), static_cast<float>(y1), _id)));
 					_id++;
 				}
 				x1 += 1;

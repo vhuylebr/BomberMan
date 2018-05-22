@@ -23,7 +23,8 @@ SRCS	=	$(SRC)Menu.cpp	\
 		$(GAME)Crate.cpp	\
 		$(GAME)Player.cpp	\
 		$(GAME)Bomb.cpp	\
-		$(GAME)ACube.cpp	
+		$(GAME)ACube.cpp	\
+		$(GAME)Fire.cpp	
 		#$(GAME)Item.cpp	
 		#$(GAME)eItem.cpp	
 

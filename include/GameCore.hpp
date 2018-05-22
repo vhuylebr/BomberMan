@@ -13,6 +13,7 @@
 # include <vector>
 # include <memory>
 # include <utility>
+# include <fstream>
 # include "Item.hpp"
 # include "Actions.hpp"
 # include "IEntity.hpp"
@@ -21,6 +22,8 @@
 # include "Player.hpp"
 # include "State.hpp"
 # include "BombFactory.hpp"
+# include "MenuItem.hpp"
+# include "Fire.hpp"
 
 class GameCore {
 public:
