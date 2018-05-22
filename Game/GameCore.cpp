@@ -37,6 +37,9 @@ void    GameCore::init(pairUC size)
 				} else if (line[j] == '1') {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
+				} else if (line[j] == '2') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::PLAYER, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_id++;
 				} else  {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}

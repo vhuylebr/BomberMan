@@ -368,9 +368,8 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	_camera->setTarget(groundPos);
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
-			for (auto &it3 : it2->getEntity()) {
-				_factory[it3->getType()](it3);
-			} 
+			if (!it2->isEmpty())
+					_factory[it2->getType()](it2->getEntity());
 		}
 	}
 }

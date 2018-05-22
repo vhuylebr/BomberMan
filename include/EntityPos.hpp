@@ -15,10 +15,12 @@
 #include "IEntity.hpp"
 #include "Crate.hpp"
 #include "Wall.hpp"
+#include "Player.hpp"
 
 enum class ItemStatic {
 	WALL,
-	CRATE
+	CRATE,
+	PLAYER
 };
 
 using ptrFunc = std::function<std::unique_ptr<IEntity>(float, float, int)>;
@@ -36,7 +38,7 @@ class EntityPos {
 		~EntityPos();
 		bool isEmpty() const { return (!_entities.size());};
 		Entity getType() const;
-		std::vector<std::unique_ptr<IEntity> > &getEntity() const;
+		std::unique_ptr<IEntity> &getEntity();
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);
 	private:
