@@ -6,9 +6,6 @@
 */
 
 #include "GameCore.hpp"
-#include "MenuItem.hpp"
-#include <fstream>
-#include <iostream>
 
 GameCore::GameCore()
 	:_id(1), _player1(-1, -1, _id)
