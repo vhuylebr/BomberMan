@@ -26,6 +26,7 @@
 # include "BombFactory.hpp"
 # include "MenuItem.hpp"
 # include "Fire.hpp"
+# include "EntityPos.hpp"
 
 class GameCore {
 public:
@@ -50,6 +51,7 @@ private:
 	Player 				_player1;
 	std::vector<Bomb>		_bombs;
 	//BombFactory			_bfact;
+	std::array<std::array<std::unique_ptr<EntityPos>, 20>, 20> _arrayEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
 	int _pauseid;

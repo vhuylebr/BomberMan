@@ -31,17 +31,13 @@ void    GameCore::init(pairUC size)
 			x1 = 0;
 			for (unsigned int j = 0; line[j] != 0; j++) {
 				if (line[j] == '0') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Wall(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					_arrayEntities[y1][x1] = std::make_unique<EntityPos>(ItemStatic::Wall, static_cast<float>(x1), static_cast<float>(y1), _id);
 					_id++;
 				} else if (line[j] == '1') {
-					_entities.push_back(std::unique_ptr<IEntity>(new Crate(static_cast<float>(x1), static_cast<float>(y1), _id)));
+					_arrayEntities[y1][x1] = std::make_unique<EntityPos>(ItemStatic::Crate, static_cast<float>(x1), static_cast<float>(y1), _id);
 					_id++;
-				} else if (line[j] == '2') {
-					_player1.setPos(static_cast<float>(x1), static_cast<float>(y1));
-					_entities.push_back(std::unique_ptr<IEntity>(&_player1));
-				} else if (line[j] == '3') {
-					//_entities.push_back(std::unique_ptr<IEntity>(new Bomb(static_cast<float>(x1), static_cast<float>(y1), _id)));
-					//_id++;
+				} else  {
+					_arrayEntities[y1][x1] = std::make_unique<EntityPos>();
 				}
 				x1 += 1;
 			}
