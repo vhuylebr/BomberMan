@@ -8,7 +8,7 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
-	:_counter(300), _owner(owner)
+	:_counter(150), _owner(owner)
 {
 	_alive = true;
 	_x = x;
