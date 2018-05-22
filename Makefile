@@ -29,7 +29,7 @@ SRCS	=	$(SRC)Menu.cpp	\
 
 CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lsfml-graphics -lsfml-window -lsfml-system -lsfml-system -lsfml-window -lsfml-network -lsfml-graphics -lsfml-audio
 
-CC	=	g++
+CXX	=	g++ -g3
 
 RM	=	rm -f
 
@@ -40,7 +40,7 @@ NAME	=	bomberman
 all: $(NAME)
 
 $(NAME):	$(OBJS)
-	$(CC) $(OBJS) -o $(NAME) $(CPPFLAGS)
+	$(CXX) $(OBJS) -o $(NAME) $(CPPFLAGS)
 
 clean:
 	$(RM) $(OBJS)

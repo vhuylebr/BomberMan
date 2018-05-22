@@ -72,6 +72,8 @@ class IrrLib {
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();
+		void setVisible(bool state);
+
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
@@ -89,6 +91,7 @@ class IrrLib {
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
+		std::vector<irr::gui::IGUIButton*> _buttons;
 		irr::gui::IGUIListBox *_listbox;
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;

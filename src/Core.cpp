@@ -58,7 +58,7 @@ void 	Core::getParametersFromMenu()
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
 		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
-} 
+}
 
 void    Core::gameManager(STATE &last)
 {
@@ -68,13 +68,13 @@ void    Core::gameManager(STATE &last)
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
 		_lib.drawGame();
-		if (_state == STATE::GAME) {
-			_lib.deletePause(); // C'est ici qu'il faut enlever les elements de la pause
-		}
+		if (_state == STATE::GAME)
+			_lib.setVisible(false);
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();
 		if (actions.escape == true) {
 			_lib.createPause(_game.createPause());
+			_lib.setVisible(true);
 			_state = STATE::PAUSE;
 		}
 		_lib.affGameEntities(_game.calc(actions));

@@ -31,10 +31,10 @@ public:
 	void	init(pairUC);
 	void	init(const std::string &);
 	pairUC	getSize() const;
-	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 	void 	handlePause(Actions actions, STATE &state);
 	void releaseUpdateEntities();
 	void afterCalc();
+	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 
 private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;
@@ -44,7 +44,8 @@ private:
 	std::vector<Bomb>		_bombs;
 	//BombFactory			_bfact;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
-	std::vector<std::unique_ptr<IEntity>>	_pause;
+	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
+	int _pauseid;
 };
 
 #endif /* !GAMECORE_HPP_ */

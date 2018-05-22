@@ -152,6 +152,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
+	if (item->getId() == 1001 || item->getId() == 1002 || item->getId() == 1003)
+		_buttons.push_back(button);
 }
 
 void IrrLib::addStaticText(std::unique_ptr<IEntity> &entity)
@@ -210,7 +212,6 @@ void IrrLib::addListBox(std::unique_ptr<IEntity> &entity)
 		item->getPos().second,	item->getPos().first + item->getSize().first, 
 		item->getPos().second + item->getSize().second));
 	_listbox->setItemHeight(20);
-//	_listbox->setAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	int idx = 0;
 	for (auto &i : item->getChoices())
 	{
@@ -250,12 +251,6 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);
 	}
-}
-
-void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
-{
-	for (auto &it : menuItems)
-		_factory[it->getType()](it);
 }
 
 void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
@@ -388,7 +383,21 @@ void IrrLib::drop()
 	_device->drop();
 }
 
-void IrrLib::deletePause()
+void IrrLib::setVisible(bool state)
 {
-	_guienv->drop();
+	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
+		if ((*it)->getID() == 1001)
+			(*it)->setVisible(state);
+		else if ((*it)->getID() == 1002)
+			(*it)->setVisible(state);
+		else if ((*it)->getID() == 1003)
+			(*it)->setVisible(state);
+	}
+}
+
+void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
+{
+	for (auto &it : menuItems) {
+		_factory[it->getType()](it);
+	}
 }

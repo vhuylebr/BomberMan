@@ -51,6 +51,9 @@ void    GameCore::init(pairUC size)
 			y1 += 1;
 		}
 	}
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1001, "Resume", 600, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1002, "Save and Quit", 600, 400, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1003	, "Quit", 600, 600, 400, 100)));
 }
 
 GameCore::~GameCore()
@@ -124,33 +127,21 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 		// }	
 		std::cout << "create Bomb" << std::endl;
 	}
-	std::cout << "In" << std::endl;
 	for (auto &it: _bombs) {
-		std::cout << "In2" << std::endl;
 		it.tick();
-		if (!it.isAlive()) {
+		if (!it.isAlive())
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
-			std::cout << "Boom" << std::endl;
-		}
 	}
-	std::cout << "OUt" << std::endl;
 	return (_updateEntities);
 }
 
-std::vector<std::unique_ptr<IEntity>> 	&GameCore::createPause()
-{
-	_pause.clear();
-	_pause.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Resume", 600, 200, 400, 100)));
-	_pause.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Save and Quit", 600, 400, 400, 100)));
-	_pause.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3	, "Quit", 600, 600, 400, 100)));
-	return (_pause);
-}
+#include <unistd.h>
 
 void 	GameCore::handlePause(Actions actions, STATE &state)
 {
-	if (actions.buttonPressed == 1)
+	if (actions.buttonPressed == 1001)
 		state = STATE::GAME;
-	if (actions.buttonPressed == 3)
+	if (actions.buttonPressed == 1003)
 		state = STATE::EXIT;
 }
 
@@ -162,4 +153,9 @@ void GameCore::afterCalc()
 			// ++it;
 		}
 	}
+}
+
+std::vector<std::unique_ptr<IEntity>> 	&GameCore::createPause()
+{
+	return _pauseitem;
 }
