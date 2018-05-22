@@ -1,6 +1,6 @@
-#include <SFML/Audio.hpp>
 #include <unistd.h>
 #include "Core.hpp"
+#include "Music.hpp"
 
 Core::Core()
 	:_state(STATE::MENU), _game(), _menu(), _lib(_act), _host(-1)
@@ -87,22 +87,22 @@ void    Core::gameManager(STATE &last)
 int     Core::loop()
 {
 	STATE   lstate = STATE::INIT;
-	sf::Music music;
-	sf::Music music2;
+	Music 	coremusic;
 
-	if (!music.openFromFile("./media/Sound/MenuSelect.ogg"))
+	if (coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
 		return -1;
-	if (!music2.openFromFile("./media/Sound/TitleScreen.ogg"))
-		return -1;		
-	music.play();
-	music.setLoop(true);
+	if (coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
+		return -1;
+	coremusic.play(SOUND::MENU);
+	coremusic.setLoop(SOUND::MENU, true);
+
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
-				music.stop();
-				music2.play();
-				music2.setLoop(true);
+				coremusic.stop(SOUND::MENU);
+				coremusic.play(SOUND::GAME);
+				coremusic.setLoop(SOUND::GAME, true);
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
