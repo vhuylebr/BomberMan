@@ -96,11 +96,6 @@ void	GameCore::bombManager(Actions &act)
 		return !x.isAlive();
 	}), _bombs.end());
 	if (act.space == true && _player1.getBombCount() > 0) {
-		// if (_bombs.front().isAlive() == false) {
-		// 	_bombs.front().setPos(_player1.getPos().first, _player1.getPos().second);
-		// 	_bombs.front();
-		// 	_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.front()));
-		// } else {
 			auto pos = _player1.getPos();
 			for (auto &a : _bombs) {
 				if (a.getPos().first == std::ceil(pos.first - 0.5) && 
@@ -166,24 +161,12 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 	return (_updateEntities);
 }
 
-#include <unistd.h>
-
 void 	GameCore::handlePause(Actions actions, STATE &state)
 {
 	if (actions.buttonPressed == 1001)
 		state = STATE::GAME;
 	if (actions.buttonPressed == 1003)
 		state = STATE::EXIT;
-}
-
-void GameCore::afterCalc()
-{
-	for (auto it = _bombs.begin(); it != _bombs.end(); ++it) {
-		if (!it->isAlive()) {
-			// _bombs.erase(it);
-			// ++it;
-		}
-	}
 }
 
 std::vector<std::unique_ptr<IEntity>> 	&GameCore::createPause()

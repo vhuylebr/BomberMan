@@ -368,7 +368,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size)
-{
+{	
 	_skybox->setVisible(false);
 	createPlane(size);
 	irr::core::vector3df groundPos = _ground->getPosition();

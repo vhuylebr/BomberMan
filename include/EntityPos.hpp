@@ -11,7 +11,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
-#include <map>
+#include <unordered_map>
 #include "IEntity.hpp"
 #include "Crate.hpp"
 #include "Wall.hpp"
@@ -42,7 +42,7 @@ class EntityPos {
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);
 	private:
-		std::map<ItemStatic, ptrFunc> _functionMap;
+		std::unordered_map<ItemStatic, ptrFunc> _functionMap;
 		std::vector<std::unique_ptr<IEntity> > _entities;
 };
 

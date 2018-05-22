@@ -39,7 +39,6 @@ public:
 	pairUC	getSize() const;
 	void 	handlePause(Actions actions, STATE &state);
 	void releaseUpdateEntities();
-	void afterCalc();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 
 private:
