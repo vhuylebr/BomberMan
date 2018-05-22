@@ -44,26 +44,26 @@ void 	Menu::makeJoinMenu()
 void    Menu::makeOptionMenu()
 {
 	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Number Player : ", 200, 150, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 300, 325, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 300, 475, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 300, 625, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 800, 250, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 800, 500, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 850, 700, 200, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", 1250, 0, 820, 1000)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 200, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", 1500, 200, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 11, "", 1400, 300, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 12, "Power Up", 1500, 300, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 400, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 14, "Penetration", 1500, 400, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 500, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", 1500, 500, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 600, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", 1500, 600, 100, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1400, 700, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", 1500, 700, 100, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Number Player : ", 100, 150, 300, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 200, 325, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 200, 475, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 200, 625, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 700, 250, 300, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 700, 500, 300, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 750, 700, 200, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", 1150, 0, 820, 1000)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 200, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", 1300, 200, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 11, "", 1200, 300, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 12, "Power Up", 1300, 300, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 400, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 14, "Penetration", 1300, 400, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 500, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", 1300, 500, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 600, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", 1300, 600, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 700, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", 1300, 700, 250, 50)));
 }
 
 void    Menu::makeMainMenu()
