@@ -21,8 +21,14 @@ public:
 	pairUC getPos() const;
 	float getRotation() const {return _rotation;};
 	void setRotation(float);
+
+	void	addBomb();
+	void	dropBomb();
+	int	getBombCount() const;
+
 private:
-	float _rotation;
+	float 		_rotation;
+	int	_bombs;
 };
 
 #endif /* !PLAYER_HPP_ */

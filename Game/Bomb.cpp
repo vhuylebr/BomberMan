@@ -7,13 +7,17 @@
 
 #include "Bomb.hpp"
 
-Bomb::Bomb(float x, float y, unsigned int id)
-	:_counter(300)
+Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
+	:_counter(300), _owner(owner)
 {
 	_alive = true;
 	_x = x;
 	_y = y;
 	_id = id;
+}
+
+Bomb::~Bomb()
+{
 }
 
 Entity	Bomb::getType() const
@@ -29,4 +33,9 @@ void	Bomb::tick()
 bool 	Bomb::isAlive() const
 {
 	return (_counter > 0);
+}
+
+std::size_t	Bomb::getOwner()
+{
+	return (_owner);
 }

@@ -13,6 +13,8 @@
 # include <vector>
 # include <memory>
 # include <utility>
+# include <algorithm>
+# include <cmath>
 # include "Item.hpp"
 # include "Actions.hpp"
 # include "IEntity.hpp"
@@ -37,9 +39,11 @@ public:
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 
 private:
+	void	bombManager(Actions &act);
+
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;
-	unsigned int _id;
+	unsigned int			_id;
 	Player 				_player1;
 	std::vector<Bomb>		_bombs;
 	//BombFactory			_bfact;
