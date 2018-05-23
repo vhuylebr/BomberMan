@@ -78,7 +78,6 @@ void    Core::gameManager(STATE &last)
 			_state = STATE::PAUSE;
 		}
 		_lib.affGameEntities(_game.calc(actions));
-		_game.afterCalc();
 		_lib.drawGame();
 	}
 	last = STATE::GAME;
