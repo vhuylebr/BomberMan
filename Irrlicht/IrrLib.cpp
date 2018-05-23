@@ -117,6 +117,7 @@ void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 			return ;
 		}
 	}
+	addCube(entity);
 }
 
 Actions	IrrLib::getActions()
