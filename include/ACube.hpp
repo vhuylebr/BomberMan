@@ -19,10 +19,12 @@ class ACube: public IEntity {
 		pairUC getPos() const;
 		std::string getTexture() const;
 		int getId() const { return _id; }
+		bool isAlive() const;
 	protected:
 		coords _pos;
 		std::string _texture;
 		int _id;
+		bool _isAlive;
 };
 
 #endif /* !ACUBE_HPP_ */

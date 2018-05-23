@@ -15,7 +15,6 @@ public:
 	Wall(float, float, int);
 	~Wall() {};
 	void 	poke();
-	bool	isAlive() const;
 };
 
 #endif /* !WALL_HPP_ */

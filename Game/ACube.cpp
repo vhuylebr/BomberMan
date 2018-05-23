@@ -30,3 +30,8 @@ std::string ACube::getTexture() const
 {
     return _texture;
 }
+
+bool ACube::isAlive() const
+{
+    return _isAlive;
+}

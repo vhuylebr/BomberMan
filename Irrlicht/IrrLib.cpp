@@ -113,7 +113,7 @@ void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 	for (auto &it : _cubes) {
 		if (it->getID() == static_cast<ACube*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-			it->setVisible(false);
+			it->setVisible(static_cast<ACube*>(entity.get())->isAlive());
 			return ;
 		}
 	}
