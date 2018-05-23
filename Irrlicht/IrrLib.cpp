@@ -106,6 +106,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 	cube->setMaterialTexture(0, _driver->getTexture(static_cast<ACube*>(entity.get())->getTexture().c_str()));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+	cube->setID(static_cast<ACube*>(entity.get())->getId());
 	cube->render();
 	_cubes.push_back(cube);
 }
