@@ -371,7 +371,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 }
 
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
-	pairUC size)
+	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {	
 	_skybox->setVisible(false);
 	createPlane(size);
@@ -383,6 +383,9 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 			if (!it2->isEmpty())
 					_factory[it2->getType()](it2->getEntity());
 		}
+	}
+	for (auto &it3: mobileEntities) {
+		_factory[it3->getType()](it3);
 	}
 }
 

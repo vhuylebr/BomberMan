@@ -38,7 +38,7 @@ void    GameCore::init(pairUC size)
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
 				} else if (line[j] == '2') {
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::PLAYER, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_id++;
 				} else  {
@@ -62,10 +62,10 @@ GameCore::~GameCore()
 
 pairUC	GameCore::getSize() const
 {
-    return (std::make_pair(_size.x, _size.y));
+	return (std::make_pair(_size.x, _size.y));
 }
 
-void    GameCore::init(const std::string &file)
+void	GameCore::init(const std::string &file)
 {
 	init(std::make_pair(100, 100));
 	std::cout << "Loading " << file << std::endl;
@@ -74,6 +74,11 @@ void    GameCore::init(const std::string &file)
 std::vector<std::vector<std::unique_ptr<EntityPos> > >	&GameCore::getEntities()
 {
 	return _vectorEntities;
+}
+
+std::vector<std::unique_ptr<IEntity> >	&GameCore::getMobileEntities()
+{
+	return _mobileEntities;
 }
 
 void GameCore::releaseUpdateEntities()
