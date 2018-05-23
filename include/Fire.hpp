@@ -14,7 +14,6 @@ class Fire : public ACube {
 public:
 	Fire(float, float, int);
 	~Fire() {};
-	void 	poke();
 };
 
 #endif /* !FIRE_HPP_ */

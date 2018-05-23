@@ -11,11 +11,5 @@
 Fire::Fire(float x, float y, int id)
 	: ACube(x, y, "./media/fire.jpg", id)
 {
-	_isAlive = false;
+	std::cout << "Fire created (" << x << "," << y << ")" << std::endl;
 }
-
-void 	Fire::poke()
-{
-	std::cout << "Fire here, pos " << _pos.x << ":" << _pos.y << std::endl;
-}
-

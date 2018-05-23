@@ -35,3 +35,8 @@ bool ACube::isAlive() const
 {
     return _isAlive;
 }
+
+void    ACube::setAlive(bool alive)
+{
+    _isAlive = alive;
+}
