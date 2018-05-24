@@ -41,6 +41,8 @@ public:
 	void	releaseUpdateEntities();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
+	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
+	
 
 private:
 	void	bombManager(Actions &act);
@@ -55,6 +57,7 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
+	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 };
 
 #endif /* !GAMECORE_HPP_ */

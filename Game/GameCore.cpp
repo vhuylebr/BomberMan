@@ -88,6 +88,11 @@ void GameCore::releaseUpdateEntities()
 	_updateEntities.clear();
 }
 
+std::vector<std::pair<int, Entity> >	&GameCore::getEntitiesToRemove()
+{
+	return _entitiesToRemove;
+}
+
 void	GameCore::bombManager(Actions &act)
 {
 	for (auto &a : _bombs) {
@@ -121,7 +126,7 @@ void	GameCore::bombManager(Actions &act)
 			}
 	}
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities);
+		a.tick(_id, _vectorEntities, _entitiesToRemove);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {

@@ -39,7 +39,7 @@ std::vector<Fire>	&Bomb::getFlames()
 	return (_flames);
 }
 
-void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map)
+void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map, std::vector<std::pair<int, Entity> > &entitiesToRemove)
 {
 	std::cout << "tick"<< std::endl;
 	_counter -= 1;
@@ -49,10 +49,15 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 			for (auto i = 1 ; i < _pow ; i += 1) {
 				std::pair<std::size_t, std::size_t> tmp(std::ceil(_x) + a.first * i, std::ceil(_y) + a.second * i);
 				if (tmp.first > 0 && tmp.second > 0 && tmp.second < map.size() && tmp.first < map[tmp.second].size()) {
-					if (map[tmp.second][tmp.first]->isEmpty()/* || map[tmp.second][tmp.first]->getEntity()->getSubType() == itemStatic::CRATE*/) {
+					if (map[tmp.second][tmp.first]->isEmpty() || map[tmp.second][tmp.first]->getSubType() == ItemStatic::CRATE) {
 						Fire	add(tmp.first, tmp.second, id);
-						//if (!map[tmp.second][tmp.first]->isEmpty())
-						//	(map[tmp.second][tmp.first]->getEntity())->setAlive(false);
+						if (!map[tmp.second][tmp.first]->isEmpty()) {
+							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
+								map[tmp.second][tmp.first]->getType()));
+							// static_cast<ACube*>(map[tmp.second][tmp.first]->getEntity().get())->setAlive(false);
+							// updateEntities.push_back(map[tmp.second][tmp.first]->getEntity());
+							std::cout << "coucou\n";
+						}
 						id += 1;
 						add.setAlive(true);
 						_flames.push_back(add);

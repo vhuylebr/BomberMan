@@ -41,6 +41,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::updateCube, this,
 		std::placeholders::_1)));
+	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -74,7 +76,6 @@ void IrrLib::createPlane(pairUC &size)
 
 void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 {
-	std::cout << "add sphere\n";
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
@@ -88,9 +89,8 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
-	std::cout << "update bomb\n";
 	for (auto &it : _spheres) {
-		if (static_cast<unsigned int>(it->getID()) == static_cast<Bomb*>(entity.get())->getId()) {
+		if (it->getID() == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
 			_gamemusic.play(SOUND::BOOM);
@@ -102,6 +102,16 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 {
+	for (auto &it : _cubes) {
+		if (it->getID() == -1) {
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setMaterialTexture(0, _driver->getTexture(static_cast<ACube*>(entity.get())->getTexture().c_str()));
+			it->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+			it->setID(static_cast<ACube*>(entity.get())->getId());
+			it->render();
+			return;
+		}
+	}
 	irr::scene::ISceneNode* cube = _smgr->addCubeSceneNode(1);
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 	cube->setMaterialTexture(0, _driver->getTexture(static_cast<ACube*>(entity.get())->getTexture().c_str()));
@@ -348,7 +358,7 @@ void IrrLib::drawGame()
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _players) {
-		if (static_cast<unsigned int>(it->getID()) == static_cast<Player*>(entity.get())->getId()) {
+		if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
 			it->setRotation(irr::core::vector3df(0, static_cast<Player*>(entity.get())->getRotation(), 0));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		}
@@ -410,6 +420,28 @@ void IrrLib::setVisible(bool state)
 			(*it)->setVisible(state);
 		else if ((*it)->getID() == 1003)
 			(*it)->setVisible(state);
+	}
+}
+
+void IrrLib::removeCube(int id)
+{
+	int i = 0;
+
+	for (auto &it : _cubes) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
+	}
+}
+
+void IrrLib::removeEntities(std::vector<std::pair<int, Entity> > &vectorToRemove)
+{
+	for (auto &it : vectorToRemove) {
+		_factoryDelete[it.second](it.first);
 	}
 }
 

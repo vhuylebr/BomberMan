@@ -44,7 +44,8 @@ class IrrLib {
 		bool getRun();
 		void createPlane(pairUC &size);
 		void affGameEntities(std::vector<std::unique_ptr<IEntity>>&);
-		
+		void removeEntities(std::vector<std::pair<int, Entity> > &vectorToRemove);
+		void removeCube(int);
 		// void affMenuItems(std::vector<MenuItem>&);
 		void addButton(std::unique_ptr<IEntity>&);
 		void addStaticText(std::unique_ptr<IEntity>&);
@@ -101,6 +102,7 @@ class IrrLib {
 		irr::scene::ISceneNode* _ground;
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
+		std::map<Entity, std::function<void(int)>> _factoryDelete;
 		std::vector<irr::scene::ISceneNode*> _spheres;
 		Music	_gamemusic;
 };
