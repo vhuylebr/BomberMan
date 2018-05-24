@@ -49,14 +49,15 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 				if (tmp.first > 0 && tmp.second > 0 && tmp.second < map.size() && tmp.first < map[tmp.second].size()) {
 					if (map[tmp.second][tmp.first]->isEmpty() || map[tmp.second][tmp.first]->getSubType() == ItemStatic::CRATE) {
 						Fire	add(tmp.first, tmp.second, id);
+						id += 1;
+						add.setAlive(true);
+						_flames.push_back(add);
 						if (!map[tmp.second][tmp.first]->isEmpty()) {
 							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
 								map[tmp.second][tmp.first]->getType()));
 								map[tmp.second][tmp.first]->removeFirstEntity();
+								break;
 						}
-						id += 1;
-						add.setAlive(true);
-						_flames.push_back(add);
 					} else if (!map[tmp.second][tmp.first]->isEmpty() && map[tmp.second][tmp.first]->getEntity()->getType() == Entity::CUBE)
 						break ;
 				}
