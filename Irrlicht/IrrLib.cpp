@@ -108,6 +108,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ACube*>(entity.get())->getTexture().c_str()));
 			it->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 			it->setID(static_cast<ACube*>(entity.get())->getId());
+			it->setVisible(true);
 			it->render();
 			return;
 		}
