@@ -38,7 +38,7 @@ void    GameCore::init(pairUC size)
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
 				} else if (line[j] == '2') {
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::PLAYER, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_id++;
 				} else  {
@@ -62,10 +62,10 @@ GameCore::~GameCore()
 
 pairUC	GameCore::getSize() const
 {
-    return (std::make_pair(_size.x, _size.y));
+	return (std::make_pair(_size.x, _size.y));
 }
 
-void    GameCore::init(const std::string &file)
+void	GameCore::init(const std::string &file)
 {
 	init(std::make_pair(100, 100));
 	std::cout << "Loading " << file << std::endl;
@@ -76,24 +76,30 @@ std::vector<std::vector<std::unique_ptr<EntityPos> > >	&GameCore::getEntities()
 	return _vectorEntities;
 }
 
+std::vector<std::unique_ptr<IEntity> >	&GameCore::getMobileEntities()
+{
+	return _mobileEntities;
+}
+
 void GameCore::releaseUpdateEntities()
 {
-	for (auto &i : _updateEntities) {
+	for (auto &i : _updateEntities)
 		i.release();
-	}
 	_updateEntities.clear();
 }
 
 void	GameCore::bombManager(Actions &act)
 {
 	for (auto &a : _bombs) {
-		if (!a.isAlive()) {
-			//std::size_t t = a.getOwner();
-			_player1.addBomb(); // use bomb id
+		if (a.isOutFire()) {
+			for (auto &b : a.getFlames()) {
+				std::cout << "Fire Out" << std::endl;
+				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
+			}
 		}
 	} // Plus tard les deux boucles seront assemblables
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(),[](const Bomb& x) {
-		return !x.isAlive();
+		return x.isOver();
 	}), _bombs.end());
 	if (act.space == true && _player1.getBombCount() > 0) {
 			auto pos = _player1.getPos();
@@ -105,35 +111,36 @@ void	GameCore::bombManager(Actions &act)
 					break ;
 				}
 			}
-			// for (auto &a : _entities) {
-			// 	if (a->getPos().first == std::ceil(pos.first - 0.5) && 
-			// 		std::ceil(pos.second - 0.5) == a->getPos().second) {
-			// 		pos.first = -1;
-			// 		pos.second = -1;
-			// 		break ;
-			// 	}
-			// }
 			if (pos.first != -1 && pos.second != -1) {
 				Bomb	tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player1.getId());
 				_player1.dropBomb();
+				tmp.setPower(_player1.getPower());
 				_bombs.push_back(tmp);
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 				std::cout << "create Bomb" << std::endl;
 			}
 	}
 	for (auto &a : _bombs) {
-		a.tick();
-		if (!a.isAlive())
+		a.tick(_id, _vectorEntities);
+		if (a.isExplode()) {
+			std::vector<Fire> &vec = a.getFlames();
+			for (auto &b : vec) {
+				//std::cout << "here" << std::endl;
+				//b.getPos().second;
+				//b.getPos().first;
+				//_vectorEntities.size();
+				//std::cout << "here2" << std::endl;
+					_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
+			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
+			_player1.addBomb();
+		}
 	}
 }
 
 bool 	GameCore::playerMovement(Actions act)
 {
 	bool changed = false;
-
-	int y = _player1.getPos().first;
-	int x = _player1.getPos().second;
 	float yP = _player1.getPos().first;
 	float xP = _player1.getPos().second;
 
@@ -159,21 +166,12 @@ bool 	GameCore::playerMovement(Actions act)
 	}
 	float aX = _player1.getPos().second;
 	float aY = _player1.getPos().first;
-
-	std::cout << "Player actual position :" << std::endl;
-	std::cout << "y : " << yP << std::endl;
-	std::cout << "x : " << xP << std::endl;
-	std::cout << "Map position :" << std::endl;
-	std::cout << "y : " << aY << std::endl;
-	std::cout << "x : " << aX << std::endl;
 	if (_vectorEntities[aY][aX]->isEmpty() == false) {
+		// if (_vectorEntities[aY][aX]->getType(xPx	) == Entity::CUBE) {
+		// 	std::cout << "ceci est une caisse" << std::endl;
+		// }
 		changed = false;
 		_player1.setPos(yP, xP);
-		std::cout << "ceci est une caisse" << std::endl;
-		// if (_vectorEntities[aY][aX]->getType() == Entity::CUBE) {
-		// 	std::cout << "recule" << std::endl;
-		// 	changed = false;
-		// }
 	}
 	return (changed);
 }

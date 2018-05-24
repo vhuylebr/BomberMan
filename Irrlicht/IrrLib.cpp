@@ -39,6 +39,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::updateSphere, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::updateCube, this,
+		std::placeholders::_1)));
 	_skybox = _smgr->addSkyBoxSceneNode(
 		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
 		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
@@ -104,6 +106,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	cube->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 	cube->setMaterialTexture(0, _driver->getTexture(static_cast<ACube*>(entity.get())->getTexture().c_str()));
 	cube->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+	cube->setID(static_cast<ACube*>(entity.get())->getId());
 	cube->render();
 	_cubes.push_back(cube);
 }
@@ -113,10 +116,11 @@ void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 	for (auto &it : _cubes) {
 		if (it->getID() == static_cast<ACube*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-			it->setVisible(false);
+			it->setVisible(static_cast<ACube*>(entity.get())->isAlive());
 			return ;
 		}
 	}
+	addCube(entity);
 }
 
 Actions	IrrLib::getActions()
@@ -367,7 +371,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 }
 
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
-	pairUC size)
+	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {	
 	_skybox->setVisible(false);
 	createPlane(size);
@@ -379,6 +383,9 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 			if (!it2->isEmpty())
 					_factory[it2->getType()](it2->getEntity());
 		}
+	}
+	for (auto &it3: mobileEntities) {
+		_factory[it3->getType()](it3);
 	}
 }
 

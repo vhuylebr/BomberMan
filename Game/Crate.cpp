@@ -11,15 +11,10 @@
 Crate::Crate(float x, float y, int id)
 	: ACube(x, y, "./media/crate.jpg", id)
 {
+	_isAlive = true;
 }
 
 void 	Crate::poke()
 {
 	std::cout << "Crate here, pos " << _pos.x << ":" << _pos.y << std::endl;
-}
-
-bool 	Crate::isAlive() const
-{
-	std::cout << "Crate here, pos " << _pos.x << ":" << _pos.y << std::endl;
-	return (true);
 }

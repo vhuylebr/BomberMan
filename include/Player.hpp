@@ -19,6 +19,7 @@ public:
 	Entity 	getType() const final;
 	bool	isAlive() const;
 	pairUC getPos() const;
+	int	getPower() const;
 	float getRotation() const {return _rotation;};
 	void setRotation(float);
 
@@ -27,8 +28,9 @@ public:
 	int	getBombCount() const;
 
 private:
-	float 		_rotation;
+	float 	_rotation;
 	int	_bombs;
+	int	_pow;
 };
 
 #endif /* !PLAYER_HPP_ */

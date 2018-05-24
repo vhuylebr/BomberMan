@@ -8,7 +8,7 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id)
-	:_bombs(2)
+	:_bombs(2), _pow(3)
 {
 	_x = x;
 	_y = y;
@@ -44,6 +44,11 @@ bool 	Player::isAlive() const
 pairUC	Player::getPos() const
 {
 	return std::make_pair(_x, _y);
+}
+
+int	Player::getPower() const
+{
+	return _pow;
 }
 
 Entity	Player::getType() const

@@ -64,7 +64,7 @@ void    Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
 		_game.init(std::make_pair(12, 8));
-		_lib.initGame(_game.getEntities(), _game.getSize());
+		_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
 		_lib.drawGame();

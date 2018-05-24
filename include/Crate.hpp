@@ -15,7 +15,6 @@ public:
 	Crate(float, float, int);
 	~Crate() {};
 	void 	poke();
-	bool	isAlive() const;
 };
 
 #endif /* !CRATE_HPP_ */

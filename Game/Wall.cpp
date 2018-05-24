@@ -11,15 +11,10 @@
 Wall::Wall(float x, float y, int id)
 	: ACube(x, y, "./media/wall.bmp", id)
 {
+	_isAlive = true;
 }
 
 void 	Wall::poke()
 {
 	std::cout << "Wall here, pos " << _pos.x << ":" << _pos.y << std::endl;
-}
-
-bool 	Wall::isAlive() const
-{
-	std::cout << "Wall here, pos " << _pos.x << ":" << _pos.y << std::endl;
-	return (true);
 }

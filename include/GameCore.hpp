@@ -38,9 +38,10 @@ public:
 	void	init(const std::string &);
 	pairUC	getSize() const;
 	void 	handlePause(Actions actions, STATE &state);
-	void releaseUpdateEntities();
+	void	releaseUpdateEntities();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 	bool 	playerMovement(Actions act);
+	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 
 private:
 	void	bombManager(Actions &act);
@@ -53,6 +54,7 @@ private:
 	//BombFactory			_bfact;
 	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
+	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
 };
 
