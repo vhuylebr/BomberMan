@@ -128,12 +128,15 @@ void	GameCore::bombManager(Actions &act)
 	}
 }
 
-std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
+bool 	GameCore::playerMovement(Actions act)
 {
 	bool changed = false;
 
-	if (_updateEntities.size() > 0)
-		releaseUpdateEntities();
+	int y = _player1.getPos().first;
+	int x = _player1.getPos().second;
+	float yP = _player1.getPos().first;
+	float xP = _player1.getPos().second;
+
 	if (act.up == true) {
 		_player1.setPos(_player1.getPos().first + 0.07, _player1.getPos().second);
 		_player1.setRotation(0.0f);
@@ -154,9 +157,36 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 		_player1.setRotation(90.0f);
 		changed = true;
 	}
+	float aX = _player1.getPos().second;
+	float aY = _player1.getPos().first;
+
+	std::cout << "Player actual position :" << std::endl;
+	std::cout << "y : " << yP << std::endl;
+	std::cout << "x : " << xP << std::endl;
+	std::cout << "Map position :" << std::endl;
+	std::cout << "y : " << aY << std::endl;
+	std::cout << "x : " << aX << std::endl;
+	if (_vectorEntities[aY][aX]->isEmpty() == false) {
+		changed = false;
+		_player1.setPos(yP, xP);
+		std::cout << "ceci est une caisse" << std::endl;
+		// if (_vectorEntities[aY][aX]->getType() == Entity::CUBE) {
+		// 	std::cout << "recule" << std::endl;
+		// 	changed = false;
+		// }
+	}
+	return (changed);
+}
+
+std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
+{
+	bool changed;
+
+	if (_updateEntities.size() > 0)
+		releaseUpdateEntities();
+	changed = playerMovement(act);
 	if (changed)
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
-	
 	bombManager(act);
 	return (_updateEntities);
 }

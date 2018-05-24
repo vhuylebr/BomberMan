@@ -40,6 +40,7 @@ public:
 	void 	handlePause(Actions actions, STATE &state);
 	void releaseUpdateEntities();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
+	bool 	playerMovement(Actions act);
 
 private:
 	void	bombManager(Actions &act);
