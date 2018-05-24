@@ -38,6 +38,11 @@ ItemStatic EntityPos::getSubType() const
     return _subType;
 }
 
+void EntityPos::removeFirstEntity()
+{
+    _entities.clear();
+}
+
 std::unique_ptr<IEntity> &EntityPos::getEntity()
 {
     std::unique_ptr<IEntity> &tmp = _entities[0];

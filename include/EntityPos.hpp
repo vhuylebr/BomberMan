@@ -41,6 +41,8 @@ class EntityPos {
 		ItemStatic getSubType() const;
 		int getId() const;
 		std::unique_ptr<IEntity> &getEntity();
+		void removeFirstEntity();
+		
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);
 	private:

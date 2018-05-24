@@ -387,7 +387,7 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	_skybox->setVisible(false);
 	createPlane(size);
 	irr::core::vector3df groundPos = _ground->getPosition();
-	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z));
+	_camera->setPosition(irr::core::vector3df(groundPos.X - 10, 20, groundPos.Z));
 	_camera->setTarget(groundPos);
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
