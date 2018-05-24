@@ -20,7 +20,7 @@ class ACube: public IEntity {
 		std::string getTexture() const;
 		int getId() const { return _id; }
 		bool isAlive() const;
-		void    setAlive(bool);
+		void setAlive(bool);
 	protected:
 		coords _pos;
 		std::string _texture;

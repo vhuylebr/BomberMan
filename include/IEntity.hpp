@@ -41,6 +41,7 @@ public:
     //virtual bool isDestruct() = 0;
     //virtual void extractInfo() = 0;
     //virtual void insertInfo() = 0;
+    virtual int getId() const = 0;
     virtual Entity getType() const = 0;
     virtual std::pair<float, float> getPos() const = 0;
     };

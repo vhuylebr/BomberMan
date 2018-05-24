@@ -30,7 +30,7 @@ void    GameCore::init(pairUC size)
 		while (getline(file, line)) {
 			x1 = 0;
 			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos> >());
-			for (unsigned int j = 0; line[j] != 0; j++) {
+			for (unsigned int j = 0; line[j] != 0; ++j) {
 				if (line[j] == '0') {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
@@ -88,6 +88,11 @@ void GameCore::releaseUpdateEntities()
 	_updateEntities.clear();
 }
 
+std::vector<std::pair<int, Entity> >	&GameCore::getEntitiesToRemove()
+{
+	return _entitiesToRemove;
+}
+
 void	GameCore::bombManager(Actions &act)
 {
 	for (auto &a : _bombs) {
@@ -121,7 +126,7 @@ void	GameCore::bombManager(Actions &act)
 			}
 	}
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities);
+		a.tick(_id, _vectorEntities, _entitiesToRemove);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {

@@ -25,7 +25,8 @@ public:
     Entity getType() const;
     bool   isAlive() const;
     bool   isOutFire() const;
-    void   tick(unsigned int &, std::vector<std::vector<std::unique_ptr<EntityPos>>> &);
+    void   tick(unsigned int &, std::vector<std::vector<std::unique_ptr<EntityPos>>> &,
+        std::vector<std::pair<int, Entity> > &);
     bool    isOver() const;
     std::size_t getOwner();
     bool    isExplode() const;

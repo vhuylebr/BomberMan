@@ -38,12 +38,17 @@ class EntityPos {
 		~EntityPos();
 		bool isEmpty() const { return (!_entities.size());};
 		Entity getType() const;
+		ItemStatic getSubType() const;
+		int getId() const;
 		std::unique_ptr<IEntity> &getEntity();
+		void removeFirstEntity();
+		
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);
 	private:
 		std::unordered_map<ItemStatic, ptrFunc> _functionMap;
 		std::vector<std::unique_ptr<IEntity> > _entities;
+		ItemStatic _subType;
 };
 
 #endif /* !ENTITYPOS_HPP_ */
