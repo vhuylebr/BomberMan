@@ -53,7 +53,7 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 						add.setAlive(true);
 						_flames.push_back(add);
 						if (!map[tmp.second][tmp.first]->isEmpty()) {
-							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
+								entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
 								map[tmp.second][tmp.first]->getType()));
 								map[tmp.second][tmp.first]->removeFirstEntity();
 								break;

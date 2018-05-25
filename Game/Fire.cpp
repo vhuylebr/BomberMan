@@ -11,5 +11,4 @@
 Fire::Fire(float x, float y, int id)
 	: ACube(x, y, "./media/fire.jpg", id)
 {
-	std::cout << "Fire created (" << x << "," << y << ")" << std::endl;
 }

@@ -53,7 +53,7 @@ private:
 	unsigned int			_id;
 	Player 				_player1;
 	std::vector<Bomb>		_bombs;
-	//BombFactory			_bfact;
+	bool	thereIsBomb(int x, int y);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
