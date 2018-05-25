@@ -60,7 +60,7 @@ void 	Core::getParametersFromMenu()
 	}
 }
 
-void    Core::gameManager(STATE &last)
+void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
 		_game.init(std::make_pair(12, 8));
@@ -84,7 +84,7 @@ void    Core::gameManager(STATE &last)
 	last = STATE::GAME;
 }
 
-int     Core::loop()
+int	Core::loop()
 {
 	STATE   lstate = STATE::INIT;
 	Music 	coremusic;
@@ -109,5 +109,6 @@ int     Core::loop()
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE)
 			gameManager(lstate);
 	}
+	_lib.dropAll();
 	return 0;
 }

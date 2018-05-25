@@ -277,6 +277,7 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	_inputs.clear();
 	_labels.clear();
 	_checkboxes.clear();
+	_buttons.clear();
 	_eventReceiver.resetIdButtonPressed();
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/myfont.png");
@@ -399,6 +400,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
+	drop();
 	_skybox->setVisible(false);
 	createPlane(size);
 	for (auto &it : gameEntities) {
@@ -424,7 +426,54 @@ void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities
 
 void IrrLib::drop()
 {
-	_device->drop();
+	for (auto &it : _spheres) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _players) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _cubes) {
+		it->remove();
+		// it->drop();
+	}
+	// for (auto &it : _buttons) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// for (auto &it : _labels) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// for (auto &it : _checkboxes) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// for (auto &it : _inputs) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// _smgr = _device->getSceneManager();
+	_spheres.clear();
+	_players.clear();
+	// _buttons.clear();
+	// _labels.clear();
+	// _checkboxes.clear();
+	// _inputs.clear();
+	_cubes.clear();
+	
+	// _smgr->clear();
+	// _guienv->clear();
+}
+
+void IrrLib::dropAll()
+{
+	// _guienv->drop();
+	// _smgr->drop();
+	// _driver->drop();
+	// _device->closeDevice();
+	// _device->drop();
 }
 
 void IrrLib::setVisible(bool state)

@@ -76,6 +76,7 @@ class IrrLib {
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();
 		void setVisible(bool state);
+		void dropAll();
 
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
