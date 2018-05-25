@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown)
+	:_actions(KeyIsDown), _ground(nullptr)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
 		16, false, false, false, &_eventReceiver);
@@ -43,13 +43,6 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
-	_skybox = _smgr->addSkyBoxSceneNode(
-		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
@@ -279,6 +272,13 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	_checkboxes.clear();
 	_buttons.clear();
 	_eventReceiver.resetIdButtonPressed();
+	_skybox = _smgr->addSkyBoxSceneNode(
+	_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/myfont.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
@@ -401,7 +401,7 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
 	drop();
-	_skybox->setVisible(false);
+	// _skybox->setVisible(false);
 	createPlane(size);
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
@@ -438,6 +438,8 @@ void IrrLib::drop()
 		it->remove();
 		// it->drop();
 	}
+	if (_ground)
+		_ground->remove();
 	// for (auto &it : _buttons) {
 	// 	it->remove();
 	// 	// it->drop();
@@ -461,6 +463,7 @@ void IrrLib::drop()
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
+	_skybox->remove();
 	_cubes.clear();
 	
 	// _smgr->clear();

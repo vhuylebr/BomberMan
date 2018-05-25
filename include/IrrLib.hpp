@@ -87,25 +87,29 @@ class IrrLib {
 		irr::video::IVideoDriver	*_driver;
 		irr::scene::ISceneManager	*_smgr;
 		irr::gui::IGUIEnvironment	*_guienv;
-		MyEventReceiver			_eventReceiver;
 		const irr::scene::IGeometryCreator *_geomentryCreator;
-		std::vector<irr::scene::ISceneNode*> _cubes;
+	
 		Actions _actions;
-		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
+		MyEventReceiver			_eventReceiver;
+		irr::core::vector3df		_camTarget;
+
+		std::vector<irr::scene::ISceneNode*> _cubes;
 		std::vector<irr::gui::IGUIEditBox*> _inputs;
 		std::vector<irr::gui::IGUICheckBox*> _checkboxes;
 		std::vector<irr::gui::IGUIStaticText*> _labels;
 		std::vector<irr::gui::IGUIButton*> _buttons;
+		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
+		std::vector<irr::scene::ISceneNode*> _spheres;
+
 		irr::gui::IGUIListBox *_listbox;
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
-		irr::core::vector3df		_camTarget;
 		irr::scene::ISceneNode* _ground;
-		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
+		Music	_gamemusic;
+
+		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 		std::map<Entity, std::function<void(int)>> _factoryDelete;
-		std::vector<irr::scene::ISceneNode*> _spheres;
-		Music	_gamemusic;
 };
 
 #endif /* !IRRLIB_HPP_ */
