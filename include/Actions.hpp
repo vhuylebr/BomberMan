@@ -16,6 +16,11 @@ struct Actions {
     bool    space = false;
     bool    escape = false;
     bool    enter = false;
+    bool    Z = false;
+    bool    D = false;
+    bool    S = false;
+    bool    W = false;
+    bool    Q = false;
     int    buttonPressed = -1;
 };
 

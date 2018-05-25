@@ -52,6 +52,7 @@ private:
 	coords				_size;
 	unsigned int			_id;
 	Player 				_player1;
+	Player 				_player2;
 	std::vector<Bomb>		_bombs;
 	bool	thereIsBomb(int x, int y);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;

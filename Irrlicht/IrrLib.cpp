@@ -143,6 +143,11 @@ Actions	IrrLib::getActions()
 	_actions.up = false;
 	_actions.down = false;
 	_actions.enter = false;
+	_actions.Z = false;
+	_actions.Q = false;
+	_actions.S = false;
+	_actions.D = false;
+	_actions.W = false;
 	_actions.buttonPressed = getIdButtonPressed();
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
 		_actions.left = true;
@@ -158,6 +163,16 @@ Actions	IrrLib::getActions()
 		_actions.space = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RETURN))
 		_actions.enter = true;
+	if (_eventReceiver.IsKeyDown(irr::KEY_KEY_Q))
+		_actions.Q = true;
+	if (_eventReceiver.IsKeyDown(irr::KEY_KEY_S))
+		_actions.S = true;
+	if (_eventReceiver.IsKeyDown(irr::KEY_KEY_D))
+		_actions.D = true;
+	if (_eventReceiver.IsKeyDown(irr::KEY_KEY_Z))
+		_actions.Z = true;
+	if (_eventReceiver.IsKeyDown(irr::KEY_KEY_W))
+		_actions.W = true;
 	return (_actions);
 }
 
@@ -386,9 +401,6 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 {	
 	_skybox->setVisible(false);
 	createPlane(size);
-	irr::core::vector3df groundPos = _ground->getPosition();
-	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z - 10));
-	_camera->setTarget(groundPos);
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
 			if (!it2->isEmpty())
@@ -398,6 +410,9 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}
+	irr::core::vector3df groundPos = _players[0]->getPosition();
+	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z - 1));
+	_camera->setTarget(_players[0]->getPosition());
 }
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)

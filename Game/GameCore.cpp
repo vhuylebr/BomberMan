@@ -8,7 +8,7 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, _id)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
 {
 }
 
@@ -42,7 +42,12 @@ void    GameCore::init(pairUC size)
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				} else  {
+				} else if (line[j] == '3') {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					_id++;
+				} else {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}
 				x1 += 1;
@@ -124,6 +129,24 @@ void	GameCore::bombManager(Actions &act)
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 			}
 	}
+	if (act.W == true && _player2.getBombCount() > 0) {
+			auto pos = _player2.getPos();
+			for (auto &a : _bombs) {
+				if (a.getPos().first == std::ceil(pos.first - 0.5) && 
+					std::ceil(pos.second - 0.5) == a.getPos().second) {
+					pos.first = -1;
+					pos.second = -1;
+					break ;
+				}
+			}
+			if (pos.first != -1 && pos.second != -1) {
+				Bomb	tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player2.getId());
+				_player2.dropBomb();
+				tmp.setPower(_player2.getPower());
+				_bombs.push_back(tmp);
+				_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+			}
+	}
 	for (auto &a : _bombs) {
 		a.tick(_id, _vectorEntities, _entitiesToRemove);
 		if (a.isExplode()) {
@@ -132,7 +155,10 @@ void	GameCore::bombManager(Actions &act)
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
-			_player1.addBomb();
+			if (a.getOwner() == _player1.getId())
+				_player1.addBomb();
+			if (a.getOwner() == _player2.getId())
+				_player2.addBomb();
 		}
 	}
 }
@@ -183,6 +209,38 @@ bool 	GameCore::playerMovement(Actions act)
 		_player1.setRotation(90.0f);
 		changed = true;
 	}
+	if (act.D == true) {
+		if (_vectorEntities[std::round(_player2.getPos().second)][std::round(_player2.getPos().first + 0.5)]->isEmpty() == true &&
+			(thereIsBomb(std::round(_player2.getPos().first + 0.5), std::round(_player2.getPos().second)) == false ||
+			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
+			_player2.setPos(_player2.getPos().first + 0.07, _player2.getPos().second);
+		_player2.setRotation(0.0f);
+		changed = true;
+	}
+	if (act.Q == true) {
+		if (_vectorEntities[std::round(_player2.getPos().second)][std::round(_player2.getPos().first - 0.5)]->isEmpty() == true &&
+			(thereIsBomb(std::round(_player2.getPos().first - 0.5), std::round(_player2.getPos().second)) == false ||
+			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
+			_player2.setPos(_player2.getPos().first - 0.07, _player2.getPos().second);
+		_player2.setRotation(180.0f);
+		changed = true;
+	}
+	if (act.Z == true) {
+		if (_vectorEntities[std::round(_player2.getPos().second + 0.5)][std::round(_player2.getPos().first)]->isEmpty() == true &&
+			(thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second + 0.5)) == false ||
+			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
+			_player2.setPos(_player2.getPos().first, _player2.getPos().second + 0.07);
+		_player2.setRotation(-90.0f);
+		changed = true;
+	}
+	if (act.S == true) {
+		if (_vectorEntities[std::round(_player2.getPos().second - 0.5)][std::round(_player2.getPos().first)]->isEmpty() == true &&
+			(thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second - 0.5)) == false ||
+			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
+			_player2.setPos(_player2.getPos().first, _player2.getPos().second - 0.07);
+		_player2.setRotation(90.0f);
+		changed = true;
+	}
 	return (changed);
 }
 
@@ -193,8 +251,10 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
 	changed = playerMovement(act);
-	if (changed)
+	if (changed) {
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+	}
 	bombManager(act);
 	return (_updateEntities);
 }
