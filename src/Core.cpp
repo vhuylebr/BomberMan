@@ -84,25 +84,30 @@ void    Core::gameManager(STATE &last)
 	last = STATE::GAME;
 }
 
+int		Core::startMusic()
+{
+	if (_coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
+		return -1;
+	if (_coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
+		return -1;
+	_coremusic.play(SOUND::MENU);
+	_coremusic.setLoop(SOUND::MENU, true);
+	return 0;
+}
+
 int     Core::loop()
 {
 	STATE   lstate = STATE::INIT;
-	Music 	coremusic;
 
-	if (coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
+	if (startMusic() == -1)
 		return -1;
-	if (coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
-		return -1;
-	coremusic.play(SOUND::MENU);
-	coremusic.setLoop(SOUND::MENU, true);
-
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
-				coremusic.stop(SOUND::MENU);
-				coremusic.play(SOUND::GAME);
-				coremusic.setLoop(SOUND::GAME, true);
+				_coremusic.stop(SOUND::MENU);
+				_coremusic.play(SOUND::GAME);
+				_coremusic.setLoop(SOUND::GAME, true);
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}

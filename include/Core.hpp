@@ -34,11 +34,12 @@ public:
 	~Core() = default;
 
 	int loop();
-	void menuManager(STATE &last);
-	void gameManager(STATE &last);
 //	void pauseManager(STATE &last);
 	void getParametersFromMenu();
-
+protected:
+	int startMusic();
+	void menuManager(STATE &last);
+	void gameManager(STATE &last);
 
 private:
 	parameters _param;
@@ -47,6 +48,7 @@ private:
 	Menu    _menu;
 	IrrLib  _lib;
 	char    _host;
+	Music 	_coremusic;
 	// Lobby   _lobby;
 	Actions _act;
 };

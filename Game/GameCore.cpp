@@ -55,9 +55,10 @@ void    GameCore::init(pairUC size)
 			y1 += 1;
 		}
 	}
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1001, "Resume", 600, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1002, "Save and Quit", 600, 400, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1003	, "Quit", 600, 600, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10001, "Resume", 600, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10002, "Save and Quit", 600, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10003, "Main Menu", 600, 500, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10004, "Quit", 600, 650, 400, 100)));
 }
 
 GameCore::~GameCore()
@@ -261,9 +262,11 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 
 void 	GameCore::handlePause(Actions actions, STATE &state)
 {
-	if (actions.buttonPressed == 1001)
+	if (actions.buttonPressed == 10001)
 		state = STATE::GAME;
-	if (actions.buttonPressed == 1003)
+	if (actions.buttonPressed == 10003)
+		state = STATE::MENU;
+	if (actions.buttonPressed == 10004)
 		state = STATE::EXIT;
 }
 

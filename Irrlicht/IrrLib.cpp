@@ -190,7 +190,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == 1001 || item->getId() == 1002 || item->getId() == 1003)
+	if (item->getId() == 10001 || item->getId() == 10002
+	|| item->getId() == 10003 || item->getId() == 10004)
 		_buttons.push_back(button);
 }
 
@@ -430,11 +431,13 @@ void IrrLib::drop()
 void IrrLib::setVisible(bool state)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == 1001)
+		if ((*it)->getID() == 10001)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 1002)
+		else if ((*it)->getID() == 10002)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 1003)
+		else if ((*it)->getID() == 10003)
+			(*it)->setVisible(state);
+		else if ((*it)->getID() == 10004)
 			(*it)->setVisible(state);
 	}
 }

@@ -48,8 +48,8 @@ void    Menu::makeOptionMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 200, 325, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 200, 475, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 200, 625, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 700, 250, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 700, 500, 300, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 700, 100, 300, 70)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 700, 200, 300, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 750, 700, 200, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", 1150, 0, 820, 1000)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 200, 50, 50)));
@@ -64,6 +64,13 @@ void    Menu::makeOptionMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", 1300, 600, 250, 50)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 700, 50, 50)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", 1300, 700, 250, 50)));
+	std::vector<std::wstring> toto;
+	toto.push_back(L"Hello1");
+	toto.push_back(L"there1");
+	toto.push_back(L"Hello2");
+	toto.push_back(L"there2");
+
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 21, "", 600, 350, 500, 300)));
 }
 
 void    Menu::makeMainMenu()
@@ -194,8 +201,9 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 		return ;
 	}
 	if (actions.buttonPressed == 3) {
+		std::cout << "hellow"<< std::endl;
 		state = STATE::GAME;
-		_changed = -1;
+		_changed = true;
 	}
 }
 
