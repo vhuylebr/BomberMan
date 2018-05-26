@@ -13,6 +13,7 @@ Player::Player(float x, float y, unsigned int id)
 	_x = x;
 	_y = y;
 	_id = id;
+	_alive = true;
 }
 
 void 	Player::poke()
@@ -37,8 +38,12 @@ int	Player::getBombCount() const
 
 bool 	Player::isAlive() const
 {
-	std::cout << "Player here, pos " << _x << ":" << _y << std::endl;
 	return (_alive);
+}
+
+void 	Player::setAlive(bool alive)
+{
+	_alive = alive;
 }
 
 pairUC	Player::getPos() const

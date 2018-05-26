@@ -111,7 +111,7 @@ void	GameCore::bombManager(Actions &act)
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(),[](const Bomb& x) {
 		return x.isOver();
 	}), _bombs.end());
-	if (act.space == true && _player1.getBombCount() > 0) {
+	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive()) {
 			auto pos = _player1.getPos();
 			for (auto &a : _bombs) {
 				if (a.getPos().first == std::ceil(pos.first - 0.5) && 
@@ -128,7 +128,7 @@ void	GameCore::bombManager(Actions &act)
 				_bombs.push_back(tmp);
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 			}
-	} else if (act.W == true && _player2.getBombCount() > 0) {
+	} else if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) {
 			auto pos = _player2.getPos();
 			for (auto &a : _bombs) {
 				if (a.getPos().first == std::ceil(pos.first - 0.5) && 
@@ -152,6 +152,16 @@ void	GameCore::bombManager(Actions &act)
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
+					if (std::round(_player1.getPos().first) == b.getPos().first &&
+						std::round(_player1.getPos().second) == b.getPos().second) {
+							_player1.setAlive(false);
+							_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
+					}
+					if (std::round(_player2.getPos().first) == b.getPos().first &&
+						std::round(_player2.getPos().second) == b.getPos().second) {
+							_player2.setAlive(false);
+							_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+					}
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
 			if (a.getOwner() == _player1.getId())
