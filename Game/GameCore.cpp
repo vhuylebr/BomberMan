@@ -260,12 +260,29 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 	return (_updateEntities);
 }
 
+void	GameCore::removeAll()
+{
+	for (auto &it : _vectorEntities) {
+		it.clear();
+	}
+	_vectorEntities.clear();
+	_updateEntities.clear();
+	_mobileEntities.clear();
+	_bombs.clear();
+	_pauseitem.clear();
+	_entitiesToRemove.clear();
+	_entities.clear();
+	_id = 0;
+}
+
 void 	GameCore::handlePause(Actions actions, STATE &state)
 {
 	if (actions.buttonPressed == 10001)
 		state = STATE::GAME;
-	if (actions.buttonPressed == 10003)
+	if (actions.buttonPressed == 10003) {
+		removeAll();
 		state = STATE::MENU;
+	}
 	if (actions.buttonPressed == 10004)
 		state = STATE::EXIT;
 }

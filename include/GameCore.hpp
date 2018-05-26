@@ -39,6 +39,7 @@ public:
 	pairUC	getSize() const;
 	void 	handlePause(Actions actions, STATE &state);
 	void	releaseUpdateEntities();
+	void	removeAll();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();

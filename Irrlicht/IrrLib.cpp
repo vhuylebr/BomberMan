@@ -399,7 +399,7 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
-{	
+{
 	_skybox->setVisible(false);
 	createPlane(size);
 	for (auto &it : gameEntities) {
