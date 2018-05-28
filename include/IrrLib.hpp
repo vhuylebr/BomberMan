@@ -110,6 +110,8 @@ class IrrLib {
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 		std::map<Entity, std::function<void(int)>> _factoryDelete;
+
+		irr::scene::ICameraSceneNode *_cameras[4];
 };
 
 #endif /* !IRRLIB_HPP_ */
