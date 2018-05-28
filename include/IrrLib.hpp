@@ -22,6 +22,7 @@
 #include "Bomb.hpp"
 #include "EntityPos.hpp"
 #include "Music.hpp"
+#include "Item.hpp"
 
 enum
 {
