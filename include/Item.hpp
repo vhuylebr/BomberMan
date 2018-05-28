@@ -34,8 +34,8 @@ public:
 	pairUC	getPos() const { return {_x, _y};}
 	bool	isAlive() const { return (_alive);};
 	Entity	getType() const {return Entity::ITEM;};
-	std::string		getModel() const {return "./media/Fireball.obj";};
-	std::string		getTexture() const {return "./media/Fireball.png";};
+	std::string		getModel() const {return "./media/Shoes.obj";};
+	std::string		getTexture() const {return "./media/Shoes.png";};
 
 private:
 
