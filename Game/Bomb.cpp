@@ -5,6 +5,8 @@
 ** Bomb implementation
 */
 
+#include <random>
+#include <chrono>
 #include "Bomb.hpp"
 
 Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
@@ -39,7 +41,8 @@ std::vector<Fire>	&Bomb::getFlames()
 	return (_flames);
 }
 
-void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map, std::vector<std::pair<int, Entity> > &entitiesToRemove)
+void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map, std::vector<std::pair<int, Entity> > &entitiesToRemove,
+			std::vector<std::unique_ptr<IEntity>> &_updateEntities)
 {
 	_counter -= 1;
 	if (_counter == 0) {
@@ -56,10 +59,16 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
 							map[tmp.second][tmp.first]->getType()));
 							map[tmp.second][tmp.first]->removeFirstEntity();
+							std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+							std::uniform_int_distribution<int> distrib{1, 10};
+							if (distrib(re) < 6) {
+								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id);
+								_updateEntities.push_back(std::unique_ptr<IEntity>(map[tmp.second][tmp.first]->getEntity().get()));
+							}
 							break;
 						}
 					} else if (!map[tmp.second][tmp.first]->isEmpty() && map[tmp.second][tmp.first]->getEntity()->getType() == Entity::CUBE)
-						break ;
+						break;
 				}
 			}
 		}

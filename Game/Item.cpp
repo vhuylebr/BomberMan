@@ -7,11 +7,13 @@
 
 #include <random>
 #include <chrono>
+#include <iostream>
 #include "Item.hpp"
 
 Item::Item(float x, float y, unsigned int id)
-	:ACube(x, y, "bonus", id)
+	:_x(x), _y(y), _id(id), _alive(false)
 {
+	std::cout << "Created Item " << std::endl;
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
 	std::uniform_int_distribution<int> distrib{0, 2};
 	_type = static_cast<eItem>(distrib(re));

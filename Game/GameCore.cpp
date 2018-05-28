@@ -147,7 +147,7 @@ void	GameCore::bombManager(Actions &act)
 			}
 	}
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities, _entitiesToRemove);
+		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {

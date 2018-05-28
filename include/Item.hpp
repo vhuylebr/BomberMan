@@ -8,7 +8,7 @@
 #ifndef ITEM_HPP_
 # define ITEM_HPP_
 
-# include "ACube.hpp"
+# include "AEntity.hpp"
 # include <string>
 
 # define NB_ITEMS 6 // Nombre d'items implémentés
@@ -23,16 +23,25 @@ enum eItem {
 	NONE
 };
 
-class Item : public ACube {
+class Item : public IEntity {
 public:
 	Item(float, float, unsigned int);
 	~Item();
 
-	eItem getItemType() const;
+	eItem	getItemType() const;
+	int	getId() const { return _id; }
+	void	setPos(float x, float y) { _x = x; _y = y; }
+	pairUC	getPos() const { return {_x, _y};}
+	bool	isAlive() const { return (_alive);};
+	Entity	getType() const {return Entity::ITEM;};
 
 private:
 
 	eItem	_type;
+	float	_x;
+	float	_y;
+	size_t	_id;
+	bool	_alive;
 };
 
 #endif /* !ITEM_HPP_ */
