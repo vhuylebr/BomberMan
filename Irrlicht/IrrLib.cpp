@@ -398,6 +398,32 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 	}
 }
 
+void IrrLib::updateItem(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _items) {
+		if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
+			it->setRotation(irr::core::vector3df(0, static_cast<Player*>(entity.get())->getRotation(), 0));
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setVisible(static_cast<Player*>(entity.get())->isAlive());
+		}
+	}
+}
+
+void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
+{
+	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh("./media/Shadow.md2");
+	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
+	if (node) {
+		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		node->setMD2Animation(irr::scene::EMAT_STAND);
+		node->setMaterialTexture( 0, _driver->getTexture("./media/SHADOW.png") );
+		node->setScale(irr::core::vector3df(0.02f, 0.02f, 0.02f));
+		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+		node->setID(static_cast<Player*>(entity.get())->getId());
+		_items.push_back(node);
+	}
+}
+
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
