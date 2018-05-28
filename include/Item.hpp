@@ -36,6 +36,7 @@ public:
 	Entity	getType() const {return Entity::ITEM;};
 	std::string		getModel() const {return "./media/Shoes.obj";};
 	std::string		getTexture() const {return "./media/Shoes.png";};
+	float	getScale() const {return 0.08f;};
 
 private:
 
