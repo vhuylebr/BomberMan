@@ -22,6 +22,7 @@
 #include "Bomb.hpp"
 #include "EntityPos.hpp"
 #include "Music.hpp"
+#include "Item.hpp"
 
 enum
 {
@@ -80,6 +81,8 @@ class IrrLib {
 		void setVisible(bool state);
 		void dropAll();
 
+		void updateItem(std::unique_ptr<IEntity> &entity);
+		void addItem(std::unique_ptr<IEntity> &entity);
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
@@ -102,7 +105,7 @@ class IrrLib {
 		std::vector<irr::gui::IGUIButton*> _buttons;
 		std::vector<irr::scene::IAnimatedMeshSceneNode*> _players;
 		std::vector<irr::scene::ISceneNode*> _spheres;
-
+		std::vector<irr::scene::IAnimatedMeshSceneNode*> _items;
 		irr::gui::IGUIListBox *_listbox;
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
@@ -112,6 +115,8 @@ class IrrLib {
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 		std::map<Entity, std::function<void(int)>> _factoryDelete;
+
+		irr::scene::ICameraSceneNode *_cameras[4];
 };
 
 #endif /* !IRRLIB_HPP_ */

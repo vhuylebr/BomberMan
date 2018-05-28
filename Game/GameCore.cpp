@@ -173,11 +173,9 @@ void GameCore::bombManager(Actions &act)
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 		}
 	}
-	for (auto &a : _bombs)
-	{
-		a.tick(_id, _vectorEntities, _entitiesToRemove);
-		if (a.isExplode())
-		{
+	for (auto &a : _bombs) {
+		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
+		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec)
 			{
@@ -196,9 +194,9 @@ void GameCore::bombManager(Actions &act)
 				}
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
-			if (a.getOwner() == _player1.getId())
+			if (a.getOwner() == static_cast<unsigned int>(_player1.getId()))
 				_player1.addBomb();
-			if (a.getOwner() == _player2.getId())
+			if (a.getOwner() == static_cast<unsigned int>(_player2.getId()))
 				_player2.addBomb();
 			break;
 		}
