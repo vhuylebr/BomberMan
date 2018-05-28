@@ -50,7 +50,8 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 			for (auto i = 1 ; i < _pow ; i += 1) {
 				std::pair<std::size_t, std::size_t> tmp(std::ceil(_x) + a.first * i, std::ceil(_y) + a.second * i);
 				if (tmp.first > 0 && tmp.second > 0 && tmp.second < map.size() && tmp.first < map[tmp.second].size()) {
-					if (map[tmp.second][tmp.first]->isEmpty() || map[tmp.second][tmp.first]->getSubType() == ItemStatic::CRATE) {
+					if (map[tmp.second][tmp.first]->isEmpty() || (map[tmp.second][tmp.first]->getType() == Entity::CUBE &&
+															map[tmp.second][tmp.first]->getSubType() == ItemStatic::CRATE)) {
 						Fire	add(tmp.first, tmp.second, id);
 						id += 1;
 						add.setAlive(true);

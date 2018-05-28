@@ -24,6 +24,7 @@ Item::~Item()
 {
 }
 
+
 eItem Item::getItemType() const
 {
 	return (_bonusType);
