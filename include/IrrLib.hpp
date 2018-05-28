@@ -8,21 +8,21 @@
 #ifndef IRRLIB_HPP_
 	#define IRRLIB_HPP_
 
-#include <irrlicht.h>
-#include <vector>
-#include <map>
-#include <functional>
-#include <memory>
-#include "IEntity.hpp"
-#include "MyEventReceiver.hpp"
-#include "Actions.hpp"
-#include "MenuItem.hpp"
-#include "Player.hpp"
-#include "ACube.hpp"
-#include "Bomb.hpp"
-#include "EntityPos.hpp"
-#include "Music.hpp"
-#include "Item.hpp"
+# include <irrlicht.h>
+# include <vector>
+# include <map>
+# include <functional>
+# include <memory>
+# include "IEntity.hpp"
+# include "MyEventReceiver.hpp"
+# include "Actions.hpp"
+# include "MenuItem.hpp"
+# include "Player.hpp"
+# include "ACube.hpp"
+# include "Bomb.hpp"
+# include "EntityPos.hpp"
+# include "Music.hpp"
+# include "Metrics.hpp"
 
 enum
 {
@@ -78,7 +78,6 @@ class IrrLib {
 		void deletePause();
 		void setVisible(bool state);
 		void dropAll();
-
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);
 		

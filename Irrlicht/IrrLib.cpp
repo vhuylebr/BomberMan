@@ -10,7 +10,7 @@
 IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(1600), _screenSizeY(900)
 {
-	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
+	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
@@ -189,7 +189,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == 1001 || item->getId() == 1002 || item->getId() == 1003)
+	if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
+	|| item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
 		_buttons.push_back(button);
 }
 
@@ -366,6 +367,19 @@ void IrrLib::drawMenu()
 
 void IrrLib::cleanMenu()
 {
+	for (auto &it : _inputs)
+		it->remove();
+	for (auto &it : _checkboxes)
+		it->remove();
+	for (auto &it : _labels)
+		it->remove();
+	for (auto &it : _buttons)
+		it->remove();
+	_inputs.clear();
+	_checkboxes.clear();
+	_labels.clear();
+	_buttons.clear();
+	_skybox->remove();
 	_guienv->clear();
 }
 
@@ -515,7 +529,7 @@ void IrrLib::drop()
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
-	_skybox->remove();
+	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
 	_cubes.clear();
 	
 	// _smgr->clear();
@@ -534,11 +548,13 @@ void IrrLib::dropAll()
 void IrrLib::setVisible(bool state)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == 1001)
+		if ((*it)->getID() == PAUSE_ID)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 1002)
+		else if ((*it)->getID() == PAUSE_ID + 1)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 1003)
+		else if ((*it)->getID() == PAUSE_ID + 2)
+			(*it)->setVisible(state);
+		else if ((*it)->getID() == PAUSE_ID + 3)
 			(*it)->setVisible(state);
 	}
 }

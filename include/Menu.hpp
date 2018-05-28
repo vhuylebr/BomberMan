@@ -15,6 +15,7 @@
 # include "MenuItem.hpp"
 # include "Item.hpp"
 # include "State.hpp"
+# include "Metrics.hpp"
 
 class Menu {
 public:
@@ -40,10 +41,12 @@ private:
 	void handleFirstMenu(Actions &actions, STATE &state);
 	void handleSecondMenu(Actions &actions, STATE &state);
 	void handleThirdMenu(Actions &actions, STATE &state);
+	void handleMapMenu(Actions &actions, STATE &state);
 
 	void makeMainMenu();
 	void makeOptionMenu();
 	void makeJoinMenu();
+	void makeMapMenu();
 
 	int _step;
 	int _nbPlayer;
