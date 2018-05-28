@@ -48,6 +48,8 @@ class IrrLib {
 		void removeCube(int);
 		// void affMenuItems(std::vector<MenuItem>&);
 		void addButton(std::unique_ptr<IEntity>&);
+		void updateButton(std::unique_ptr<IEntity> &entity);
+		
 		void addStaticText(std::unique_ptr<IEntity>&);
 		void addEditBox(std::unique_ptr<IEntity>&);
 		void addCheckBox(std::unique_ptr<IEntity>&);

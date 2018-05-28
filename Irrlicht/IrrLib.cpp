@@ -41,6 +41,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::updateCube, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::BUTTON, std::bind(&IrrLib::updateButton, this,
+		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
 	_camTarget = irr::core::vector3df(10, 0, 10);
@@ -185,6 +187,17 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 	button->setDrawBorder(true);
 	if (item->getId() == 1001 || item->getId() == 1002 || item->getId() == 1003)
 		_buttons.push_back(button);
+}
+
+
+void IrrLib::updateButton(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _buttons) {
+		if (static_cast<MenuItem*>(entity.get())->getId() == it->getID()) {
+			return;
+		}
+	}
+	addButton(entity);
 }
 
 void IrrLib::addStaticText(std::unique_ptr<IEntity> &entity)

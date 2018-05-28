@@ -32,7 +32,7 @@ class GameCore {
 public:
 	GameCore();
 	~GameCore();
-	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
+	std::vector<std::unique_ptr<IEntity>>	&calc(Actions, STATE &);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void	init(pairUC);
 	void	init(const std::string &);
@@ -44,7 +44,8 @@ public:
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
-	
+	bool checkEnd(STATE &);
+	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
 
 private:
 	void	bombManager(Actions &act);
@@ -56,10 +57,12 @@ private:
 	Player 				_player2;
 	std::vector<Bomb>		_bombs;
 	bool	thereIsBomb(int x, int y);
+	void	initEndScreen();
 	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
+	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 };
 

@@ -70,14 +70,17 @@ void	Core::gameManager(STATE &last)
 		_lib.drawGame();
 		if (_state == STATE::GAME)
 			_lib.setVisible(false);
+	} else if (_state == STATE::END) {
+		_lib.affGameEntities(_game.handleEnd(_lib.getActions(), _state));
+		_lib.drawGame();
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();
 		if (actions.escape == true) {
 			_lib.createPause(_game.createPause());
 			_lib.setVisible(true);
 			_state = STATE::PAUSE;
-		}
-		_lib.affGameEntities(_game.calc(actions));
+		}		
+		_lib.affGameEntities(_game.calc(actions, _state));
 		_lib.removeEntities(_game.getEntitiesToRemove());
 		_lib.drawGame();
 	}
@@ -95,7 +98,6 @@ int	Core::loop()
 		return -1;
 	coremusic.play(SOUND::MENU);
 	coremusic.setLoop(SOUND::MENU, true);
-
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
@@ -106,7 +108,8 @@ int	Core::loop()
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
-		} else if (_state == STATE::GAME || _state == STATE::PAUSE)
+		} else if (_state == STATE::GAME || _state == STATE::PAUSE
+		|| _state == STATE::END)
 			gameManager(lstate);
 	}
 	_lib.dropAll();
