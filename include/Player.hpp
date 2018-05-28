@@ -18,6 +18,7 @@ public:
 	void 	poke();
 	Entity 	getType() const final;
 	bool	isAlive() const;
+	void	setAlive(bool);
 	pairUC getPos() const;
 	int	getPower() const;
 	float getRotation() const {return _rotation;};

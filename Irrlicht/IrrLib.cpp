@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown)
+	:_actions(KeyIsDown), _ground(nullptr)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
 		16, false, false, false, &_eventReceiver);
@@ -43,13 +43,6 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
-	_skybox = _smgr->addSkyBoxSceneNode(
-		_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
-		_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
@@ -278,7 +271,15 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	_inputs.clear();
 	_labels.clear();
 	_checkboxes.clear();
+	_buttons.clear();
 	_eventReceiver.resetIdButtonPressed();
+	_skybox = _smgr->addSkyBoxSceneNode(
+	_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
+	_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/myfont.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
@@ -378,6 +379,7 @@ void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == static_cast<Player*>(entity.get())->getId()) {
 			it->setRotation(irr::core::vector3df(0, static_cast<Player*>(entity.get())->getRotation(), 0));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setVisible(static_cast<Player*>(entity.get())->isAlive());
 		}
 	}
 }
@@ -400,7 +402,8 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
-	_skybox->setVisible(false);
+	drop();
+	// _skybox->setVisible(false);
 	createPlane(size);
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
@@ -425,7 +428,57 @@ void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities
 
 void IrrLib::drop()
 {
-	_device->drop();
+	for (auto &it : _spheres) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _players) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _cubes) {
+		it->remove();
+		// it->drop();
+	}
+	if (_ground)
+		_ground->remove();
+	// for (auto &it : _buttons) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// for (auto &it : _labels) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// for (auto &it : _checkboxes) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// for (auto &it : _inputs) {
+	// 	it->remove();
+	// 	// it->drop();
+	// }
+	// _smgr = _device->getSceneManager();
+	_spheres.clear();
+	_players.clear();
+	// _buttons.clear();
+	// _labels.clear();
+	// _checkboxes.clear();
+	// _inputs.clear();
+	_skybox->remove();
+	_cubes.clear();
+	
+	// _smgr->clear();
+	// _guienv->clear();
+}
+
+void IrrLib::dropAll()
+{
+	// _guienv->drop();
+	// _smgr->drop();
+	// _driver->drop();
+	// _device->closeDevice();
+	// _device->drop();
 }
 
 void IrrLib::setVisible(bool state)
