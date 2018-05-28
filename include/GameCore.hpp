@@ -27,6 +27,7 @@
 # include "MenuItem.hpp"
 # include "Fire.hpp"
 # include "EntityPos.hpp"
+# include "Metrics.hpp"
 
 enum class GameState {
 	NEWGAME,
@@ -72,7 +73,7 @@ private:
 	Player 				_player2;
 	std::vector<Bomb>		_bombs;
 	bool	thereIsBomb(int x, int y);
-	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
+	std::vector<std::vector<std::unique_ptr<EntityPos>>> _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;

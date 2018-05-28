@@ -12,6 +12,7 @@
 #include <memory>
 #include <functional>
 #include <unordered_map>
+#include "Item.hpp"
 #include "IEntity.hpp"
 #include "Crate.hpp"
 #include "Wall.hpp"
@@ -20,10 +21,11 @@
 enum class ItemStatic {
 	WALL,
 	CRATE,
-	PLAYER
+	PLAYER,
+	ITEM
 };
 
-using ptrFunc = std::function<std::unique_ptr<IEntity>(float, float, int)>;
+typedef std::function<std::unique_ptr<IEntity>(float, float, int)> ptrFunc;
 
 template <typename T>
 std::unique_ptr<IEntity>	addItem(float x, float y, int id)
@@ -42,6 +44,7 @@ class EntityPos {
 		int getId() const;
 		std::unique_ptr<IEntity> &getEntity();
 		void removeFirstEntity();
+		void addEntity(float, float, unsigned int &);
 		
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);

@@ -13,28 +13,38 @@
 
 # define NB_ITEMS 6 // Nombre d'items implémentés
 
-enum class eItem {
+enum eItem {
 	BOMB_UP,
 	POWER_UP,
-	SUPER_BOMB,
 	SPEED,
+	SUPER_BOMB,
 	WALL_PASS,
 	KICK,
 	NONE
 };
 
-std::string itemToStr(eItem item);
-
-class Item : public AEntity {
+class Item : public IEntity {
 public:
 	Item(float, float, unsigned int);
 	~Item();
 
-	void 	poke();
-	Entity 	getType() const final;
-	bool	isAlive() const;
-	pairUC getPos() const;	
+	eItem	getItemType() const;
+	int	getId() const { return _id; }
+	void	setPos(float x, float y) { _x = x; _y = y; }
+	pairUC	getPos() const { return {_x, _y};}
+	bool	isAlive() const { return (_alive);};
+	Entity	getType() const {return Entity::ITEM;};
+	std::string		getModel() const {return "./media/Shoes.obj";};
+	std::string		getTexture() const {return "./media/Shoes.png";};
+	float	getScale() const {return 0.08f;};
+
 private:
+
+	eItem	_bonusType;
+	float	_x;
+	float	_y;
+	size_t	_id;
+	bool	_alive;
 };
 
 #endif /* !ITEM_HPP_ */

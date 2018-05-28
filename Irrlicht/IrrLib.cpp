@@ -35,11 +35,15 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::addSphere, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::addItem, this,
+		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::PLAYER, std::bind(&IrrLib::updatePlayer, this,
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::updateSphere, this,
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::updateCube, this,
+		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::updateItem, this,
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
@@ -183,8 +187,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == 10001 || item->getId() == 10002
-	|| item->getId() == 10003 || item->getId() == 10004)
+	if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
+	|| item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
 		_buttons.push_back(button);
 }
 
@@ -412,6 +416,33 @@ void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 	}
 }
 
+void IrrLib::updateItem(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _items) {
+		if (it->getID() == static_cast<Item*>(entity.get())->getId()) {
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setVisible(static_cast<Item*>(entity.get())->isAlive());
+			return;
+		}
+	}
+	addItem(entity);
+}
+
+void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
+{
+	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh(static_cast<Item*>(entity.get())->getModel().c_str());
+	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
+	if (node) {
+		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		node->setMD2Animation(irr::scene::EMAT_STAND);
+		node->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+		node->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
+		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+		node->setID(static_cast<Item*>(entity.get())->getId());
+		_items.push_back(node);
+	}
+}
+
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
@@ -478,7 +509,7 @@ void IrrLib::drop()
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
-	_skybox->remove();
+	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
 	_cubes.clear();
 	
 	// _smgr->clear();
@@ -497,13 +528,13 @@ void IrrLib::dropAll()
 void IrrLib::setVisible(bool state)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == 10001)
+		if ((*it)->getID() == PAUSE_ID)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 10002)
+		else if ((*it)->getID() == PAUSE_ID + 1)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 10003)
+		else if ((*it)->getID() == PAUSE_ID + 2)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 10004)
+		else if ((*it)->getID() == PAUSE_ID + 3)
 			(*it)->setVisible(state);
 	}
 }

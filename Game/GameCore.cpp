@@ -56,10 +56,10 @@ void    GameCore::init(pairUC size)
 		}
 	}
 	std::cout << "bijour" << std::endl;
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10001, "Resume", 600, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10002, "Save and Quit", 600, 350, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10003, "Main Menu", 600, 500, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10004, "Quit", 600, 650, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", 600, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", 600, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", 600, 500, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", 600, 650, 400, 100)));
 	std::cout << "bijour" << std::endl;
 }
 
@@ -105,10 +105,10 @@ void    GameCore::init(parameters params)
 			y1 += 1;
 		}
 	}
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10001, "Resume", 600, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10002, "Save and Quit", 600, 350, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10003, "Main Menu", 600, 500, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 10004, "Quit", 600, 650, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", 600, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", 600, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", 600, 500, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", 600, 650, 400, 100)));
 }
 
 GameCore::~GameCore()
@@ -198,7 +198,7 @@ void	GameCore::bombManager(Actions &act)
 			}
 	}
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities, _entitiesToRemove);
+		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {
@@ -215,9 +215,9 @@ void	GameCore::bombManager(Actions &act)
 					}
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
-			if (a.getOwner() == _player1.getId())
+			if (a.getOwner() == static_cast<unsigned int>(_player1.getId()))
 				_player1.addBomb();
-			if (a.getOwner() == _player2.getId())
+			if (a.getOwner() == static_cast<unsigned int>(_player2.getId()))
 				_player2.addBomb();
 			break;
 		}
@@ -337,13 +337,13 @@ void	GameCore::removeAll()
 
 void 	GameCore::handlePause(Actions actions, STATE &state)
 {
-	if (actions.buttonPressed == 10001)
+	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
-	if (actions.buttonPressed == 10003) {
+	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
 		state = STATE::MENU;
 	}
-	if (actions.buttonPressed == 10004)
+	if (actions.buttonPressed == PAUSE_ID + 3)
 		state = STATE::EXIT;
 }
 

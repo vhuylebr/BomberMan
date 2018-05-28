@@ -10,5 +10,6 @@
 
 # define SCREEN_WIDTH 1920
 # define SCREEN_HEIGHT 1080
+# define PAUSE_ID 1000001
 
 #endif /* !METRICS_HPP_ */

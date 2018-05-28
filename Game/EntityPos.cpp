@@ -5,14 +5,16 @@
 ** posentity
 */
 
+#include "Item.hpp"
 #include "EntityPos.hpp"
 
 EntityPos::EntityPos(ItemStatic item, float x, float y, int id)
-    : _subType(item)
+    :_subType(item)
 {
     _functionMap[ItemStatic::CRATE] = addItem<Crate>;
     _functionMap[ItemStatic::WALL] = addItem<Wall>;
     _functionMap[ItemStatic::PLAYER] = addItem<Player>;
+    _functionMap[ItemStatic::ITEM] = addItem<Item>;
     _entities.push_back(_functionMap[item](x, y, id));
 }
 
@@ -21,6 +23,7 @@ EntityPos::EntityPos()
     _functionMap[ItemStatic::CRATE] = addItem<Crate>;
     _functionMap[ItemStatic::WALL] = addItem<Wall>;
     _functionMap[ItemStatic::PLAYER] = addItem<Player>;
+    _functionMap[ItemStatic::ITEM] = addItem<Item>;
 }
 
 Entity EntityPos::getType() const
@@ -41,6 +44,12 @@ ItemStatic EntityPos::getSubType() const
 void EntityPos::removeFirstEntity()
 {
     _entities.clear();
+}
+
+void EntityPos::addEntity(float x, float y, unsigned int &id)
+{
+    _entities.push_back(std::make_unique<Item>(x, y, id));
+    id += 1;
 }
 
 std::unique_ptr<IEntity> &EntityPos::getEntity()

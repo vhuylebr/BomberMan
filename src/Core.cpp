@@ -66,8 +66,7 @@ void 	Core::getParametersFromMenu()
 void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
-		_game.init(std::make_pair(12, 8));
-//		_game.init(_param);
+		_game.init(_param);
 		_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
