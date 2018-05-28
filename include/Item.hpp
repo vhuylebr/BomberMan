@@ -37,7 +37,7 @@ public:
 
 private:
 
-	eItem	_type;
+	eItem	_bonusType;
 	float	_x;
 	float	_y;
 	size_t	_id;
