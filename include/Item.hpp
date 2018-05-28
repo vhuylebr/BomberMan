@@ -8,33 +8,31 @@
 #ifndef ITEM_HPP_
 # define ITEM_HPP_
 
-# include "AEntity.hpp"
+# include "ACube.hpp"
 # include <string>
 
 # define NB_ITEMS 6 // Nombre d'items implémentés
 
-enum class eItem {
+enum eItem {
 	BOMB_UP,
 	POWER_UP,
-	SUPER_BOMB,
 	SPEED,
+	SUPER_BOMB,
 	WALL_PASS,
 	KICK,
 	NONE
 };
 
-std::string itemToStr(eItem item);
-
-class Item : public AEntity {
+class Item : public ACube {
 public:
 	Item(float, float, unsigned int);
 	~Item();
 
-	void 	poke();
-	Entity 	getType() const final;
-	bool	isAlive() const;
-	pairUC getPos() const;	
+	eItem getItemType() const;
+
 private:
+
+	eItem	_type;
 };
 
 #endif /* !ITEM_HPP_ */

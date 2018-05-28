@@ -5,11 +5,16 @@
 ** Item class 
 */
 
+#include <random>
+#include <chrono>
 #include "Item.hpp"
 
 Item::Item(float x, float y, unsigned int id)
+	:ACube(x, y, "bonus", id)
 {
-	setCoord(x, y);
+	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+	std::uniform_int_distribution<int> distrib{0, 2};
+	_type = static_cast<eItem>(distrib(re));
 	_id = id;
 }
 
@@ -17,22 +22,7 @@ Item::~Item()
 {
 }
 
-bool 	Item::isSuperpoz() const
+eItem Item::getItemType() const
 {
-	return true;
+	return (_type);
 }
-
-void 	Item::hit()
-{
-
-}
-
-bool 	Item::isDestruct()
-{
-	return true;
-}
-
-// IEntity::Entity	Item::getType() const
-// {
-// 	return WALL;
-// }

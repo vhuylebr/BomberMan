@@ -8,7 +8,7 @@
 #include "EntityPos.hpp"
 
 EntityPos::EntityPos(ItemStatic item, float x, float y, int id)
-    : _subType(item)
+    :_subType(item)
 {
     _functionMap[ItemStatic::CRATE] = addItem<Crate>;
     _functionMap[ItemStatic::WALL] = addItem<Wall>;
