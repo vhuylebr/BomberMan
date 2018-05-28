@@ -10,7 +10,7 @@
 
 
 Menu::Menu()
-	: _step(1), _nbPlayer(4), _change_menu(true), _changeState(true)
+	: _step(1), _nbPlayer(4), _change_menu(true), _changeState(true), _changed(false)
 {
 	makeMainMenu();
 }
@@ -19,26 +19,19 @@ Menu::~Menu()
 {
 }
 
-void Menu::deselectAll()
-{
-	for (auto &i : _item) {
-		static_cast<MenuItem*>(i.get())->deselect();
-	}
-}
-
 void 	Menu::makeJoinMenu()
 {
 	_item.clear();
 	std::vector<std::wstring> toto;
-	toto.push_back(L"Hello1");
-	toto.push_back(L"there1");
-	toto.push_back(L"Hello2");
-	toto.push_back(L"there2");
+	toto.push_back(L"Save1");
+	toto.push_back(L"Save2");
+	toto.push_back(L"Save3");
+	toto.push_back(L"Save4");
 
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 1, "", 500, 250, 600, 400)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 1, "", (SCREEN_WIDTH / 2) - 300, 250, 600, 400)));
 	static_cast<MenuItem*>(_item[0].get())->setChoices(toto);
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", 500, 150, 600, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Connect", 500, 700, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", (SCREEN_WIDTH / 2) - 300, 150, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Connect", (SCREEN_WIDTH / 2) - 300, 700, 600, 100)));
 }
 
 void    Menu::makeOptionMenu()
@@ -48,9 +41,9 @@ void    Menu::makeOptionMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 200, 325, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 200, 475, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 200, 625, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 700, 100, 300, 70)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 700, 200, 300, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 750, 700, 200, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name : ", 700, 150, 300, 70)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 700, 220, 300, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Select map", 700, 700, 300, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", 1150, 0, 820, 1000)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 200, 50, 50)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", 1300, 200, 250, 50)));
@@ -64,21 +57,30 @@ void    Menu::makeOptionMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", 1300, 600, 250, 50)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", 1200, 700, 50, 50)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", 1300, 700, 250, 50)));
-	std::vector<std::wstring> toto;
-	toto.push_back(L"Hello1");
-	toto.push_back(L"there1");
-	toto.push_back(L"Hello2");
-	toto.push_back(L"there2");
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 21, "Your pseudo", 700, 370, 300, 70)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Toto", 700, 440, 300, 100)));
+}
 
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 21, "", 600, 350, 500, 300)));
+void 	Menu::makeMapMenu()
+{
+	_item.clear();
+	std::vector<std::wstring> toto;
+	toto.push_back(L"map1");
+	toto.push_back(L"map2");
+	toto.push_back(L"map3");
+	toto.push_back(L"map4");
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Select your map", 500, 175, 600, 75)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 2, "", 500, 250, 600, 400)));
+	static_cast<MenuItem*>(_item[1].get())->setChoices(toto);
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Start Game", 700, 700, 200, 100)));
 }
 
 void    Menu::makeMainMenu()
 {
 	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", 500, 280, 500, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Join Game", 500, 430, 500, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", 500, 580, 500, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 280, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Join Game", (SCREEN_WIDTH / 2) - 300, 430, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 580, 600, 100)));
 }
 
 void Menu::changeMenu()
@@ -94,36 +96,17 @@ void Menu::changeMenu()
 		case 3:
 			makeJoinMenu();
 			break;
+		// case 4:
+		// 	makeMapMenu(); Sayonara
+			break;
 	}
 }
 
-static void selectAnother(int before, int after,
-	std::vector<std::unique_ptr<IEntity>> &item)
-{
-	static_cast<MenuItem*>(item[before].get())->deselect();
-	static_cast<MenuItem*>(item[after].get())->select();
-}
-
-
-static int findSelected(std::vector<std::unique_ptr<IEntity>> &item)
-{
-	int id = 0;
-
-	for (auto &i : item) {
-		if (static_cast<MenuItem*>(i.get())->isSelected())
-			return id;
-		id++;
-	}
-	return 0; // p-ê renvoyer -1 mais check le renvoi de findSelected
-}
-
-void Menu::firstMenuKey(Actions &actions, STATE &state)
+void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
 	if (actions.space || actions.enter || actions.buttonPressed != -1) {
 		if (actions.buttonPressed != -1)
 			_step = actions.buttonPressed;
-		else
-			_step = findSelected(_item) + 1;
 		if (_step == 3)
 			state = STATE::EXIT;
 		if (_step == 2) {
@@ -136,34 +119,7 @@ void Menu::firstMenuKey(Actions &actions, STATE &state)
 		}
 		_change_menu = true;
 	}
-}
 
-static void actionIsUp(std::vector<std::unique_ptr<IEntity>> &_item)
-{
-	if (static_cast<MenuItem*>(_item[0].get())->isSelected()) {
-		static_cast<MenuItem*>(_item[_item.size() - 1].get())->select();
-		static_cast<MenuItem*>(_item[0].get())->deselect();
-	} else
-		selectAnother(findSelected(_item), findSelected(_item) - 1, _item);
-}
-
-static void actionIsDown(std::vector<std::unique_ptr<IEntity>> &_item)
-{
-	if (static_cast<unsigned int>(findSelected(_item)) == _item.size() - 1) {
-		static_cast<MenuItem*>(_item[_item.size() - 1].get())->deselect();
-		static_cast<MenuItem*>(_item[0].get())->select();
-	} else
-		selectAnother(findSelected(_item), findSelected(_item) + 1, _item);
-}
-
-void Menu::handleFirstMenu(Actions &actions, STATE &state)
-{
-	if (actions.up)
-		actionIsUp(_item);
-	else if (actions.down)
-		actionIsDown(_item);
-	else
-		firstMenuKey(actions, state);
 }
 
 void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
@@ -175,8 +131,10 @@ void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 		_changed = true;
 	}
 	if (actions.buttonPressed == 7) {
-		_changed = -1;
-		state = STATE::GAME;
+		_changed = true;
+//		_step = 4; // Sayonara
+		_change_menu = true;
+		state = STATE::GAME; // Sayonara
 	}
 	else if (actions.buttonPressed == 2) {
 		if (_nbPlayer < 4)
@@ -198,10 +156,19 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 		_change_menu = true;
 		_changed = true;
 		_step = 1;
-		return ;
+	} else if (actions.buttonPressed == 3) {
+		state = STATE::GAME;
+		_changed = true;
 	}
-	if (actions.buttonPressed == 3) {
-		std::cout << "hellow"<< std::endl;
+}
+
+void 	Menu::handleMapMenu(Actions &actions, STATE &state)
+{
+	if (actions.escape == true) {
+		_change_menu = true;
+		_changed = true;
+		_step = 2;
+	} else if (actions.buttonPressed == 3) {
 		state = STATE::GAME;
 		_changed = true;
 	}
@@ -225,7 +192,16 @@ static bool keyPressed(Actions &actions, bool changeState)
 
 bool 	Menu::getState(Actions &actions, STATE &state)
 {
-	if (_step == 2 && actions.buttonPressed == 7) {
+ 	// if (_step == 4 && actions.buttonPressed == 3) {
+		// state = STATE::GAME;
+ 	// 	return false;
+ 	// } Sayonara
+ 	if (_step == 2 && actions.buttonPressed == 7) {
+		state = STATE::GAME;
+ 		return false;
+ 	}
+
+	if (_step == 3 && actions.buttonPressed == 3) {
 		state = STATE::GAME;
 		return false;
 	}
@@ -260,5 +236,8 @@ void Menu::getMenu(Actions &actions, STATE &state)
 		case 3:
 			handleThirdMenu(actions, state);
 			break;
+		// case 4:
+		// 	handleMapMenu(actions, state);
+		// 	break; Sayonara
 	}
 }

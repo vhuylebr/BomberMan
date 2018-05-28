@@ -19,6 +19,7 @@ void 	Core::menuManager(STATE &last)
 	}
 	if (_menu.stepChanged(last) == true) {
 		_menu.getMenu(_act, _state);
+		_lib.cleanMenu();
 	}
 	if (last == STATE::GAME || last == STATE::INIT) {
 		_lib.initMenu(_menu.getMenuItems());
@@ -45,6 +46,7 @@ void 	Core::getParametersFromMenu()
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
 		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));
 		_param.mapSize = std::make_pair(10, 10);
+		_param.mapname = "./media/map1.txt";
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
@@ -56,6 +58,7 @@ void 	Core::getParametersFromMenu()
 	{
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
+		_param.mapname = "./media/map1.txt";
 		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
 }
@@ -64,6 +67,7 @@ void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
 		_game.init(std::make_pair(12, 8));
+//		_game.init(_param);
 		_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);

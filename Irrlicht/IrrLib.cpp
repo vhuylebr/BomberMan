@@ -10,7 +10,7 @@
 IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown), _ground(nullptr)
 {
-	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
+	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
@@ -361,6 +361,19 @@ void IrrLib::drawMenu()
 
 void IrrLib::cleanMenu()
 {
+	for (auto &it : _inputs)
+		it->remove();
+	for (auto &it : _checkboxes)
+		it->remove();
+	for (auto &it : _labels)
+		it->remove();
+	for (auto &it : _buttons)
+		it->remove();
+	_inputs.clear();
+	_checkboxes.clear();
+	_labels.clear();
+	_buttons.clear();
+	_skybox->remove();
 	_guienv->clear();
 }
 
