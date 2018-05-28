@@ -408,8 +408,10 @@ void IrrLib::updateItem(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == static_cast<Item*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Item*>(entity.get())->isAlive());
+			return;
 		}
 	}
+	addItem(entity);
 }
 
 void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
