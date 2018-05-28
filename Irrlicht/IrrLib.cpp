@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown), _ground(nullptr)
+	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(1600), _screenSizeY(900)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
 		16, false, false, false, &_eventReceiver);
@@ -16,6 +16,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
+	_cameras[0] = _smgr->addCameraSceneNode();
+    _cameras[1] = _smgr->addCameraSceneNode();
 	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
@@ -66,7 +68,7 @@ void IrrLib::createPlane(pairUC &size)
 	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
 		irr::core::dimension2d<irr::u32>(size.second, size.second));
 	_ground = _smgr->addMeshSceneNode(plane);
-	_ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
+	_ground->setPosition(irr::core::vector3df(size.first / 2, 0, size.second / 2));
 	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
@@ -371,7 +373,23 @@ void IrrLib::drawGame()
 {
 	_eventReceiver.resetIdButtonPressed();
 	_driver->beginScene(true, true);
+	
+	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
+	if (_splitScreen) {
+		irr::core::vector3df camPos = _players[0]->getPosition();
+		_cameras[0]->setPosition(irr::core::vector3df(camPos.X, 5, camPos.Z - 5));
+		_cameras[0]->setTarget(_players[0]->getPosition());
+		camPos = _players[1]->getPosition();
+		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 5));
+		_cameras[1]->setTarget(_players[1]->getPosition());
+		_smgr->setActiveCamera(_cameras[0]);
+    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX, _screenSizeY / 2));
+		_smgr->drawAll();
+		_smgr->setActiveCamera(_cameras[1]);
+    	_driver->setViewPort(irr::core::rect<irr::s32>(0, _screenSizeY / 2, _screenSizeX, _screenSizeY));
+	}
 	_smgr->drawAll();
+
 	_guienv->drawAll();
 	_driver->endScene();
 }
@@ -433,8 +451,8 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
 	drop();
-	// _skybox->setVisible(false);
 	createPlane(size);
+	_splitScreen = false;
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
 			if (!it2->isEmpty())
@@ -444,9 +462,11 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}
-	irr::core::vector3df groundPos = _players[0]->getPosition();
-	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z - 1));
-	_camera->setTarget(_players[0]->getPosition());
+	if (!_splitScreen) {
+		irr::core::vector3df camPos = _ground->getPosition();
+		_camera->setPosition(irr::core::vector3df(camPos.X, 20, camPos.Z - 1));
+		_camera->setTarget(camPos);
+	}
 }
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
