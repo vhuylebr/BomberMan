@@ -41,6 +41,11 @@ std::vector<Fire>	&Bomb::getFlames()
 	return (_flames);
 }
 
+void	Bomb::detonate()
+{
+	_counter = 2;
+}
+
 void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map, std::vector<std::pair<int, Entity> > &entitiesToRemove,
 			std::vector<std::unique_ptr<IEntity>> &_updateEntities)
 {

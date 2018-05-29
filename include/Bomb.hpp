@@ -30,8 +30,9 @@ public:
     bool    isOver() const;
     std::size_t getOwner();
     bool    isExplode() const;
-    std::vector<Fire>    &getFlames();
+    std::vector<Fire>   &getFlames();
     void	setPower(int pow);
+    void	detonate();
     // int getStartingTime() const;
 
 private:
