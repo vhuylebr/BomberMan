@@ -69,6 +69,7 @@ class IrrLib {
 			pairUC size, std::vector<std::unique_ptr<IEntity> >&);
 		void drawGame();
 		void cleanMenu();
+		void removeItem(int);
 
 		void createPause(std::vector<std::unique_ptr<IEntity>> &menuItems);
 		void initMenu(std::vector<MenuItem> &);
@@ -76,7 +77,7 @@ class IrrLib {
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();
-		void setVisible(bool state);
+		void setVisible(bool);
 		void dropAll();
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);
@@ -117,6 +118,7 @@ class IrrLib {
 		int _screenSizeX;
 		int _screenSizeY;
 		bool _splitScreen;
+		int _lastFps;
 };
 
 #endif /* !IRRLIB_HPP_ */
