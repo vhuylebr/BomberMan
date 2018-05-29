@@ -482,7 +482,7 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
-		node->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+		node->setMaterialTexture(0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
 		node->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		node->setID(static_cast<Item*>(entity.get())->getId());
@@ -547,6 +547,10 @@ void IrrLib::drop()
 		it->remove();
 		// it->drop();
 	}
+	for (auto &it : _items) {
+		it->remove();
+		// it->drop();
+	}
 	if (_ground)
 		_ground->remove();
 	// for (auto &it : _buttons) {
@@ -566,14 +570,15 @@ void IrrLib::drop()
 	// 	// it->drop();
 	// }
 	// _smgr = _device->getSceneManager();
-	_spheres.clear();
-	_players.clear();
 	// _buttons.clear();
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
 	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
+	_spheres.clear();
+	_players.clear();
 	_cubes.clear();
+	_items.clear();
 	
 	// _smgr->clear();
 	// _guienv->clear();
