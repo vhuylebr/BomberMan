@@ -16,9 +16,16 @@ void 	Core::menuManager(STATE &last)
 		_menu.getMenu(_act, _state);
 		if (_menu.getStep() == 2 && (_act.buttonPressed == 2 || _act.buttonPressed == 4))
 			_lib.updateLabel(_menu.getItemByID(3));
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 23 || _act.buttonPressed == 25))
+			_lib.updateLabel(_menu.getItemByID(24));
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 28 || _act.buttonPressed == 30))
+			_lib.updateLabel(_menu.getItemByID(29));
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 32 || _act.buttonPressed == 34))
+			_lib.updateLabel(_menu.getItemByID(33));
 	}
 	if (_menu.stepChanged(last) == true) {
 		_menu.getMenu(_act, _state);
+		_lib.cleanMenu();
 	}
 	if (last == STATE::GAME || last == STATE::INIT) {
 		_lib.initMenu(_menu.getMenuItems());
@@ -45,6 +52,7 @@ void 	Core::getParametersFromMenu()
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
 		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));
 		_param.mapSize = std::make_pair(10, 10);
+		_param.mapname = "./media/map1.txt";
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
@@ -56,6 +64,7 @@ void 	Core::getParametersFromMenu()
 	{
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
+		_param.mapname = "./media/map1.txt";
 		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
 }
@@ -63,7 +72,7 @@ void 	Core::getParametersFromMenu()
 void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
-		_game.init(std::make_pair(12, 8));
+		_game.init(_param);
 		_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
@@ -84,25 +93,30 @@ void	Core::gameManager(STATE &last)
 	last = STATE::GAME;
 }
 
+int		Core::startMusic()
+{
+	if (_coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
+		return -1;
+	if (_coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
+		return -1;
+	_coremusic.play(SOUND::MENU);
+	_coremusic.setLoop(SOUND::MENU, true);
+	return 0;
+}
+
 int	Core::loop()
 {
 	STATE   lstate = STATE::INIT;
-	Music 	coremusic;
 
-	if (coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
+	if (startMusic() == -1)
 		return -1;
-	if (coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
-		return -1;
-	coremusic.play(SOUND::MENU);
-	coremusic.setLoop(SOUND::MENU, true);
-
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
-				coremusic.stop(SOUND::MENU);
-				coremusic.play(SOUND::GAME);
-				coremusic.setLoop(SOUND::GAME, true);
+				_coremusic.stop(SOUND::MENU);
+				_coremusic.play(SOUND::GAME);
+				_coremusic.setLoop(SOUND::GAME, true);
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}

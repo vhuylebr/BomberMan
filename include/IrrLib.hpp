@@ -8,21 +8,21 @@
 #ifndef IRRLIB_HPP_
 	#define IRRLIB_HPP_
 
-#include <irrlicht.h>
-#include <vector>
-#include <map>
-#include <functional>
-#include <memory>
-#include "IEntity.hpp"
-#include "MyEventReceiver.hpp"
-#include "Actions.hpp"
-#include "MenuItem.hpp"
-#include "Player.hpp"
-#include "ACube.hpp"
-#include "Bomb.hpp"
-#include "EntityPos.hpp"
-#include "Music.hpp"
-#include "Item.hpp"
+# include <irrlicht.h>
+# include <vector>
+# include <map>
+# include <functional>
+# include <memory>
+# include "IEntity.hpp"
+# include "MyEventReceiver.hpp"
+# include "Actions.hpp"
+# include "MenuItem.hpp"
+# include "Player.hpp"
+# include "ACube.hpp"
+# include "Bomb.hpp"
+# include "EntityPos.hpp"
+# include "Music.hpp"
+# include "Metrics.hpp"
 
 enum
 {
@@ -69,6 +69,7 @@ class IrrLib {
 			pairUC size, std::vector<std::unique_ptr<IEntity> >&);
 		void drawGame();
 		void cleanMenu();
+		void removeItem(int);
 
 		void createPause(std::vector<std::unique_ptr<IEntity>> &menuItems);
 		void initMenu(std::vector<MenuItem> &);
@@ -76,9 +77,8 @@ class IrrLib {
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();
-		void setVisible(bool state);
+		void setVisible(bool);
 		void dropAll();
-
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);
 		
@@ -114,7 +114,11 @@ class IrrLib {
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 		std::map<Entity, std::function<void(int)>> _factoryDelete;
 
-		irr::scene::ICameraSceneNode *_cameras[4];
+		irr::scene::ICameraSceneNode *_cameras[2];
+		int _screenSizeX;
+		int _screenSizeY;
+		bool _splitScreen;
+		int _lastFps;
 };
 
 #endif /* !IRRLIB_HPP_ */

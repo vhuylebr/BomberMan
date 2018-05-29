@@ -34,10 +34,13 @@ public:
 	pairUC	getPos() const { return {_x, _y};}
 	bool	isAlive() const { return (_alive);};
 	Entity	getType() const {return Entity::ITEM;};
+	std::string		getModel() const {return "./media/Shoes.obj";};
+	std::string		getTexture() const {return "./media/Shoes.png";};
+	float	getScale() const {return 0.08f;};
 
 private:
 
-	eItem	_type;
+	eItem	_bonusType;
 	float	_x;
 	float	_y;
 	size_t	_id;

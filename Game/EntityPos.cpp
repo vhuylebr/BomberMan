@@ -48,7 +48,7 @@ void EntityPos::removeFirstEntity()
 
 void EntityPos::addEntity(float x, float y, unsigned int &id)
 {
-    _entities.push_back(std::unique_ptr<IEntity>(new Item(x, y, id)));
+    _entities.push_back(std::make_unique<Item>(x, y, id));
     id += 1;
 }
 
