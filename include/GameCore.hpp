@@ -44,6 +44,7 @@ public:
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
+	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
 	
 
 private:

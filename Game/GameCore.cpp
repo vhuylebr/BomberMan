@@ -183,78 +183,55 @@ bool	GameCore::thereIsBomb(int x, int y)
 	return (false);
 }
 
+void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir, Player &player, float rotation)
+{
+	if (_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->isEmpty() == true &&
+		(thereIsBomb(std::round(from.first + 0.5 * dir.first), std::round(from.second + 0.5 * dir.second)) == false ||
+		thereIsBomb(std::round(from.first), std::round(from.second)) == true))
+		player.setPos(from.first + 0.07 * dir.first, from.second + 0.07 * dir.second);
+	player.setRotation(rotation);
+}
+
 bool 	GameCore::playerMovement(Actions act)
 {
 	bool changed = false;
 
 	if (act.right == true) {
-		if (_vectorEntities[std::round(_player1.getPos().second)][std::round(_player1.getPos().first + 0.5)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player1.getPos().first + 0.5), std::round(_player1.getPos().second)) == false ||
-			thereIsBomb(std::round(_player1.getPos().first), std::round(_player1.getPos().second)) == true))
-			_player1.setPos(_player1.getPos().first + 0.07, _player1.getPos().second);
-		_player1.setRotation(0.0f);
+		movePlayer(_player1.getPos(), {1, 0}, _player1, 0.0f);
 		changed = true;
 	}
 	if (act.left == true) {
-		if (_vectorEntities[std::round(_player1.getPos().second)][std::round(_player1.getPos().first - 0.5)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player1.getPos().first - 0.5), std::round(_player1.getPos().second)) == false ||
-			thereIsBomb(std::round(_player1.getPos().first), std::round(_player1.getPos().second)) == true))
-			_player1.setPos(_player1.getPos().first - 0.07, _player1.getPos().second);
-		_player1.setRotation(180.0f);
+		movePlayer(_player1.getPos(), {-1, 0}, _player1, 180.0f);
 		changed = true;
 	}
 	if (act.up == true) {
-		if (_vectorEntities[std::round(_player1.getPos().second + 0.5)][std::round(_player1.getPos().first)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player1.getPos().first), std::round(_player1.getPos().second + 0.5)) == false ||
-			thereIsBomb(std::round(_player1.getPos().first), std::round(_player1.getPos().second)) == true))
-			_player1.setPos(_player1.getPos().first, _player1.getPos().second + 0.07);
-		_player1.setRotation(-90.0f);
+		movePlayer(_player1.getPos(), {0, 1}, _player1, -90.0f);
 		changed = true;
 	}
 	if (act.down == true) {
-		if (_vectorEntities[std::round(_player1.getPos().second - 0.5)][std::round(_player1.getPos().first)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player1.getPos().first), std::round(_player1.getPos().second - 0.5)) == false ||
-			thereIsBomb(std::round(_player1.getPos().first), std::round(_player1.getPos().second)) == true))
-			_player1.setPos(_player1.getPos().first, _player1.getPos().second - 0.07);
-		_player1.setRotation(90.0f);
+		movePlayer(_player1.getPos(), {0, -1}, _player1, 90.0f);
 		changed = true;
 	}
 	if (act.D == true) {
-		if (_vectorEntities[std::round(_player2.getPos().second)][std::round(_player2.getPos().first + 0.5)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player2.getPos().first + 0.5), std::round(_player2.getPos().second)) == false ||
-			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
-			_player2.setPos(_player2.getPos().first + 0.07, _player2.getPos().second);
-		_player2.setRotation(0.0f);
+		movePlayer(_player2.getPos(), {1, 0}, _player2, 0.0f);
 		changed = true;
 	}
 	if (act.Q == true) {
-		if (_vectorEntities[std::round(_player2.getPos().second)][std::round(_player2.getPos().first - 0.5)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player2.getPos().first - 0.5), std::round(_player2.getPos().second)) == false ||
-			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
-			_player2.setPos(_player2.getPos().first - 0.07, _player2.getPos().second);
-		_player2.setRotation(180.0f);
+		movePlayer(_player2.getPos(), {-1, 0}, _player2, 180.0f);
 		changed = true;
 	}
 	if (act.Z == true) {
-		if (_vectorEntities[std::round(_player2.getPos().second + 0.5)][std::round(_player2.getPos().first)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second + 0.5)) == false ||
-			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
-			_player2.setPos(_player2.getPos().first, _player2.getPos().second + 0.07);
-		_player2.setRotation(-90.0f);
+		movePlayer(_player2.getPos(), {0, 1}, _player2, -90.0f);
 		changed = true;
 	}
 	if (act.S == true) {
-		if (_vectorEntities[std::round(_player2.getPos().second - 0.5)][std::round(_player2.getPos().first)]->isEmpty() == true &&
-			(thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second - 0.5)) == false ||
-			thereIsBomb(std::round(_player2.getPos().first), std::round(_player2.getPos().second)) == true))
-			_player2.setPos(_player2.getPos().first, _player2.getPos().second - 0.07);
-		_player2.setRotation(90.0f);
+		movePlayer(_player2.getPos(), {0, -1}, _player2, 90.0f);
 		changed = true;
 	}
 	return (changed);
 }
 
-std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
+std::vector<std::unique_ptr<IEntity>>	&GameCore::calc(Actions act)
 {
 	bool changed;
 
@@ -271,9 +248,8 @@ std::vector<std::unique_ptr<IEntity>>    &GameCore::calc(Actions act)
 
 void	GameCore::removeAll()
 {
-	for (auto &it : _vectorEntities) {
+	for (auto &it : _vectorEntities)
 		it.clear();
-	}
 	_vectorEntities.clear();
 	_updateEntities.clear();
 	_mobileEntities.clear();
