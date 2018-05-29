@@ -49,6 +49,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::updateItem, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::LABEL, std::bind(&IrrLib::updateLabel, this,
+		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::removeItem, this,
@@ -221,9 +223,7 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
-	|| item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
-		_buttons.push_back(button);
+	_buttons.push_back(button);
 }
 
 
@@ -343,18 +343,14 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	}
 }
 
-void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
+void IrrLib::updateLabel(std::unique_ptr<IEntity> &entity)
 {
-	std::wstring wText;
-
-	for (unsigned int i = 0; i < static_cast<MenuItem*>(item.get())->getText().size(); ++i)
-		wText += wchar_t(static_cast<MenuItem*>(item.get())->getText()[i]);
-	const wchar_t* newnewlabel = wText.c_str();
 	for (auto &it : _labels) {
-		if (static_cast<MenuItem*>(item.get())->getId() == (*it).getID()) {
-			(*it).setText(newnewlabel);
+		if (static_cast<MenuItem*>(entity.get())->getId() == it->getID()) {
+			return;
 		}
 	}
+	addStaticText(entity);
 }
 
 std::wstring IrrLib::getInputText(std::unique_ptr<IEntity> &item)
@@ -640,17 +636,19 @@ void IrrLib::dropAll()
 	// _device->drop();
 }
 
-void IrrLib::setVisible(bool state)
+void IrrLib::setVisible(bool state, int id)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == PAUSE_ID)
+		if ((*it)->getID() == id)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 1)
-			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 2)
-			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 3)
-			(*it)->setVisible(state);
+		// if ((*it)->getID() == PAUSE_ID)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 1)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 2)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 3)
+		// 	(*it)->setVisible(state);
 	}
 }
 
@@ -676,7 +674,7 @@ void IrrLib::removeEntities(std::vector<std::pair<int, Entity> > &vectorToRemove
 	}
 }
 
-void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
+void IrrLib::newMenuItems(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);

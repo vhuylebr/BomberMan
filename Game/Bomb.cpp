@@ -10,7 +10,7 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
-	:_counter(100),_owner(owner), _pow(1), _flametime(10)
+	:_counter(100),_owner(owner), _pow(1), _superB(false), _flametime(10)
 {
 	_alive = true;
 	_x = x;
@@ -31,6 +31,11 @@ Entity	Bomb::getType() const
     return (Entity::SPHERE);
 }
 
+void	Bomb::setSuper(bool tmp)
+{
+	_superB = tmp;
+}
+
 void	Bomb::setPower(int pow)
 {
 	_pow = pow;
@@ -46,7 +51,8 @@ void	Bomb::detonate()
 	_counter = 2;
 }
 
-void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map, std::vector<std::pair<int, Entity> > &entitiesToRemove,
+void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map,
+			std::vector<std::pair<int, Entity> > &entitiesToRemove,
 			std::vector<std::unique_ptr<IEntity>> &_updateEntities)
 {
 	_counter -= 1;
@@ -71,7 +77,8 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id);
 								_updateEntities.push_back(std::unique_ptr<IEntity>(map[tmp.second][tmp.first]->getEntity().get()));
 							}
-							break;
+							if (!_superB)
+								break;
 						}
 					} else if (!map[tmp.second][tmp.first]->isEmpty() && map[tmp.second][tmp.first]->getEntity()->getType() == Entity::CUBE)
 						break;

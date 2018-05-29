@@ -68,7 +68,9 @@ public:
 	void 	saveMobileEntities(std::ofstream &file);
 
 	bool checkEnd(STATE &);
-	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
+	void handleEnd(Actions actions, STATE &state);
+	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
+	int getEndId() const;
 
 private:
 	void	bombManager(Actions &act);

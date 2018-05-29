@@ -16,16 +16,17 @@ Item::Item(float x, float y, unsigned int id)
 	_getModel[SPEED] = "./media/Shoes.obj";
 	_getTexture[SPEED] = "./media/Shoes.png";
 	_getScale[SPEED] = 0.1f;
-	
 	_getModel[POWER_UP] = "./media/Fireball.obj";
 	_getTexture[POWER_UP] = "./media/Fireball.png";
 	_getScale[POWER_UP] = 1.0f;
-
 	_getModel[BOMB_UP] = "./media/Bomb.md2";
 	_getTexture[BOMB_UP] = "./media/bomb.png";
 	_getScale[BOMB_UP] = 0.0015f;
+	_getModel[SUPER_BOMB] = "./media/megaBomb.obj";
+	_getTexture[SUPER_BOMB] = "./media/megaBomb.png";
+	_getScale[SUPER_BOMB] = 1.0f;
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-	std::uniform_int_distribution<int> distrib{0, 2};
+	std::uniform_int_distribution<int> distrib{0, 4};
 	_bonusType = static_cast<eItem>(distrib(re));
 	std::cout << "Created Item :" << _bonusType << std::endl;
 	_id = id;
