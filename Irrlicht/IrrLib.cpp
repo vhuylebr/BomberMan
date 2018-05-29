@@ -391,16 +391,16 @@ void IrrLib::drawGame()
 		_splitScreen = !_splitScreen;
 	if (_splitScreen) {
 		irr::core::vector3df camPos = _players[0]->getPosition();
-		_cameras[0]->setPosition(irr::core::vector3df(camPos.X, 5, camPos.Z - 5));
+		_cameras[0]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_cameras[0]->setTarget(_players[0]->getPosition());
 		camPos = _players[1]->getPosition();
-		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 5));
+		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_cameras[1]->setTarget(_players[1]->getPosition());
 		_smgr->setActiveCamera(_cameras[0]);
-    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX, _screenSizeY / 2));
+    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX / 2, _screenSizeY / 2));
 		_smgr->drawAll();
 		_smgr->setActiveCamera(_cameras[1]);
-    	_driver->setViewPort(irr::core::rect<irr::s32>(0, _screenSizeY / 2, _screenSizeX, _screenSizeY));
+    	_driver->setViewPort(irr::core::rect<irr::s32>(_screenSizeX / 2, _screenSizeY / 2, _screenSizeX, _screenSizeY));
 		_smgr->drawAll();
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
