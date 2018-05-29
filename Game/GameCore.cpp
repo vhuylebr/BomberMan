@@ -109,6 +109,13 @@ void    GameCore::init(parameters params)
 					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
+				} else if (line[j] == '4') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					if (static_cast<int>(_iaList.size()) < params.nbBots) {
+						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+						_iaList.push_back(Player(static_cast<float>(x1), static_cast<float>(y1), _id));
+						_id++;
+					}
 				} else {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}

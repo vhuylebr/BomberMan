@@ -59,6 +59,7 @@ public:
 	void	releaseUpdateEntities();
 	void	removeAll();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
+	std::vector<Player>			_iaList;
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
