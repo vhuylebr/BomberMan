@@ -16,6 +16,12 @@ void 	Core::menuManager(STATE &last)
 		_menu.getMenu(_act, _state);
 		if (_menu.getStep() == 2 && (_act.buttonPressed == 2 || _act.buttonPressed == 4))
 			_lib.updateLabel(_menu.getItemByID(3));
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 23 || _act.buttonPressed == 25))
+			_lib.updateLabel(_menu.getItemByID(24));
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 28 || _act.buttonPressed == 30))
+			_lib.updateLabel(_menu.getItemByID(29));
+		if (_menu.getStep() == 2 && (_act.buttonPressed == 32 || _act.buttonPressed == 34))
+			_lib.updateLabel(_menu.getItemByID(33));
 	}
 	if (_menu.stepChanged(last) == true) {
 		_menu.getMenu(_act, _state);
