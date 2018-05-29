@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT)
+	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _lastFps(0)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, false, false, false, &_eventReceiver);
@@ -48,6 +48,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_factoryUpdate.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::updateItem, this,
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
+		std::placeholders::_1)));
+	_factoryDelete.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::removeItem, this,
 		std::placeholders::_1)));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
@@ -391,16 +393,16 @@ void IrrLib::drawGame()
 		_splitScreen = !_splitScreen;
 	if (_splitScreen) {
 		irr::core::vector3df camPos = _players[0]->getPosition();
-		_cameras[0]->setPosition(irr::core::vector3df(camPos.X, 5, camPos.Z - 5));
+		_cameras[0]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_cameras[0]->setTarget(_players[0]->getPosition());
 		camPos = _players[1]->getPosition();
-		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 5));
+		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_cameras[1]->setTarget(_players[1]->getPosition());
 		_smgr->setActiveCamera(_cameras[0]);
-    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX, _screenSizeY / 2));
+    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX / 2, _screenSizeY / 2));
 		_smgr->drawAll();
 		_smgr->setActiveCamera(_cameras[1]);
-    	_driver->setViewPort(irr::core::rect<irr::s32>(0, _screenSizeY / 2, _screenSizeX, _screenSizeY));
+    	_driver->setViewPort(irr::core::rect<irr::s32>(_screenSizeX / 2, _screenSizeY / 2, _screenSizeX, _screenSizeY));
 		_smgr->drawAll();
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
@@ -408,6 +410,16 @@ void IrrLib::drawGame()
 		_smgr->drawAll();
 	_guienv->drawAll();
 	_driver->endScene();
+	
+	int fps = _driver->getFPS();
+	if (_lastFps != fps) {
+            irr::core::stringw tmp(L"Movement Example - Irrlicht Engine [");
+            tmp += _driver->getName();
+            tmp += L"] fps: ";
+            tmp += fps;
+            _device->setWindowCaption(tmp.c_str());
+            _lastFps = fps;
+    }
 }
 
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
@@ -451,7 +463,22 @@ void IrrLib::updateItem(std::unique_ptr<IEntity> &entity)
 void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 {
 	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh(static_cast<Item*>(entity.get())->getModel().c_str());
+	for (auto &it : _items) {
+		if (it->getID() == -1) {
+			it->setMesh(mesh);
+			it->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+			it->setMD2Animation(irr::scene::EMAT_STAND);
+			it->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setID(static_cast<Item*>(entity.get())->getId());
+			return;
+		}
+	}
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
+	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,1,0));
+	node->addAnimator(ani);
+	ani->drop();
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
@@ -460,6 +487,21 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		node->setID(static_cast<Item*>(entity.get())->getId());
 		_items.push_back(node);
+	}
+}
+
+void IrrLib::removeItem(int id)
+{
+	int i = 0;
+
+	for (auto &it : _items) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
 	}
 }
 
@@ -479,7 +521,6 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 		_factory[it3->getType()](it3);
 	}
 	if (!_splitScreen) {
-		std::cout << size.first << " " << size.second << std::endl;
 		_camera->setPosition(irr::core::vector3df(size.first / 2, 20, size.second / 2 - 1));
 		_camera->setTarget(irr::core::vector3df(size.first / 2, 0, size.second / 2));
 	}
