@@ -53,6 +53,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::removeItem, this,
 		std::placeholders::_1)));
+	_factoryDelete.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::removeSphere, this,
+		std::placeholders::_1)));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
@@ -79,6 +81,15 @@ void IrrLib::createPlane(pairUC &size)
 
 void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 {
+	for (auto &it : _spheres) {
+		if (it->getID() == -1) {
+			it->setID(entity->getId());
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
+			it->setVisible(true);
+			it->render();
+			return;
+		}
+	}
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
@@ -96,11 +107,28 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
+			if (static_cast<Bomb*>(entity.get())->isAlive() == false)
+				it->setID(-1);
 			_gamemusic.play(SOUND::BOOM);
 			return ;
 		}
 	}
 	addSphere(entity);
+}
+
+void IrrLib::removeSphere(int id)
+{
+	int i = 0;
+
+	for (auto &it : _spheres) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
+	}
 }
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)

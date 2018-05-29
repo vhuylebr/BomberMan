@@ -83,6 +83,7 @@ class IrrLib {
 		void dropAll();
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);
+		void removeSphere(int);
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
