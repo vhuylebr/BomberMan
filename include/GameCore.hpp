@@ -64,7 +64,9 @@ public:
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
 	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
-	
+	void	saveMap(std::ofstream &file);
+	void 	saveMobileEntities(std::ofstream &file);
+
 	bool checkEnd(STATE &);
 	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
 

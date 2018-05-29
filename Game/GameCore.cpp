@@ -363,25 +363,52 @@ void GameCore::removeAll()
 	_id = 0;
 }
 
+void	GameCore::saveMap(std::ofstream &file)
+{
+	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
+		for (auto &i2 : _vectorEntities[idx]) {
+			if (i2->isEmpty() == false && i2->getType() == Entity::CUBE) {
+				if (i2->getSubType() == ItemStatic::WALL)
+					file << "0";
+				else if (i2->getSubType() == ItemStatic::CRATE)
+					file << "1";
+			}
+			else
+				file << " ";
+		}
+		file << "\n";
+	}
+}
+
+void 	GameCore::saveMobileEntities(std::ofstream &file)
+{
+	for (auto &i : _bombs)
+		file << "Bomb " << i.getX() << " " << i.getY() << "\n";
+	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
+		for (unsigned int y = 0; y != _vectorEntities[idx].size(); y++) {
+			if (_vectorEntities[idx][y]->isEmpty() == false &&
+				_vectorEntities[idx][y]->getType() == Entity::ITEM) {
+				std::cout << "item !!" << std::endl;
+				auto pos = _vectorEntities[idx][y]->getEntity()->getPos();
+				std::cout << pos.first << std::endl;
+				std::cout << pos.second << std::endl;
+			}
+		}
+	}
+}
+
 void GameCore::handlePause(Actions actions, STATE &state)
 {
+
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
 	if (actions.buttonPressed == PAUSE_ID + 1) {
-		// Vector entities, mobile entities, players, bombs
-		// for (int idx = 0; idx != _vectorEntities.size(); idx++) {
-		// 	for (auto &i2 : _vectorEntities[idx]) {
-		// 		if (i2->isEmpty() == false && i2->getType() == Entity::CUBE) {
-		// 			if (i2->getSubType() == ItemStatic::CRATE)
-		// 				std::cout << "this is a crate" << std::endl;
-		// 			if (i2->getSubType() == ItemStatic::WALL)
-		// 				std::cout << "this is a wall" << std::endl;
-		// 			if (i2->getSubType() == ItemStatic::ITEM)
-		// 				std::cout << "this is a item" << std::endl;
-		// 		}
-		// 	}
-		// 	std::cout << "line" << std::endl;
-		// }
+//		Vector entities, mobile entities, players, bombs
+		std::ofstream file("save.txt");
+		saveMap(file);
+		file << "separateur\n";
+		saveMobileEntities(file);
+		file.close();
 	}
 	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
