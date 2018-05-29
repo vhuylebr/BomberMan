@@ -55,6 +55,7 @@ void 	Core::getParametersFromMenu()
 		_param.mapSize.first = std::stoi(_lib.getLabelText(_menu.getItemByID(29))); // Height
 		_param.mapSize.second = std::stoi(_lib.getLabelText(_menu.getItemByID(33))); // Width
 		_param.mapname = "./media/map1.txt";
+		_param.split = _param.nbPlayers - 1;
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
@@ -71,6 +72,7 @@ void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
 		_game.init(_param);
+		_lib.setSplitScreen(_param.split);
 		_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);

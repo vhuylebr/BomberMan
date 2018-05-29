@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _lastFps(0)
+	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, false, false, false, &_eventReceiver);
@@ -525,7 +525,6 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 {
 	drop();
 	createPlane(size);
-	_splitScreen = false;
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
 			if (!it2->isEmpty())
@@ -649,4 +648,9 @@ void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);
 	}
+}
+
+void IrrLib::setSplitScreen(bool split)
+{
+	_splitScreen = split;
 }

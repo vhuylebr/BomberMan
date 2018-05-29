@@ -23,6 +23,7 @@
 # include "EntityPos.hpp"
 # include "Music.hpp"
 # include "Metrics.hpp"
+# include "GameCore.hpp"
 
 enum
 {
@@ -69,6 +70,7 @@ class IrrLib {
 		void displayBackground();
 		void initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &,
 			pairUC size, std::vector<std::unique_ptr<IEntity> >&);
+
 		void drawGame();
 		void cleanMenu();
 		void removeItem(int);
@@ -83,7 +85,9 @@ class IrrLib {
 		void dropAll();
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);
-		
+		bool getSplitScreen() const {return _splitScreen; };
+		void setSplitScreen(bool split);
+
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
 

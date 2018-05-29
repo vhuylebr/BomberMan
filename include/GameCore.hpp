@@ -43,6 +43,7 @@ struct  parameters
 	std::pair<int,int> mapSize;
 	std::vector<eItem> bonuses;		// Vecteur de bonus actifs
 	std::string mapname;
+	bool split;
 };
 
 class GameCore {
