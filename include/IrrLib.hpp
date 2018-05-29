@@ -87,7 +87,8 @@ class IrrLib {
 		void addItem(std::unique_ptr<IEntity> &entity);
 		bool getSplitScreen() const {return _splitScreen; };
 		void setSplitScreen(bool split);
-
+		void removeSphere(int);
+		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
 
