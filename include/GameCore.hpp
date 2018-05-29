@@ -27,6 +27,23 @@
 # include "MenuItem.hpp"
 # include "Fire.hpp"
 # include "EntityPos.hpp"
+# include "Metrics.hpp"
+
+enum class GameState {
+	NEWGAME,
+	LOADGAME
+};
+
+struct  parameters
+{
+	GameState state;                // State si la map doit être à nouveau ou doit être chargée depuis un fichier
+	std::wstring gameName;          // Le fichier dans lequel on devra sauvegarde ou get les infos de la map
+	int nbPlayers;
+	int nbBots;
+	std::pair<int,int> mapSize;
+	std::vector<eItem> bonuses;		// Vecteur de bonus actifs
+	std::string mapname;
+};
 
 class GameCore {
 public:
@@ -35,6 +52,7 @@ public:
 	std::vector<std::unique_ptr<IEntity>>	&calc(Actions, STATE &);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void	init(pairUC);
+	void	init(parameters);
 	void	init(const std::string &);
 	pairUC	getSize() const;
 	void 	handlePause(Actions actions, STATE &state);

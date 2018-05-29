@@ -19,8 +19,6 @@ void GameCore::init(pairUC size)
 	std::string line;
 
 	std::cout << "Initializing new game" << std::endl;
-	_size.x = size.first;
-	_size.y = size.second;
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
 	if (!file.is_open())
@@ -69,9 +67,62 @@ void GameCore::init(pairUC size)
 			y1 += 1;
 		}
 	}
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1001, "Resume", 600, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1002, "Save and Quit", 600, 400, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1003, "Quit", 600, 600, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+	_size.x = x1;
+	_size.y = y1;
+}
+
+void    GameCore::init(parameters params)
+{
+	std::ifstream file(params.mapname);
+	std::string line;
+
+	std::cout << "Initializing new game" << std::endl;
+	_size.x = params.mapSize.first;
+	_size.y = params.mapSize.second;
+	unsigned int x1 = 0;
+	unsigned int y1 = 0;
+	if (!file.is_open()) {
+		std::cout << "Open has failed\n";
+	} else {
+		std::cout << "Open success\n";
+		while (getline(file, line)) {
+			x1 = 0;
+			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos> >());
+			for (unsigned int j = 0; line[j] != 0; ++j) {
+				if (line[j] == '0') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_id++;
+				} else if (line[j] == '1') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_id++;
+				} else if (line[j] == '2') {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					_id++;
+				} else if (line[j] == '3') {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					_id++;
+				} else {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+				}
+				x1 += 1;
+			}
+			y1 += 1;
+		}
+	}
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+	_size.x = x1;
+	_size.y = y1;
 }
 
 GameCore::~GameCore()
@@ -352,23 +403,22 @@ void GameCore::removeAll()
 
 void GameCore::handlePause(Actions actions, STATE &state)
 {
-	if (actions.buttonPressed == 1001)
+	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
-	if (actions.buttonPressed == 1003)
-	{
+	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
-		_updateEntities.clear();
 		state = STATE::MENU;
 	}
+	if (actions.buttonPressed == PAUSE_ID + 3)
+		state = STATE::EXIT;
 }
 
 std::vector<std::unique_ptr<IEntity>> &GameCore::handleEnd(Actions actions, STATE &state)
 {
-	if (actions.buttonPressed == 2000002)
+	if (actions.buttonPressed == 2000002) {
 		state = STATE::GAME;
-	if (actions.buttonPressed == 2000003) {
+	} if (actions.buttonPressed == 2000003) {
 		removeAll();
-		std::cout << "size " << _updateEntities.size() << std::endl;
 		state = STATE::MENU;
 	}
 	return _endItem;

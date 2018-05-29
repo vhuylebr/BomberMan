@@ -8,14 +8,16 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown), _ground(nullptr)
+	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _lastFps(0)
 {
-	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1600, 900),
+	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, false, false, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
+	_cameras[0] = _smgr->addCameraSceneNode();
+    _cameras[1] = _smgr->addCameraSceneNode();
 	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
@@ -49,6 +51,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
+	_factoryDelete.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::removeItem, this,
+		std::placeholders::_1)));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
@@ -68,7 +72,7 @@ void IrrLib::createPlane(pairUC &size)
 	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
 		irr::core::dimension2d<irr::u32>(size.second, size.second));
 	_ground = _smgr->addMeshSceneNode(plane);
-	_ground->setPosition(irr::core::vector3df(size.first, 0, size.second));
+	_ground->setPosition(irr::core::vector3df(0, 0, 0));
 	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
@@ -189,7 +193,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == 1001 || item->getId() == 1002 || item->getId() == 1003)
+	if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
+	|| item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
 		_buttons.push_back(button);
 }
 
@@ -248,6 +253,7 @@ void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
 	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item->getPos().first,
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second));
+	checkbox->setChecked(true);
 	checkbox->setID(item->getId());
 	_checkboxes.push_back(checkbox);
 }
@@ -377,6 +383,19 @@ void IrrLib::drawMenu()
 
 void IrrLib::cleanMenu()
 {
+	for (auto &it : _inputs)
+		it->remove();
+	for (auto &it : _checkboxes)
+		it->remove();
+	for (auto &it : _labels)
+		it->remove();
+	for (auto &it : _buttons)
+		it->remove();
+	_inputs.clear();
+	_checkboxes.clear();
+	_labels.clear();
+	_buttons.clear();
+	_skybox->remove();
 	_guienv->clear();
 }
 
@@ -384,9 +403,37 @@ void IrrLib::drawGame()
 {
 	_eventReceiver.resetIdButtonPressed();
 	_driver->beginScene(true, true);
-	_smgr->drawAll();
+	if (_eventReceiver.IsKeyDown(irr::KEY_KEY_P))
+		_splitScreen = !_splitScreen;
+	if (_splitScreen) {
+		irr::core::vector3df camPos = _players[0]->getPosition();
+		_cameras[0]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
+		_cameras[0]->setTarget(_players[0]->getPosition());
+		camPos = _players[1]->getPosition();
+		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
+		_cameras[1]->setTarget(_players[1]->getPosition());
+		_smgr->setActiveCamera(_cameras[0]);
+    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX / 2, _screenSizeY / 2));
+		_smgr->drawAll();
+		_smgr->setActiveCamera(_cameras[1]);
+    	_driver->setViewPort(irr::core::rect<irr::s32>(_screenSizeX / 2, _screenSizeY / 2, _screenSizeX, _screenSizeY));
+		_smgr->drawAll();
+	}
+	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
+	if (!_splitScreen)
+		_smgr->drawAll();
 	_guienv->drawAll();
 	_driver->endScene();
+	
+	int fps = _driver->getFPS();
+	if (_lastFps != fps) {
+            irr::core::stringw tmp(L"BomberMan [");
+            tmp += _driver->getName();
+            tmp += L"] fps: ";
+            tmp += fps;
+            _device->setWindowCaption(tmp.c_str());
+            _lastFps = fps;
+    }
 }
 
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
@@ -430,11 +477,26 @@ void IrrLib::updateItem(std::unique_ptr<IEntity> &entity)
 void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 {
 	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh(static_cast<Item*>(entity.get())->getModel().c_str());
+	for (auto &it : _items) {
+		if (it->getID() == -1) {
+			it->setMesh(mesh);
+			it->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+			it->setMD2Animation(irr::scene::EMAT_STAND);
+			it->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setID(static_cast<Item*>(entity.get())->getId());
+			return;
+		}
+	}
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
+	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,1,0));
+	node->addAnimator(ani);
+	ani->drop();
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
-		node->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+		node->setMaterialTexture(0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
 		node->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		node->setID(static_cast<Item*>(entity.get())->getId());
@@ -442,12 +504,27 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 	}
 }
 
+void IrrLib::removeItem(int id)
+{
+	int i = 0;
+
+	for (auto &it : _items) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
+	}
+}
+
 void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
 	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
 	drop();
-	// _skybox->setVisible(false);
 	createPlane(size);
+	_splitScreen = false;
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
 			if (!it2->isEmpty())
@@ -457,9 +534,10 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}
-	irr::core::vector3df groundPos = _players[0]->getPosition();
-	_camera->setPosition(irr::core::vector3df(groundPos.X, 20, groundPos.Z - 1));
-	_camera->setTarget(_players[0]->getPosition());
+	if (!_splitScreen) {
+		_camera->setPosition(irr::core::vector3df(size.first / 2, 20, size.second / 2 - 1));
+		_camera->setTarget(irr::core::vector3df(size.first / 2, 0, size.second / 2));
+	}
 }
 
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
@@ -483,6 +561,10 @@ void IrrLib::drop()
 		it->remove();
 		// it->drop();
 	}
+	for (auto &it : _items) {
+		it->remove();
+		// it->drop();
+	}
 	if (_ground)
 		_ground->remove();
 	// for (auto &it : _buttons) {
@@ -502,14 +584,15 @@ void IrrLib::drop()
 	// 	// it->drop();
 	// }
 	// _smgr = _device->getSceneManager();
-	_spheres.clear();
-	_players.clear();
 	// _buttons.clear();
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
-	_skybox->remove();
+	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
+	_spheres.clear();
+	_players.clear();
 	_cubes.clear();
+	_items.clear();
 	
 	// _smgr->clear();
 	// _guienv->clear();
@@ -527,11 +610,13 @@ void IrrLib::dropAll()
 void IrrLib::setVisible(bool state)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == 1001)
+		if ((*it)->getID() == PAUSE_ID)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 1002)
+		else if ((*it)->getID() == PAUSE_ID + 1)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == 1003)
+		else if ((*it)->getID() == PAUSE_ID + 2)
+			(*it)->setVisible(state);
+		else if ((*it)->getID() == PAUSE_ID + 3)
 			(*it)->setVisible(state);
 	}
 }
