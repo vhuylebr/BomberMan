@@ -34,7 +34,7 @@ private:
 	Menu    _menu;
 	IrrLib  _lib;
 	char    _host;
-//	Music 	_coremusic;
+	Music 	_coremusic;
 	// Lobby   _lobby;
 	Actions _act;
 };
