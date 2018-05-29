@@ -61,7 +61,6 @@ class IrrLib {
 		bool getCheckboxState(std::unique_ptr<IEntity> &item);
 		std::wstring getLabelText(std::unique_ptr<IEntity> &item);
 		void initMenu(std::vector<std::unique_ptr<IEntity>> &);
-		void updateLabel(std::unique_ptr<IEntity>&);
 		
 		void drop();
 		void drawMenu();
@@ -77,7 +76,7 @@ class IrrLib {
 
 		void newMenuItems(std::vector<std::unique_ptr<IEntity>> &menuItems);
 		void initMenu(std::vector<MenuItem> &);
-		void updateLabel(MenuItem &item);
+		void updateLabel(std::unique_ptr<IEntity> &item);
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();

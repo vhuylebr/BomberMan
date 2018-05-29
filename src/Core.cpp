@@ -115,7 +115,7 @@ void	Core::gameManager(STATE &last)
 			_lib.newMenuItems(_game.createPause());
 			setPauseVisible(_lib, true);
 			_state = STATE::PAUSE;
-		}		
+		}
 		_lib.affGameEntities(_game.calc(actions, _state));
 		_lib.removeEntities(_game.getEntitiesToRemove());
 		_lib.drawGame();

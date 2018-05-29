@@ -313,6 +313,8 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
+	if (checkEnd(state) == true)
+		return _updateEntities;
 	changed = playerMovement(act);
 	if (changed)
 	{
@@ -320,7 +322,6 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 	}
 	bombManager(act);
-	checkEnd(state);
 	return (_updateEntities);
 }
 
