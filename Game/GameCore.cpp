@@ -367,6 +367,22 @@ void GameCore::handlePause(Actions actions, STATE &state)
 {
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
+	if (actions.buttonPressed == PAUSE_ID + 1) {
+		// Vector entities, mobile entities, players, bombs
+		// for (int idx = 0; idx != _vectorEntities.size(); idx++) {
+		// 	for (auto &i2 : _vectorEntities[idx]) {
+		// 		if (i2->isEmpty() == false && i2->getType() == Entity::CUBE) {
+		// 			if (i2->getSubType() == ItemStatic::CRATE)
+		// 				std::cout << "this is a crate" << std::endl;
+		// 			if (i2->getSubType() == ItemStatic::WALL)
+		// 				std::cout << "this is a wall" << std::endl;
+		// 			if (i2->getSubType() == ItemStatic::ITEM)
+		// 				std::cout << "this is a item" << std::endl;
+		// 		}
+		// 	}
+		// 	std::cout << "line" << std::endl;
+		// }
+	}
 	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
 		state = STATE::MENU;

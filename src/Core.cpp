@@ -111,10 +111,6 @@ int	Core::loop()
 
 	if (startMusic() == -1)
 		return -1;
-	if (_coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
-		return -1;
-	_coremusic.play(SOUND::MENU);
-	_coremusic.setLoop(SOUND::MENU, true);
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);

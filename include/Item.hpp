@@ -10,7 +10,7 @@
 
 # include "AEntity.hpp"
 # include <string>
-
+# include <map>
 # define NB_ITEMS 6 // Nombre d'items implémentés
 
 enum eItem {
@@ -34,9 +34,9 @@ public:
 	pairUC	getPos() const { return {_x, _y};}
 	bool	isAlive() const { return (_alive);};
 	Entity	getType() const {return Entity::ITEM;};
-	std::string		getModel() const {return "./media/Shoes.obj";};
-	std::string		getTexture() const {return "./media/Shoes.png";};
-	float	getScale() const {return 0.08f;};
+	std::string		getModel();
+	std::string		getTexture();
+	float	getScale();
 
 private:
 
@@ -45,6 +45,9 @@ private:
 	float	_y;
 	size_t	_id;
 	bool	_alive;
+	std::map<eItem, std::string> _getModel;
+	std::map<eItem, std::string> _getTexture;
+	std::map<eItem, float> _getScale;
 };
 
 #endif /* !ITEM_HPP_ */
