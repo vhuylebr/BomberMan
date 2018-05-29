@@ -62,6 +62,8 @@ public:
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
+	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
+	
 	bool checkEnd(STATE &);
 	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
 
@@ -71,8 +73,8 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;
 	unsigned int			_id;
-	Player 				_player1;
-	Player 				_player2;
+	Player				_player1;
+	Player				_player2;
 	std::vector<Bomb>		_bombs;
 	bool	thereIsBomb(int x, int y);
 	void	initEndScreen();

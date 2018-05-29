@@ -482,6 +482,7 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 			it->setMesh(mesh);
 			it->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 			it->setMD2Animation(irr::scene::EMAT_STAND);
+			it->setVisible(true);
 			it->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
 			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
