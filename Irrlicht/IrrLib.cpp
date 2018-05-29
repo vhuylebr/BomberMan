@@ -221,8 +221,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
-	|| item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
+	// if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
+	// || item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
 		_buttons.push_back(button);
 }
 
@@ -600,14 +600,14 @@ void IrrLib::drop()
 	}
 	if (_ground)
 		_ground->remove();
-	// for (auto &it : _buttons) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
-	// for (auto &it : _labels) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
+	for (auto &it : _buttons) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _labels) {
+		it->remove();
+		// it->drop();
+	}
 	// for (auto &it : _checkboxes) {
 	// 	it->remove();
 	// 	// it->drop();
@@ -640,17 +640,19 @@ void IrrLib::dropAll()
 	// _device->drop();
 }
 
-void IrrLib::setVisible(bool state)
+void IrrLib::setVisible(bool state, int id)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == PAUSE_ID)
+		if ((*it)->getID() == id)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 1)
-			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 2)
-			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 3)
-			(*it)->setVisible(state);
+		// if ((*it)->getID() == PAUSE_ID)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 1)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 2)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 3)
+		// 	(*it)->setVisible(state);
 	}
 }
 
@@ -676,7 +678,7 @@ void IrrLib::removeEntities(std::vector<std::pair<int, Entity> > &vectorToRemove
 	}
 }
 
-void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
+void IrrLib::newMenuItems(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);

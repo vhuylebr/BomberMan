@@ -75,13 +75,13 @@ class IrrLib {
 		void cleanMenu();
 		void removeItem(int);
 
-		void createPause(std::vector<std::unique_ptr<IEntity>> &menuItems);
+		void newMenuItems(std::vector<std::unique_ptr<IEntity>> &menuItems);
 		void initMenu(std::vector<MenuItem> &);
 		void updateLabel(MenuItem &item);
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();
-		void setVisible(bool);
+		void setVisible(bool, int);
 		void dropAll();
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);

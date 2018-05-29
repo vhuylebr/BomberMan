@@ -68,6 +68,27 @@ void 	Core::getParametersFromMenu()
 	}
 }
 
+static void setPauseVisible(IrrLib &lib, bool state)
+{
+	lib.setVisible(state, PAUSE_ID);
+	lib.setVisible(state, PAUSE_ID + 1);
+	lib.setVisible(state, PAUSE_ID + 2);
+	lib.setVisible(state, PAUSE_ID + 3);
+}
+
+static void setEndVisible(IrrLib &lib, bool state, char player)
+{
+	std::cout << "Set end visible " << state << std::endl;
+	if (player == 1)
+		lib.setVisible(state, WIN_P1_ID);
+	else if (player == 2)
+		lib.setVisible(state, WIN_P2_ID);
+	else
+		lib.setVisible(state, LOSE_ID);
+	lib.setVisible(state, PLAY_AGAIN_ID);
+	lib.setVisible(state, QUIT_END_ID);
+}
+
 void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
@@ -78,20 +99,30 @@ void	Core::gameManager(STATE &last)
 		_game.handlePause(_lib.getActions(), _state);
 		_lib.drawGame();
 		if (_state == STATE::GAME)
-			_lib.setVisible(false);
+			setPauseVisible(_lib, false);
 	} else if (_state == STATE::END) {
-		_lib.affGameEntities(_game.handleEnd(_lib.getActions(), _state));
+		_game.handleEnd(_lib.getActions(), _state);
 		_lib.drawGame();
+		if (_state == STATE::GAME) {
+			setEndVisible(_lib, false, _game.getEndId());
+			_game.init(_param);
+			_lib.setSplitScreen(_param.split);
+			_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
+		}
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();
 		if (actions.escape == true) {
-			_lib.createPause(_game.createPause());
-			_lib.setVisible(true);
+			_lib.newMenuItems(_game.createPause());
+			setPauseVisible(_lib, true);
 			_state = STATE::PAUSE;
 		}		
 		_lib.affGameEntities(_game.calc(actions, _state));
 		_lib.removeEntities(_game.getEntitiesToRemove());
 		_lib.drawGame();
+		if (_state == STATE::END) {
+			_lib.newMenuItems(_game.createEndScreen());
+			setEndVisible(_lib, true, _game.getEndId());
+		}
 	}
 	last = STATE::GAME;
 }

@@ -314,7 +314,6 @@ bool GameCore::checkEnd(STATE &state)
 	if (!_player1.isAlive() || !_player2.isAlive()) {
 		state = STATE::END;
 		initEndScreen();
-		std::cout << "CHECK END RETURN TRUE\n\n\n\n";
 		return true;
 	}
 	return false;
@@ -326,8 +325,6 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
-	// if (checkEnd(state) == true)
-	// 	return (_updateEntities);
 	changed = playerMovement(act);
 	if (changed)
 	{
@@ -341,12 +338,16 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 
 void GameCore::initEndScreen()
 {
-	if (!_player1.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000001, "Player 2 won", 600, 200, 400, 100)));
+	if (!_player1.isAlive() && !_player2.isAlive())
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", 600, 200, 400, 100)));
+	else if (!_player1.isAlive())
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P2_ID, "Player 2 won", 600, 200, 400, 100)));
 	else if (!_player2.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000001, "Player 1 won", 600, 200, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000002, "Play again", 600, 400, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000003, "Quit", 600, 600, 400, 100)));
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID, "Player 1 won", 600, 200, 400, 100)));
+	else
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", 600, 200, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PLAY_AGAIN_ID, "Play again", 600, 400, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, QUIT_END_ID, "Quit", 600, 600, 400, 100)));
 }
 
 void GameCore::removeAll()
@@ -356,6 +357,7 @@ void GameCore::removeAll()
 	_vectorEntities.clear();
 	_mobileEntities.clear();
 	_bombs.clear();
+	_endItem.clear();
 	_pauseitem.clear();
 	_entitiesToRemove.clear();
 	_entities.clear();
@@ -385,24 +387,42 @@ void GameCore::handlePause(Actions actions, STATE &state)
 	}
 	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
+		_updateEntities.clear();
 		state = STATE::MENU;
 	}
 	if (actions.buttonPressed == PAUSE_ID + 3)
 		state = STATE::EXIT;
 }
 
-std::vector<std::unique_ptr<IEntity>> &GameCore::handleEnd(Actions actions, STATE &state)
+int GameCore::getEndId() const
 {
-	if (actions.buttonPressed == 2000002) {
-		state = STATE::GAME;
-	} if (actions.buttonPressed == 2000003) {
+	if (!_player1.isAlive() && !_player2.isAlive())
+		return LOSE_ID;
+	else if (!_player1.isAlive())
+		return WIN_P2_ID;
+	else if (!_player2.isAlive())
+		return WIN_P1_ID;
+	else
+		return LOSE_ID;
+}
+
+void GameCore::handleEnd(Actions actions, STATE &state)
+{
+	if (actions.buttonPressed == PLAY_AGAIN_ID) {
 		removeAll();
-		state = STATE::MENU;
+		state = STATE::GAME;
+	} if (actions.buttonPressed == QUIT_END_ID) {
+		removeAll();
+		state = STATE::EXIT;
 	}
-	return _endItem;
 }
 
 std::vector<std::unique_ptr<IEntity>> &GameCore::createPause()
 {
 	return _pauseitem;
+}
+
+std::vector<std::unique_ptr<IEntity>> &GameCore::createEndScreen()
+{
+	return _endItem;
 }
