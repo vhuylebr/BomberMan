@@ -39,6 +39,7 @@ struct  parameters
 	GameState state;                // State si la map doit être à nouveau ou doit être chargée depuis un fichier
 	std::wstring gameName;          // Le fichier dans lequel on devra sauvegarde ou get les infos de la map
 	int nbPlayers;
+	int nbBots;
 	std::pair<int,int> mapSize;
 	std::vector<eItem> bonuses;		// Vecteur de bonus actifs
 	std::string mapname;
@@ -48,8 +49,8 @@ class GameCore {
 public:
 	GameCore();
 	~GameCore();
-	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
-	std::vector<std::vector<std::unique_ptr<EntityPos>>>	&getEntities();
+	std::vector<std::unique_ptr<IEntity>>	&calc(Actions, STATE &);
+	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void	init(pairUC);
 	void	init(parameters);
 	void	init(const std::string &);
@@ -63,6 +64,8 @@ public:
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
 	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
 	
+	bool checkEnd(STATE &);
+	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
 
 private:
 	void	bombManager(Actions &act);
@@ -74,10 +77,12 @@ private:
 	Player				_player2;
 	std::vector<Bomb>		_bombs;
 	bool	thereIsBomb(int x, int y);
-	std::vector<std::vector<std::unique_ptr<EntityPos>>> _vectorEntities;
+	void	initEndScreen();
+	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
+	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 };
 

@@ -51,21 +51,19 @@ void 	Core::getParametersFromMenu()
 		_param.state = GameState::NEWGAME;
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
 		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));
-		_param.mapSize = std::make_pair(10, 10);
+		_param.nbBots = std::stoi(_lib.getLabelText(_menu.getItemByID(24)));
+		_param.mapSize.first = std::stoi(_lib.getLabelText(_menu.getItemByID(29))); // Height
+		_param.mapSize.second = std::stoi(_lib.getLabelText(_menu.getItemByID(33))); // Width
 		_param.mapname = "./media/map1.txt";
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
-		std::wcout << L"game name : " << _param.gameName << std::endl;
-		std::cout << "nb players : " << _param.nbPlayers << std::endl;
-		std::cout << "size : " << _param.bonuses.size() << std::endl;;
 	}
 	else if (_menu.getStep() == 3)
 	{
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
 		_param.mapname = "./media/map1.txt";
-		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
 }
 
@@ -79,14 +77,17 @@ void	Core::gameManager(STATE &last)
 		_lib.drawGame();
 		if (_state == STATE::GAME)
 			_lib.setVisible(false);
+	} else if (_state == STATE::END) {
+		_lib.affGameEntities(_game.handleEnd(_lib.getActions(), _state));
+		_lib.drawGame();
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();
 		if (actions.escape == true) {
 			_lib.createPause(_game.createPause());
 			_lib.setVisible(true);
 			_state = STATE::PAUSE;
-		}
-		_lib.affGameEntities(_game.calc(actions));
+		}		
+		_lib.affGameEntities(_game.calc(actions, _state));
 		_lib.removeEntities(_game.getEntitiesToRemove());
 		_lib.drawGame();
 	}
@@ -110,6 +111,10 @@ int	Core::loop()
 
 	if (startMusic() == -1)
 		return -1;
+	if (_coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
+		return -1;
+	_coremusic.play(SOUND::MENU);
+	_coremusic.setLoop(SOUND::MENU, true);
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
@@ -120,7 +125,8 @@ int	Core::loop()
 				getParametersFromMenu();
 				_lib.cleanMenu();
 			}
-		} else if (_state == STATE::GAME || _state == STATE::PAUSE)
+		} else if (_state == STATE::GAME || _state == STATE::PAUSE
+		|| _state == STATE::END)
 			gameManager(lstate);
 	}
 	_lib.dropAll();

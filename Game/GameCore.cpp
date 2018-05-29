@@ -8,11 +8,11 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
+    : _id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
 {
 }
 
-void    GameCore::init(pairUC size)
+void GameCore::init(pairUC size)
 {
 	std::string filename = "./media/map1.txt";
 	std::ifstream file(filename);
@@ -21,31 +21,45 @@ void    GameCore::init(pairUC size)
 	std::cout << "Initializing new game" << std::endl;
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
-	if (!file.is_open()) {
+	if (!file.is_open())
+	{
 		std::cout << "Open has failed\n";
-	} else {
+	}
+	else
+	{
 		std::cout << "Open success\n";
-		while (getline(file, line)) {
+		while (getline(file, line))
+		{
 			x1 = 0;
-			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos> >());
-			for (unsigned int j = 0; line[j] != 0; ++j) {
-				if (line[j] == '0') {
+			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
+			for (unsigned int j = 0; line[j] != 0; ++j)
+			{
+				if (line[j] == '0')
+				{
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
-				} else if (line[j] == '1') {
+				}
+				else if (line[j] == '1')
+				{
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
-				} else if (line[j] == '2') {
+				}
+				else if (line[j] == '2')
+				{
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				} else if (line[j] == '3') {
+				}
+				else if (line[j] == '3')
+				{
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				} else {
+				}
+				else
+				{
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}
 				x1 += 1;
@@ -117,23 +131,23 @@ GameCore::~GameCore()
 		releaseUpdateEntities();
 }
 
-pairUC	GameCore::getSize() const
+pairUC GameCore::getSize() const
 {
 	return (std::make_pair(_size.x, _size.y));
 }
 
-void	GameCore::init(const std::string &file)
+void GameCore::init(const std::string &file)
 {
 	init(std::make_pair(100, 100));
 	std::cout << "Loading " << file << std::endl;
 }
 
-std::vector<std::vector<std::unique_ptr<EntityPos> > >	&GameCore::getEntities()
+std::vector<std::vector<std::unique_ptr<EntityPos>>> &GameCore::getEntities()
 {
 	return _vectorEntities;
 }
 
-std::vector<std::unique_ptr<IEntity> >	&GameCore::getMobileEntities()
+std::vector<std::unique_ptr<IEntity>> &GameCore::getMobileEntities()
 {
 	return _mobileEntities;
 }
@@ -145,74 +159,90 @@ void GameCore::releaseUpdateEntities()
 	_updateEntities.clear();
 }
 
-std::vector<std::pair<int, Entity> >	&GameCore::getEntitiesToRemove()
+std::vector<std::pair<int, Entity>> &GameCore::getEntitiesToRemove()
 {
 	return _entitiesToRemove;
 }
 
-void	GameCore::bombManager(Actions &act)
+void GameCore::bombManager(Actions &act)
 {
-	for (auto &a : _bombs) {
-		if (a.isOutFire()) {
-			for (auto &b : a.getFlames()) {
+	for (auto &a : _bombs)
+	{
+		if (a.isOutFire())
+		{
+			for (auto &b : a.getFlames())
+			{
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
 			}
 		}
 	} // Plus tard les deux boucles seront assemblables
-	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(),[](const Bomb& x) {
-		return x.isOver();
-	}), _bombs.end());
-	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive()) {
-			auto pos = _player1.getPos();
-			for (auto &a : _bombs) {
-				if (a.getPos().first == std::ceil(pos.first - 0.5) && 
-					std::ceil(pos.second - 0.5) == a.getPos().second) {
-					pos.first = -1;
-					pos.second = -1;
-					break ;
-				}
+	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
+			     return x.isOver();
+		     }),
+		     _bombs.end());
+	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive())
+	{
+		auto pos = _player1.getPos();
+		for (auto &a : _bombs)
+		{
+			if (a.getPos().first == std::ceil(pos.first - 0.5) &&
+			    std::ceil(pos.second - 0.5) == a.getPos().second)
+			{
+				pos.first = -1;
+				pos.second = -1;
+				break;
 			}
-			if (pos.first != -1 && pos.second != -1) {
-				Bomb	tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player1.getId());
-				_player1.dropBomb();
-				tmp.setPower(_player1.getPower());
-				_bombs.push_back(tmp);
-				_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+		}
+		if (pos.first != -1 && pos.second != -1)
+		{
+			Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player1.getId());
+			_player1.dropBomb();
+			tmp.setPower(_player1.getPower());
+			_bombs.push_back(tmp);
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+		}
+	}
+	else if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) // remplacer 0 par player2.
+	{
+		auto pos = _player2.getPos();
+		for (auto &a : _bombs)
+		{
+			if (a.getPos().first == std::ceil(pos.first - 0.5) &&
+			    std::ceil(pos.second - 0.5) == a.getPos().second)
+			{
+				pos.first = -1;
+				pos.second = -1;
+				break;
 			}
-	} else if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) {
-			auto pos = _player2.getPos();
-			for (auto &a : _bombs) {
-				if (a.getPos().first == std::ceil(pos.first - 0.5) && 
-					std::ceil(pos.second - 0.5) == a.getPos().second) {
-					pos.first = -1;
-					pos.second = -1;
-					break ;
-				}
-			}
-			if (pos.first != -1 && pos.second != -1) {
-				Bomb	tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player2.getId());
-				_player2.dropBomb();
-				tmp.setPower(_player2.getPower());
-				_bombs.push_back(tmp);
-				_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
-			}
+		}
+		if (pos.first != -1 && pos.second != -1)
+		{
+			Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player2.getId());
+			_player2.dropBomb();
+			tmp.setPower(_player2.getPower());
+			_bombs.push_back(tmp);
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
+		}
 	}
 	for (auto &a : _bombs) {
 		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
-			for (auto &b : vec) {
-					_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
-					if (std::round(_player1.getPos().first) == b.getPos().first &&
-						std::round(_player1.getPos().second) == b.getPos().second) {
-							_player1.setAlive(false);
-							_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
-					}
-					if (std::round(_player2.getPos().first) == b.getPos().first &&
-						std::round(_player2.getPos().second) == b.getPos().second) {
-							_player2.setAlive(false);
-							_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
-					}
+			for (auto &b : vec)
+			{
+				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
+				if (std::round(_player1.getPos().first) == b.getPos().first &&
+				    std::round(_player1.getPos().second) == b.getPos().second)
+				{
+					_player1.setAlive(false);
+					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
+				}
+				if (std::round(_player2.getPos().first) == b.getPos().first &&
+				    std::round(_player2.getPos().second) == b.getPos().second)
+				{
+					_player2.setAlive(false);
+					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+				}
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
 			if (a.getOwner() == static_cast<unsigned int>(_player1.getId()))
@@ -224,10 +254,12 @@ void	GameCore::bombManager(Actions &act)
 	}
 }
 
-bool	GameCore::thereIsBomb(int x, int y)
+bool GameCore::thereIsBomb(int x, int y)
 {
-	for (auto &it : _bombs) {
-		if (it.getPos().first == x && it.getPos().second == y) {
+	for (auto &it : _bombs)
+	{
+		if (it.getPos().first == x && it.getPos().second == y)
+		{
 			return (true);
 		}
 	}
@@ -289,36 +321,61 @@ bool 	GameCore::playerMovement(Actions act)
 	return (changed);
 }
 
-std::vector<std::unique_ptr<IEntity>>	&GameCore::calc(Actions act)
+bool GameCore::checkEnd(STATE &state)
+{
+	if (!_player1.isAlive() || !_player2.isAlive()) {
+		state = STATE::END;
+		initEndScreen();
+		std::cout << "CHECK END RETURN TRUE\n\n\n\n";
+		return true;
+	}
+	return false;
+}
+
+std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 {
 	bool changed;
 
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
+	// if (checkEnd(state) == true)
+	// 	return (_updateEntities);
 	changed = playerMovement(act);
-	if (changed) {
+	if (changed)
+	{
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 	}
 	bombManager(act);
+	checkEnd(state);
 	return (_updateEntities);
 }
 
-void	GameCore::removeAll()
+void GameCore::initEndScreen()
+{
+	if (!_player1.isAlive())
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000001, "Player 2 won", 600, 200, 400, 100)));
+	else if (!_player2.isAlive())
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000001, "Player 1 won", 600, 200, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000002, "Play again", 600, 400, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000003, "Quit", 600, 600, 400, 100)));
+}
+
+void GameCore::removeAll()
 {
 	for (auto &it : _vectorEntities)
 		it.clear();
 	_vectorEntities.clear();
-	_updateEntities.clear();
 	_mobileEntities.clear();
 	_bombs.clear();
 	_pauseitem.clear();
 	_entitiesToRemove.clear();
 	_entities.clear();
+	_endItem.clear();
 	_id = 0;
 }
 
-void 	GameCore::handlePause(Actions actions, STATE &state)
+void GameCore::handlePause(Actions actions, STATE &state)
 {
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
@@ -330,7 +387,18 @@ void 	GameCore::handlePause(Actions actions, STATE &state)
 		state = STATE::EXIT;
 }
 
-std::vector<std::unique_ptr<IEntity>> 	&GameCore::createPause()
+std::vector<std::unique_ptr<IEntity>> &GameCore::handleEnd(Actions actions, STATE &state)
+{
+	if (actions.buttonPressed == 2000002) {
+		state = STATE::GAME;
+	} if (actions.buttonPressed == 2000003) {
+		removeAll();
+		state = STATE::MENU;
+	}
+	return _endItem;
+}
+
+std::vector<std::unique_ptr<IEntity>> &GameCore::createPause()
 {
 	return _pauseitem;
 }

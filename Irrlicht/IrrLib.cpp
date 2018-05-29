@@ -45,6 +45,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::updateCube, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::BUTTON, std::bind(&IrrLib::updateButton, this,
+		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::updateItem, this,
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
@@ -196,6 +198,17 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 		_buttons.push_back(button);
 }
 
+
+void IrrLib::updateButton(std::unique_ptr<IEntity> &entity)
+{
+	for (auto &it : _buttons) {
+		if (static_cast<MenuItem*>(entity.get())->getId() == it->getID()) {
+			return;
+		}
+	}
+	addButton(entity);
+}
+
 void IrrLib::addStaticText(std::unique_ptr<IEntity> &entity)
 {
 	auto item = static_cast<MenuItem*>(entity.get());
@@ -240,6 +253,7 @@ void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
 	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item->getPos().first,
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second));
+	checkbox->setChecked(true);
 	checkbox->setID(item->getId());
 	_checkboxes.push_back(checkbox);
 }
@@ -413,7 +427,7 @@ void IrrLib::drawGame()
 	
 	int fps = _driver->getFPS();
 	if (_lastFps != fps) {
-            irr::core::stringw tmp(L"Movement Example - Irrlicht Engine [");
+            irr::core::stringw tmp(L"BomberMan [");
             tmp += _driver->getName();
             tmp += L"] fps: ";
             tmp += fps;
@@ -482,7 +496,7 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
-		node->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+		node->setMaterialTexture(0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
 		node->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		node->setID(static_cast<Item*>(entity.get())->getId());
@@ -547,6 +561,10 @@ void IrrLib::drop()
 		it->remove();
 		// it->drop();
 	}
+	for (auto &it : _items) {
+		it->remove();
+		// it->drop();
+	}
 	if (_ground)
 		_ground->remove();
 	// for (auto &it : _buttons) {
@@ -566,14 +584,15 @@ void IrrLib::drop()
 	// 	// it->drop();
 	// }
 	// _smgr = _device->getSceneManager();
-	_spheres.clear();
-	_players.clear();
 	// _buttons.clear();
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
 	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
+	_spheres.clear();
+	_players.clear();
 	_cubes.clear();
+	_items.clear();
 	
 	// _smgr->clear();
 	// _guienv->clear();
