@@ -8,7 +8,7 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-    : _id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
 {
 }
 
@@ -21,45 +21,31 @@ void GameCore::init(pairUC size)
 	std::cout << "Initializing new game" << std::endl;
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
-	if (!file.is_open())
-	{
+	if (!file.is_open()) {
 		std::cout << "Open has failed\n";
-	}
-	else
-	{
+	} else {
 		std::cout << "Open success\n";
-		while (getline(file, line))
-		{
+		while (getline(file, line)) {
 			x1 = 0;
 			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
-			for (unsigned int j = 0; line[j] != 0; ++j)
-			{
-				if (line[j] == '0')
-				{
+			for (unsigned int j = 0; line[j] != 0; ++j) {
+				if (line[j] == '0') {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
-				}
-				else if (line[j] == '1')
-				{
+				} else if (line[j] == '1') {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
-				}
-				else if (line[j] == '2')
-				{
+				} else if (line[j] == '2') {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				}
-				else if (line[j] == '3')
-				{
+				} else if (line[j] == '3') {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				}
-				else
-				{
+				} else {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}
 				x1 += 1;
@@ -189,6 +175,7 @@ void GameCore::bombManager(Actions &act)
 			Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player1.getId());
 			_player1.dropBomb();
 			tmp.setPower(_player1.getPower());
+			tmp.setSuper(_player1.getSuper());
 			_bombs.push_back(tmp);
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 		}
@@ -206,6 +193,7 @@ void GameCore::bombManager(Actions &act)
 			Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player2.getId());
 			_player2.dropBomb();
 			tmp.setPower(_player2.getPower());
+			tmp.setSuper(_player2.getSuper());
 			_bombs.push_back(tmp);
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 		}
