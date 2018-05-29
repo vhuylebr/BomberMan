@@ -39,6 +39,7 @@ struct  parameters
 	GameState state;                // State si la map doit être à nouveau ou doit être chargée depuis un fichier
 	std::wstring gameName;          // Le fichier dans lequel on devra sauvegarde ou get les infos de la map
 	int nbPlayers;
+	int nbBots;
 	std::pair<int,int> mapSize;
 	std::vector<eItem> bonuses;		// Vecteur de bonus actifs
 	std::string mapname;

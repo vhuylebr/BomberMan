@@ -240,6 +240,7 @@ void IrrLib::addCheckBox(std::unique_ptr<IEntity> &entity)
 	irr::gui::IGUICheckBox *checkbox = _guienv->addCheckBox(false, irr::core::rect<irr::s32>(item->getPos().first,
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second));
+	checkbox->setChecked(true);
 	checkbox->setID(item->getId());
 	_checkboxes.push_back(checkbox);
 }
