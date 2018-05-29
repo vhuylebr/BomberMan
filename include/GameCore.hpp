@@ -49,7 +49,7 @@ public:
 	GameCore();
 	~GameCore();
 	std::vector<std::unique_ptr<IEntity>>	&calc(Actions);
-	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
+	std::vector<std::vector<std::unique_ptr<EntityPos>>>	&getEntities();
 	void	init(pairUC);
 	void	init(parameters);
 	void	init(const std::string &);
@@ -70,8 +70,8 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;
 	unsigned int			_id;
-	Player 				_player1;
-	Player 				_player2;
+	Player				_player1;
+	Player				_player2;
 	std::vector<Bomb>		_bombs;
 	bool	thereIsBomb(int x, int y);
 	std::vector<std::vector<std::unique_ptr<EntityPos>>> _vectorEntities;

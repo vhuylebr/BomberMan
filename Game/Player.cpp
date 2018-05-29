@@ -8,7 +8,7 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id)
-	:_bombs(2), _pow(3)
+	:_speed(1.0f), _bombs(2), _pow(3)
 {
 	_x = x;
 	_y = y;
@@ -29,6 +29,11 @@ void	Player::dropBomb()
 void	Player::addBomb()
 {
 	_bombs += 1;
+}
+
+float	Player::getSpeed() const
+{
+	return (_speed);
 }
 
 int	Player::getBombCount() const
@@ -54,6 +59,32 @@ pairUC	Player::getPos() const
 int	Player::getPower() const
 {
 	return _pow;
+}
+
+void	Player::addSpeed()
+{
+	_speed += 0.1;
+}
+
+void	Player::addPower()
+{
+	_pow += 1;
+}
+
+void	Player::pickupItem(std::unique_ptr<IEntity> &item)
+{
+	eItem	tmp = static_cast<Item *>(item.get())->getItemType();
+
+	if (tmp == eItem::BOMB_UP) {
+		this->addBomb();
+		std::cout << "Picked up Bomb" << std::endl;
+	} else if (tmp == eItem::POWER_UP) {
+		this->addPower();
+		std::cout <<  "Picked up Power up" << std::endl;
+	} else if (tmp == eItem::SPEED) {
+		std::cout << "Picked up Speed bonus" << std::endl;
+		this->addSpeed();
+	}
 }
 
 Entity	Player::getType() const
