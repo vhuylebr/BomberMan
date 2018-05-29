@@ -50,6 +50,9 @@ private:
 
 	int _step;
 	int _nbPlayer;
+	int _nbBots;
+	int _mapH;
+	int _mapW;
 	bool _change_menu;
 	std::string _pseudo;
 	std::string _ip;

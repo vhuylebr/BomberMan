@@ -19,8 +19,6 @@ void    GameCore::init(pairUC size)
 	std::string line;
 
 	std::cout << "Initializing new game" << std::endl;
-	_size.x = size.first;
-	_size.y = size.second;
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
 	if (!file.is_open()) {
@@ -59,6 +57,8 @@ void    GameCore::init(pairUC size)
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+	_size.x = x1;
+	_size.y = y1;
 }
 
 void    GameCore::init(parameters params)
@@ -107,6 +107,8 @@ void    GameCore::init(parameters params)
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+	_size.x = x1;
+	_size.y = y1;
 }
 
 GameCore::~GameCore()

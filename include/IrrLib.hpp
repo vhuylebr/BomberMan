@@ -113,7 +113,10 @@ class IrrLib {
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
 		std::map<Entity, std::function<void(int)>> _factoryDelete;
 
-		irr::scene::ICameraSceneNode *_cameras[4];
+		irr::scene::ICameraSceneNode *_cameras[2];
+		int _screenSizeX;
+		int _screenSizeY;
+		bool _splitScreen;
 };
 
 #endif /* !IRRLIB_HPP_ */
