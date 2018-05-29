@@ -110,7 +110,7 @@ class IrrLib {
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
 		irr::scene::ISceneNode* _ground;
-		Music	_gamemusic;
+//		Music	_gamemusic;
 
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;
