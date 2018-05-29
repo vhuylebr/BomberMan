@@ -476,7 +476,7 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 		}
 	}
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
-	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(0,1,0));
+	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,1,0));
 	node->addAnimator(ani);
 	ani->drop();
 	if (node) {
