@@ -51,21 +51,19 @@ void 	Core::getParametersFromMenu()
 		_param.state = GameState::NEWGAME;
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
 		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));
-		_param.mapSize = std::make_pair(10, 10);
+		_param.nbBots = std::stoi(_lib.getLabelText(_menu.getItemByID(24)));
+		_param.mapSize.first = std::stoi(_lib.getLabelText(_menu.getItemByID(29))); // Height
+		_param.mapSize.second = std::stoi(_lib.getLabelText(_menu.getItemByID(33))); // Width
 		_param.mapname = "./media/map1.txt";
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
-		std::wcout << L"game name : " << _param.gameName << std::endl;
-		std::cout << "nb players : " << _param.nbPlayers << std::endl;
-		std::cout << "size : " << _param.bonuses.size() << std::endl;;
 	}
 	else if (_menu.getStep() == 3)
 	{
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
 		_param.mapname = "./media/map1.txt";
-		std::wcout << L"game name : " << _param.gameName << std::endl;
 	}
 }
 
