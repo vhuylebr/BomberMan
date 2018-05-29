@@ -23,7 +23,7 @@ Item::Item(float x, float y, unsigned int id)
 
 	_getModel[BOMB_UP] = "./media/Bomb.md2";
 	_getTexture[BOMB_UP] = "./media/bomb.png";
-	_getScale[BOMB_UP] = 0.002f;
+	_getScale[BOMB_UP] = 0.0015f;
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
 	std::uniform_int_distribution<int> distrib{0, 2};
 	_bonusType = static_cast<eItem>(distrib(re));
