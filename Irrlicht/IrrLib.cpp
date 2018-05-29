@@ -413,7 +413,7 @@ void IrrLib::drawGame()
 	
 	int fps = _driver->getFPS();
 	if (_lastFps != fps) {
-            irr::core::stringw tmp(L"Movement Example - Irrlicht Engine [");
+            irr::core::stringw tmp(L"BomberMan [");
             tmp += _driver->getName();
             tmp += L"] fps: ";
             tmp += fps;
