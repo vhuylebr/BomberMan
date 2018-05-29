@@ -20,15 +20,11 @@ Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
 	_dirs.push_back(std::make_pair(0, 1));
 	_dirs.push_back(std::make_pair(-1, 0));
 	_dirs.push_back(std::make_pair(0, -1));
+	_type = Entity::SPHERE;
 }
 
 Bomb::~Bomb()
 {
-}
-
-Entity	Bomb::getType() const
-{
-    return (Entity::SPHERE);
 }
 
 void	Bomb::setPower(int pow)

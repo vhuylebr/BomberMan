@@ -22,7 +22,6 @@ public:
     // void hit();
     // struct s_bomb extractInfo();
     // void insertInfo();
-    Entity getType() const;
     bool   isAlive() const;
     bool   isOutFire() const;
     void   tick(unsigned int &, std::vector<std::vector<std::unique_ptr<EntityPos>>> &,

@@ -59,11 +59,11 @@ public:
 	void	releaseUpdateEntities();
 	void	removeAll();
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
-	std::vector<Player>			_iaList;
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
 	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
+	void	playerDropBomb(Player &player);
 	
 	bool checkEnd(STATE &);
 	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
@@ -71,6 +71,7 @@ public:
 private:
 	void	bombManager(Actions &act);
 
+	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;
 	unsigned int			_id;

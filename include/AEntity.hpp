@@ -19,7 +19,7 @@ public:
 	float getY() const { return _y; }
 	bool isSuperpoz() const { return _superposable; }
 	bool isDestruct() const { return _destructible; }
-	Entity getType() const { return _type; }
+	Entity getType() const final { return _type; }
 	int getId() const { return _id; }
 	void setPos(float x, float y) { _x = x; _y = y; }
 	pairUC getPos() const { return {_x, _y} ;}
