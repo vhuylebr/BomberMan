@@ -371,18 +371,31 @@ void	GameCore::saveMap(std::ofstream &file)
 	}
 }
 
+std::map<eItem, std::string> myItem =
+{
+	{BOMB_UP, "BOMB_UP"},
+	{POWER_UP, "POWER_UP"},
+	{SPEED, "SPEED"},
+	{SUPER_BOMB, "SUPER_BOMB"},
+	{WALL_PASS, "WALL_PASS"},
+	{KICK, "KICK"},
+	{NONE, "NONE"}
+};
+
 void 	GameCore::saveMobileEntities(std::ofstream &file)
 {
+	file << "Player1 " << std::round(_player1.getX()) << " " << std::round(_player1.getY()) << "\n";
+	if (true)
+		file << "Player2 " << std::round(_player2.getX()) << " " << std::round(_player2.getY()) << "\n";
 	for (auto &i : _bombs)
 		file << "Bomb " << i.getX() << " " << i.getY() << "\n";
 	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
 		for (unsigned int y = 0; y != _vectorEntities[idx].size(); y++) {
 			if (_vectorEntities[idx][y]->isEmpty() == false &&
 				_vectorEntities[idx][y]->getType() == Entity::ITEM) {
-				std::cout << "item !!" << std::endl;
 				auto pos = _vectorEntities[idx][y]->getEntity()->getPos();
-				std::cout << pos.first << std::endl;
-				std::cout << pos.second << std::endl;
+				file << "Item " << pos.first << " " << pos.second << " " <<
+				myItem[static_cast<Item *>(_vectorEntities[idx][y]->getEntity().get())->getItemType()] << "\n";
 			}
 		}
 	}
@@ -394,7 +407,6 @@ void GameCore::handlePause(Actions actions, STATE &state)
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
 	if (actions.buttonPressed == PAUSE_ID + 1) {
-//		Vector entities, mobile entities, players, bombs
 		std::ofstream file("save.txt");
 		saveMap(file);
 		file << "separateur\n";
