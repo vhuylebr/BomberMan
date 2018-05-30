@@ -596,10 +596,10 @@ void IrrLib::drop()
 	}
 	if (_ground)
 		_ground->remove();
-	// for (auto &it : _buttons) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
+	for (auto &it : _buttons) {
+		it->remove();
+		// it->drop();
+	}
 	for (auto &it : _labels) {
 		it->remove();
 		// it->drop();
@@ -613,11 +613,11 @@ void IrrLib::drop()
 	// 	// it->drop();
 	// }
 	// _smgr = _device->getSceneManager();
-	// _buttons.clear();
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
 	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
+	_buttons.clear();
 	_spheres.clear();
 	_players.clear();
 	_cubes.clear();
