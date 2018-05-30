@@ -19,10 +19,10 @@ public:
 	float getY() const { return _y; }
 	bool isSuperpoz() const { return _superposable; }
 	bool isDestruct() const { return _destructible; }
-	Entity getType() const { return _type; }
-	int getId() const { return _id; }
+	Entity getType() const override { return _type; }
+	int getId() const override { return _id; }
 	void setPos(float x, float y) { _x = x; _y = y; }
-	pairUC getPos() const { return {_x, _y} ;}
+	pairUC getPos() const override { return {_x, _y} ;}
 
 protected:
 	int _id;

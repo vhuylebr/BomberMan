@@ -28,6 +28,7 @@
 # include "Fire.hpp"
 # include "EntityPos.hpp"
 # include "Metrics.hpp"
+# include "MapGenerator.hpp"
 
 enum class GameState {
 	NEWGAME,
@@ -73,6 +74,7 @@ public:
 	int getEndId() const;
 
 private:
+	void createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1);
 	void	bombManager(Actions &act);
 
 	std::vector<std::unique_ptr<IEntity>>	_entities;

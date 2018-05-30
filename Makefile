@@ -27,12 +27,14 @@ SRCS	=	$(SRC)Menu.cpp			\
 		$(GAME)Fire.cpp			\
 		$(GAME)EntityPos.cpp		\
 		$(GAME)Item.cpp 		\
-		$(SRC)Music.cpp
+		$(SRC)Music.cpp			\
+		$(SRC)MapGenerator.cpp
+
 		#$(GAME)eItem.cpp
 
 CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio
 
-CXX	=	g++
+CXX	=	g++ -g3
 
 RM	=	rm -f
 
