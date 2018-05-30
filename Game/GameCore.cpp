@@ -179,7 +179,8 @@ void GameCore::bombManager(Actions &act)
 			_bombs.push_back(tmp);
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
 		}
-	} else if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) {
+	} 
+	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) {
 		auto pos = _player2.getPos();
 		for (auto &a : _bombs) {
 			if (a.getPos().first == std::ceil(pos.first - 0.5) &&
