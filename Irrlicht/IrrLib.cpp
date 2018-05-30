@@ -345,8 +345,17 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 
 void IrrLib::updateLabel(std::unique_ptr<IEntity> &entity)
 {
+	std::wstring wText;
 	for (auto &it : _labels) {
 		if (static_cast<MenuItem*>(entity.get())->getId() == it->getID()) {
+			for (unsigned int i = 0; i < static_cast<MenuItem*>(entity.get())->getText().size(); ++i)
+					wText += wchar_t(static_cast<MenuItem*>(entity.get())->getText()[i]);
+			const wchar_t* newnewlabel = wText.c_str();
+			for (auto &it : _labels) {
+					if (static_cast<MenuItem*>(entity.get())->getId() == it->getID()) {
+							(*it).setText(newnewlabel);
+					}
+			}
 			return;
 		}
 	}
