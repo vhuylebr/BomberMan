@@ -70,7 +70,7 @@ void MapGenerator::putWall(const int l, const int h)
 	if (checkCase(l, h) && nb < 2 && _map[h][l] != ' ')
 		_map[h][l] = '0';
 	if (h == 1 || h == _y - 2 || l == 1 || l == _x - 2) {
-		if (nb != 4 && nb >= 2)
+		if ((nb = (std::rand() % 8)) == 4)
 			_map[h][l] = ' ';
 	}
 }
@@ -79,6 +79,16 @@ void MapGenerator::fillMap()
 {
 	for (int h = 0; h < _y; h++) {
 		for (int l = 0; l < _x; l++) {
+			if (_map[h][l] == 'P') {
+				if (h == 0)
+					_map[h + 1][l] = ' ';
+				if (l == 0)
+					_map[h][l + 1] = ' ';
+				if (h == _y - 1)
+					_map[h - 1][l] = ' ';
+				if (l == _x -1)
+					_map[h][l - 1] = ' ';
+			}
 			putWall(l, h);
 		}
 	}

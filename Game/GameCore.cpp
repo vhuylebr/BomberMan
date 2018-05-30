@@ -102,14 +102,13 @@ unsigned int &x, unsigned int &y, const parameters &params)
 			} else if (c == '2') {
 				if (_nbPlayer == 0) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
-					_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
+					_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
 					_vectorEntities[y].push_back(std::make_unique<EntityPos>());					
 					_nbPlayer++;
 				} else {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
-					_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
+					_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
 					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
-
 				}
 				_id++;
 			} else if (c == '4') {
