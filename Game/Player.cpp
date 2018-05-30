@@ -14,6 +14,7 @@ Player::Player(float x, float y, unsigned int id)
 	_y = y;
 	_id = id;
 	_alive = true;
+	_type = Entity::PLAYER;
 }
 
 void 	Player::poke()
@@ -104,12 +105,11 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 	}
 }
 
-Entity	Player::getType() const
-{
-	return Entity::PLAYER;
-}
-
 void Player::setRotation(float rotation)
 {
 	_rotation = rotation;
+}
+
+void Player::ia()
+{
 }

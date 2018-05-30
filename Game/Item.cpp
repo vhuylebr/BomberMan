@@ -13,9 +13,9 @@
 Item::Item(float x, float y, unsigned int id)
 	: _x(x), _y(y), _id(id), _alive(false)
 {
-	_getModel[SPEED] = "./media/Shoes.obj";
-	_getTexture[SPEED] = "./media/Shoes.png";
-	_getScale[SPEED] = 0.1f;
+	_getModel[SPEED] = "./media/speed.obj";
+	_getTexture[SPEED] = "./media/speed.png";
+	_getScale[SPEED] = 0.5f;
 	_getModel[POWER_UP] = "./media/Fireball.obj";
 	_getTexture[POWER_UP] = "./media/Fireball.png";
 	_getScale[POWER_UP] = 1.0f;

@@ -18,11 +18,10 @@ public:
 	Player(float, float, unsigned int);
 	~Player() {};
 	void	poke();
-	Entity	getType() const final;
 	bool	isAlive() const;
 	void	setAlive(bool);
 	pairUC	getPos() const;
-	int	getPower() const;
+	int		getPower() const;
 	float	getRotation() const {return _rotation;};
 	void	setRotation(float);
 	void	pickupItem(std::unique_ptr<IEntity> &);
@@ -36,6 +35,7 @@ public:
 	void	addSpeed();
 	void	dropBomb();
 	int	getBombCount() const;
+	void	ia();
 
 private:
 	float 	_rotation;

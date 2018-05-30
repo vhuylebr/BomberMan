@@ -170,7 +170,7 @@ void MapGenerator::generatePlayers(const int nbPlayers, const int nbIA)
 	if (nbPlayers > 1)
 		putPlayers('3', _map, coords);
 	for (int i = 0; i < nbIA && static_cast<unsigned int>(i) < coords.size(); i++) {
-//		putPlayers('4', _map, coords); // pour les IA
+		putPlayers('4', _map, coords);
 	}
 	clearExcessPlayer(_map);
 	putBorders();

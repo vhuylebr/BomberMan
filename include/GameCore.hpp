@@ -65,18 +65,19 @@ public:
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
 	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
+	void	playerDropBomb(Player &player);
 	void	saveMap(std::ofstream &file);
 	void 	saveMobileEntities(std::ofstream &file);
-
 	bool checkEnd(STATE &);
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
 	int getEndId() const;
 
 private:
-	void createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1);
+	void createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
 
+	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
 	coords				_size;
 	unsigned int			_id;
