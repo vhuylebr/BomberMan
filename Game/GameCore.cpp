@@ -8,7 +8,7 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0)
 {
 }
 
@@ -56,6 +56,7 @@ void GameCore::init(pairUC size)
 		}
 		y1 += 1;
 	}
+	_nbPlayer = 0;
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
@@ -131,6 +132,7 @@ void    GameCore::init(parameters params)
 	unsigned int x = 0;
 	unsigned int y = 0;
 	MapGenerator generator(10, 10);
+	_nbPlayer = 0;
 
 	std::cout << "Initializing new game" << std::endl;
 
