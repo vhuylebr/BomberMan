@@ -67,7 +67,7 @@ void MapGenerator::putWall(const int l, const int h)
 	char nb = std::rand() % 5;
 
 
-	if (checkCase(l, h) && nb < 2)
+	if (checkCase(l, h) && nb < 2 && _map[h][l] != ' ')
 		_map[h][l] = '0';
 	if (h == 1 || h == _y - 2 || l == 1 || l == _x - 2) {
 		if (nb != 4 && nb >= 2)
@@ -114,14 +114,11 @@ static void putOnMap(int x, int y, char c, std::vector<std::vector<char>> &map)
 static void putPlayers(char player, std::vector<std::vector<char>> &map, std::vector<t_coord> &coords)
 {
 	int nb = std::rand() % coords.size();
-	t_coord tmp;// = coords[nb];
+	t_coord tmp;
 
-	if (coords.size() == 0) {
-		std::cout << "Size of vector is 0\n";
+	if (coords.size() == 0)
 		return;
-	}
 	tmp = coords[nb];
-	std::cout << "Put on x:" << tmp.x << ", y: " << tmp.y << std::endl;
 	putOnMap(tmp.x, tmp.y, player, map);
 	coords.erase(coords.begin() + nb);
 }
@@ -168,7 +165,7 @@ void MapGenerator::generatePlayers(const int nbPlayers, const int nbIA)
 	}
 	putPlayers('2', _map, coords);
 	if (nbPlayers > 1)
-		putPlayers('3', _map, coords);
+		putPlayers('2', _map, coords);
 	for (int i = 0; i < nbIA && static_cast<unsigned int>(i) < coords.size(); i++) {
 		putPlayers('4', _map, coords);
 	}

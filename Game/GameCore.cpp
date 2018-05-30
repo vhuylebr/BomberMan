@@ -64,9 +64,30 @@ void GameCore::init(pairUC size)
 	_size.y = y1;
 }
 
+void GameCore::getFirstPlayer(std::vector<std::vector<char>> &map,
+unsigned int &x, unsigned int &y)
+{
+	for (auto &line : map) {
+		x = 0;
+		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
+		for (auto &c : line) {
+			if (c == '2') {
+				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
+				_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
+				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+				_id++;
+				return;
+			}
+		}
+		y++;
+	}
+}
+
 void GameCore::createEntities(std::vector<std::vector<char>> &map,
 unsigned int &x, unsigned int &y, const parameters &params)
 {
+	// getFirstPlayer(map, x, y);
+	y = 0;
 	for (auto &line : map) {
 		x = 0;
 		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
@@ -78,14 +99,17 @@ unsigned int &x, unsigned int &y, const parameters &params)
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x), static_cast<float>(y), _id));
 				_id++;
 			} else if (c == '2') {
-				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
-				_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
-				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
-				_id++;
-			} else if (c == '3') {
-				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
-				_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
-				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+				if (_nbPlayer == 0) {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
+					_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
+					_vectorEntities[y].push_back(std::make_unique<EntityPos>());					
+					_nbPlayer++;
+				} else {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
+					_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
+					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+
+				}
 				_id++;
 			} else if (c == '4') {
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>());

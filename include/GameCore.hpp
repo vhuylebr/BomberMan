@@ -74,7 +74,8 @@ public:
 	int getEndId() const;
 
 private:
-	void createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
+	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
+	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
 
 	std::vector<Player>			_iaList;
@@ -92,6 +93,7 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
 	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
+	int _nbPlayer;
 };
 
 #endif /* !GAMECORE_HPP_ */
