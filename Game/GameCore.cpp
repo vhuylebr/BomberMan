@@ -253,7 +253,7 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 		_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getId(),
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType()));
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->removeFirstEntity();
-		player.setPos(from.first + 0.07 * dir.first * player.getSpeed(), from.second + 0.07 * dir.second * player.getSpeed());
+		player.setPos(from.first + 0.07 * dir.first, from.second + 0.07 * dir.second);
 	}
 	player.setRotation(rotation);
 }
