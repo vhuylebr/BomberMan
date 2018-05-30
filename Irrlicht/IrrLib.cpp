@@ -600,10 +600,10 @@ void IrrLib::drop()
 	// 	it->remove();
 	// 	// it->drop();
 	// }
-	// for (auto &it : _labels) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
+	for (auto &it : _labels) {
+		it->remove();
+		// it->drop();
+	}
 	// for (auto &it : _checkboxes) {
 	// 	it->remove();
 	// 	// it->drop();
@@ -622,7 +622,7 @@ void IrrLib::drop()
 	_players.clear();
 	_cubes.clear();
 	_items.clear();
-	
+	_labels.clear();
 	// _smgr->clear();
 	// _guienv->clear();
 }

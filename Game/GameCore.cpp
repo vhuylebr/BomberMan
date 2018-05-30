@@ -350,7 +350,6 @@ void GameCore::removeAll()
 	_pauseitem.clear();
 	_entitiesToRemove.clear();
 	_entities.clear();
-	_endItem.clear();
 	_id = 0;
 }
 
