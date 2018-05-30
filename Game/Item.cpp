@@ -28,7 +28,6 @@ Item::Item(float x, float y, unsigned int id)
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
 	std::uniform_int_distribution<int> distrib{0, 4};
 	_bonusType = static_cast<eItem>(distrib(re));
-	std::cout << "Created Item :" << _bonusType << std::endl;
 	_id = id;
 }
 
