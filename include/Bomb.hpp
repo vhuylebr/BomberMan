@@ -29,14 +29,17 @@ public:
     bool    isOver() const;
     std::size_t getOwner();
     bool    isExplode() const;
-    std::vector<Fire>    &getFlames();
+    std::vector<Fire>   &getFlames();
     void	setPower(int pow);
+    void	detonate();
+    void    setSuper(bool);
     // int getStartingTime() const;
 
 private:
     int _counter;
     std::size_t _owner;
     int         _pow;
+    bool        _superB;
     std::vector<Fire> _flames;
     std::vector<pairUC> _dirs;
     int           _flametime;

@@ -20,7 +20,6 @@ public:
 	~Core() = default;
 
 	int loop();
-//	void pauseManager(STATE &last);
 	void getParametersFromMenu();
 protected:
 	int startMusic();
@@ -34,7 +33,7 @@ private:
 	Menu    _menu;
 	IrrLib  _lib;
 	char    _host;
-//	Music 	_coremusic;
+	Music 	_coremusic;
 	// Lobby   _lobby;
 	Actions _act;
 };

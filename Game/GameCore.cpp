@@ -8,7 +8,7 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-    : _id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1)
 {
 }
 
@@ -21,45 +21,31 @@ void GameCore::init(pairUC size)
 	std::cout << "Initializing new game" << std::endl;
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
-	if (!file.is_open())
-	{
+	if (!file.is_open()) {
 		std::cout << "Open has failed\n";
-	}
-	else
-	{
+	} else {
 		std::cout << "Open success\n";
-		while (getline(file, line))
-		{
+		while (getline(file, line)) {
 			x1 = 0;
 			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
-			for (unsigned int j = 0; line[j] != 0; ++j)
-			{
-				if (line[j] == '0')
-				{
+			for (unsigned int j = 0; line[j] != 0; ++j) {
+				if (line[j] == '0') {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
-				}
-				else if (line[j] == '1')
-				{
+				} else if (line[j] == '1') {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
 					_id++;
-				}
-				else if (line[j] == '2')
-				{
+				} else if (line[j] == '2') {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				}
-				else if (line[j] == '3')
-				{
+				} else if (line[j] == '3') {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				}
-				else
-				{
+				} else {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}
 				x1 += 1;
@@ -186,6 +172,7 @@ void GameCore::playerDropBomb(Player &player)
 		Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id, player.getId());
 		player.dropBomb();
 		tmp.setPower(player.getPower());
+		tmp.setSuper(player.getSuper());
 		_bombs.push_back(tmp);
 		_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id, player.getId()));
 		_id++;
@@ -194,14 +181,11 @@ void GameCore::playerDropBomb(Player &player)
 
 void GameCore::bombManager(Actions &act)
 {
-	for (auto &a : _bombs)
-	{
-		if (a.isOutFire())
-		{
+	for (auto &a : _bombs) {
+		if (a.isOutFire()) {
 			for (auto &b : a.getFlames())
-			{
-				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
-			}
+				_entitiesToRemove.push_back(std::make_pair<int, Entity>(b.getId(),
+							b.getType()));
 		}
 	} // Plus tard les deux boucles seront assemblables
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
@@ -219,16 +203,19 @@ void GameCore::bombManager(Actions &act)
 			for (auto &b : vec) {
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
 				if (std::round(_player1.getPos().first) == b.getPos().first &&
-				    std::round(_player1.getPos().second) == b.getPos().second)
-				{
+				std::round(_player1.getPos().second) == b.getPos().second) {
 					_player1.setAlive(false);
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 				}
 				if (std::round(_player2.getPos().first) == b.getPos().first &&
-				    std::round(_player2.getPos().second) == b.getPos().second)
-				{
+				std::round(_player2.getPos().second) == b.getPos().second) {
 					_player2.setAlive(false);
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+				}
+				for (auto &c : _bombs) {
+					if (c.isAlive() && c.getPos().first == b.getPos().first
+					&& c.getPos().second == b.getPos().second)
+						c.detonate();
 				}
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
@@ -263,7 +250,7 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 		_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getId(),
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType()));
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->removeFirstEntity();
-		player.setPos(from.first + 0.07 * dir.first * player.getSpeed(), from.second + 0.07 * dir.second * player.getSpeed());
+		player.setPos(from.first + 0.07 * dir.first, from.second + 0.07 * dir.second);
 	}
 	player.setRotation(rotation);
 }
@@ -312,7 +299,6 @@ bool GameCore::checkEnd(STATE &state)
 	if (!_player1.isAlive() || !_player2.isAlive()) {
 		state = STATE::END;
 		initEndScreen();
-		std::cout << "CHECK END RETURN TRUE\n\n\n\n";
 		return true;
 	}
 	return false;
@@ -324,33 +310,36 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
-	// if (checkEnd(state) == true)
-	// 	return (_updateEntities);
+	if (checkEnd(state) == true)
+		return _updateEntities;
 	changed = playerMovement(act);
 	if (changed)
 	{
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 	}
-	for (auto &it : _iaList) {
+	// for (auto &it : _iaList) {
 		// it.ia();
 		// playerDropBomb(it);
 		// movePlayer(it.getPos(), {0, 1}, it, 90.0f);
-		_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
-	}
+		// _updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+	// }
 	bombManager(act);
-	checkEnd(state);
 	return (_updateEntities);
 }
 
 void GameCore::initEndScreen()
 {
-	if (!_player1.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000001, "Player 2 won", 600, 200, 400, 100)));
+	if (!_player1.isAlive() && !_player2.isAlive())
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", 600, 200, 400, 100)));
+	else if (!_player1.isAlive())
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P2_ID, "Player 2 won", 600, 200, 400, 100)));
 	else if (!_player2.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000001, "Player 1 won", 600, 200, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000002, "Play again", 600, 400, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2000003, "Quit", 600, 600, 400, 100)));
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID, "Player 1 won", 600, 200, 400, 100)));
+	else
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", 600, 200, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PLAY_AGAIN_ID, "Play again", 600, 400, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, QUIT_END_ID, "Quit", 600, 600, 400, 100)));
 }
 
 void GameCore::removeAll()
@@ -360,53 +349,111 @@ void GameCore::removeAll()
 	_vectorEntities.clear();
 	_mobileEntities.clear();
 	_bombs.clear();
+	_endItem.clear();
 	_pauseitem.clear();
 	_entitiesToRemove.clear();
 	_entities.clear();
-	_endItem.clear();
+	_updateEntities.clear();
 	_id = 0;
+}
+
+void	GameCore::saveMap(std::ofstream &file)
+{
+	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
+		for (auto &i2 : _vectorEntities[idx]) {
+			if (i2->isEmpty() == false && i2->getType() == Entity::CUBE) {
+				if (i2->getSubType() == ItemStatic::WALL)
+					file << "0";
+				else if (i2->getSubType() == ItemStatic::CRATE)
+					file << "1";
+			}
+			else
+				file << " ";
+		}
+		file << "\n";
+	}
+}
+
+std::map<eItem, std::string> myItem =
+{
+	{BOMB_UP, "BOMB_UP"},
+	{POWER_UP, "POWER_UP"},
+	{SPEED, "SPEED"},
+	{SUPER_BOMB, "SUPER_BOMB"},
+	{WALL_PASS, "WALL_PASS"},
+	{KICK, "KICK"},
+	{NONE, "NONE"}
+};
+
+void 	GameCore::saveMobileEntities(std::ofstream &file)
+{
+	file << "Player1 " << std::round(_player1.getX()) << " " << std::round(_player1.getY()) << "\n";
+	if (true)
+		file << "Player2 " << std::round(_player2.getX()) << " " << std::round(_player2.getY()) << "\n";
+	for (auto &i : _bombs)
+		file << "Bomb " << i.getX() << " " << i.getY() << "\n";
+	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
+		for (unsigned int y = 0; y != _vectorEntities[idx].size(); y++) {
+			if (_vectorEntities[idx][y]->isEmpty() == false &&
+				_vectorEntities[idx][y]->getType() == Entity::ITEM) {
+				auto pos = _vectorEntities[idx][y]->getEntity()->getPos();
+				file << "Item " << pos.first << " " << pos.second << " " <<
+				myItem[static_cast<Item *>(_vectorEntities[idx][y]->getEntity().get())->getItemType()] << "\n";
+			}
+		}
+	}
 }
 
 void GameCore::handlePause(Actions actions, STATE &state)
 {
+
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
 	if (actions.buttonPressed == PAUSE_ID + 1) {
-		// Vector entities, mobile entities, players, bombs
-		// for (int idx = 0; idx != _vectorEntities.size(); idx++) {
-		// 	for (auto &i2 : _vectorEntities[idx]) {
-		// 		if (i2->isEmpty() == false && i2->getType() == Entity::CUBE) {
-		// 			if (i2->getSubType() == ItemStatic::CRATE)
-		// 				std::cout << "this is a crate" << std::endl;
-		// 			if (i2->getSubType() == ItemStatic::WALL)
-		// 				std::cout << "this is a wall" << std::endl;
-		// 			if (i2->getSubType() == ItemStatic::ITEM)
-		// 				std::cout << "this is a item" << std::endl;
-		// 		}
-		// 	}
-		// 	std::cout << "line" << std::endl;
-		// }
+		std::ofstream file("save.txt");
+		saveMap(file);
+		file << "separateur\n";
+		saveMobileEntities(file);
+		file.close();
 	}
 	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
+		_updateEntities.clear();
 		state = STATE::MENU;
 	}
 	if (actions.buttonPressed == PAUSE_ID + 3)
 		state = STATE::EXIT;
 }
 
-std::vector<std::unique_ptr<IEntity>> &GameCore::handleEnd(Actions actions, STATE &state)
+int GameCore::getEndId() const
 {
-	if (actions.buttonPressed == 2000002) {
-		state = STATE::GAME;
-	} if (actions.buttonPressed == 2000003) {
+	if (!_player1.isAlive() && !_player2.isAlive())
+		return LOSE_ID;
+	else if (!_player1.isAlive())
+		return WIN_P2_ID;
+	else if (!_player2.isAlive())
+		return WIN_P1_ID;
+	else
+		return LOSE_ID;
+}
+
+void GameCore::handleEnd(Actions actions, STATE &state)
+{
+	if (actions.buttonPressed == PLAY_AGAIN_ID) {
 		removeAll();
-		state = STATE::MENU;
+		state = STATE::GAME;
+	} if (actions.buttonPressed == QUIT_END_ID) {
+		removeAll();
+		state = STATE::EXIT;
 	}
-	return _endItem;
 }
 
 std::vector<std::unique_ptr<IEntity>> &GameCore::createPause()
 {
 	return _pauseitem;
+}
+
+std::vector<std::unique_ptr<IEntity>> &GameCore::createEndScreen()
+{
+	return _endItem;
 }

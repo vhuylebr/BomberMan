@@ -28,26 +28,26 @@ public:
 	Item(float, float, unsigned int);
 	~Item();
 
-	eItem	getItemType() const;
-	int	getId() const { return _id; }
-	void	setPos(float x, float y) { _x = x; _y = y; }
-	pairUC	getPos() const { return {_x, _y};}
-	bool	isAlive() const { return (_alive);};
-	Entity	getType() const {return Entity::ITEM;};
-	std::string		getModel();
-	std::string		getTexture();
-	float	getScale();
+	eItem		getItemType() const;
+	int		getId() const { return _id; }
+	void		setPos(float x, float y) { _x = x; _y = y; }
+	pairUC		getPos() const { return {_x, _y};}
+	bool		isAlive() const { return (_alive);};
+	Entity		getType() const {return Entity::ITEM; };
+	std::string	getModel();
+	std::string	getTexture();
+	float		getScale();
 
 private:
 
-	eItem	_bonusType;
-	float	_x;
-	float	_y;
-	size_t	_id;
-	bool	_alive;
-	std::map<eItem, std::string> _getModel;
-	std::map<eItem, std::string> _getTexture;
-	std::map<eItem, float> _getScale;
+	eItem		_bonusType;
+	float		_x;
+	float		_y;
+	size_t		_id;
+	bool		_alive;
+	std::map<eItem, std::string>	_getModel;
+	std::map<eItem, std::string>	_getTexture;
+	std::map<eItem, float>		_getScale;
 };
 
 #endif /* !ITEM_HPP_ */

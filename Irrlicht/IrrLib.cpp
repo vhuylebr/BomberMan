@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _lastFps(0)
+	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, false, false, false, &_eventReceiver);
@@ -49,18 +49,22 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::updateItem, this,
 		std::placeholders::_1)));
+	_factoryUpdate.insert(std::make_pair(Entity::LABEL, std::bind(&IrrLib::updateLabel, this,
+		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::CUBE, std::bind(&IrrLib::removeCube, this,
 		std::placeholders::_1)));
 	_factoryDelete.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::removeItem, this,
 		std::placeholders::_1)));
+	_factoryDelete.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::removeSphere, this,
+		std::placeholders::_1)));
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
-// 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
-// 	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplose.wav");
-// //	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplosion.wav");
-// 	_gamemusic.load(SOUND::POWERUP, "./media/Sound/powerup.wav");
-// 	_gamemusic.load(SOUND::LOSE, "./media/Sound/lose.wav");
-// 	_gamemusic.load(SOUND::WIN, "./media/Sound/lose.wav");
+	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
+	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplose.wav");
+//	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplosion.wav");
+	_gamemusic.load(SOUND::POWERUP, "./media/Sound/powerup.wav");
+	_gamemusic.load(SOUND::LOSE, "./media/Sound/lose.wav");
+	_gamemusic.load(SOUND::WIN, "./media/Sound/lose.wav");
 }
 
 IrrLib::~IrrLib()
@@ -79,6 +83,15 @@ void IrrLib::createPlane(pairUC &size)
 
 void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 {
+	for (auto &it : _spheres) {
+		if (it->getID() == -1) {
+			it->setID(entity->getId());
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
+			it->setVisible(true);
+			it->render();
+			return;
+		}
+	}
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
@@ -87,7 +100,7 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
 	ball->setID(static_cast<Bomb*>(entity.get())->getId());
 	_spheres.push_back(ball);
-//	_gamemusic.play(SOUND::TICTAC);
+	_gamemusic.play(SOUND::TICTAC);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
@@ -96,11 +109,28 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
-//			_gamemusic.play(SOUND::BOOM);
+			if (static_cast<Bomb*>(entity.get())->isAlive() == false)
+				it->setID(-1);
+			_gamemusic.play(SOUND::BOOM);
 			return ;
 		}
 	}
 	addSphere(entity);
+}
+
+void IrrLib::removeSphere(int id)
+{
+	int i = 0;
+
+	for (auto &it : _spheres) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
+	}
 }
 
 void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
@@ -193,9 +223,7 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 				wText.c_str());
 	button->setPressed(item->isSelected());
 	button->setDrawBorder(true);
-	if (item->getId() == PAUSE_ID || item->getId() == PAUSE_ID + 1
-	|| item->getId() == PAUSE_ID + 2 || item->getId() == PAUSE_ID + 3)
-		_buttons.push_back(button);
+	_buttons.push_back(button);
 }
 
 
@@ -315,18 +343,19 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	}
 }
 
-void IrrLib::updateLabel(std::unique_ptr<IEntity> &item)
+void IrrLib::updateLabel(std::unique_ptr<IEntity> &entity)
 {
 	std::wstring wText;
-
-	for (unsigned int i = 0; i < static_cast<MenuItem*>(item.get())->getText().size(); ++i)
-		wText += wchar_t(static_cast<MenuItem*>(item.get())->getText()[i]);
-	const wchar_t* newnewlabel = wText.c_str();
 	for (auto &it : _labels) {
-		if (static_cast<MenuItem*>(item.get())->getId() == (*it).getID()) {
-			(*it).setText(newnewlabel);
+		if (static_cast<MenuItem*>(entity.get())->getId() == it->getID()) {
+			for (unsigned int i = 0; i < static_cast<MenuItem*>(entity.get())->getText().size(); ++i)
+					wText += wchar_t(static_cast<MenuItem*>(entity.get())->getText()[i]);
+				const wchar_t* newnewlabel = wText.c_str();
+				it->setText(newnewlabel);
+			return;
 		}
 	}
+	addStaticText(entity);
 }
 
 std::wstring IrrLib::getInputText(std::unique_ptr<IEntity> &item)
@@ -420,8 +449,13 @@ void IrrLib::drawGame()
 		_smgr->drawAll();
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
-	if (!_splitScreen)
+	if (!_splitScreen) {
+		irr::core::vector3df camPos = _players[1]->getPosition();
+		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
+		_camera->setTarget(camPos);
+		_smgr->setActiveCamera(_camera);
 		_smgr->drawAll();
+	}
 	_guienv->drawAll();
 	_driver->endScene();
 	
@@ -525,7 +559,6 @@ void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &ga
 {
 	drop();
 	createPlane(size);
-	_splitScreen = false;
 	for (auto &it : gameEntities) {
 		for (auto &it2 : it) {
 			if (!it2->isEmpty())
@@ -568,14 +601,14 @@ void IrrLib::drop()
 	}
 	if (_ground)
 		_ground->remove();
-	// for (auto &it : _buttons) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
-	// for (auto &it : _labels) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
+	for (auto &it : _buttons) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _labels) {
+		it->remove();
+		// it->drop();
+	}
 	// for (auto &it : _checkboxes) {
 	// 	it->remove();
 	// 	// it->drop();
@@ -585,16 +618,16 @@ void IrrLib::drop()
 	// 	// it->drop();
 	// }
 	// _smgr = _device->getSceneManager();
-	// _buttons.clear();
 	// _labels.clear();
 	// _checkboxes.clear();
 	// _inputs.clear();
 	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
+	_buttons.clear();
 	_spheres.clear();
 	_players.clear();
 	_cubes.clear();
 	_items.clear();
-	
+	_labels.clear();
 	// _smgr->clear();
 	// _guienv->clear();
 }
@@ -608,17 +641,19 @@ void IrrLib::dropAll()
 	// _device->drop();
 }
 
-void IrrLib::setVisible(bool state)
+void IrrLib::setVisible(bool state, int id)
 {
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
-		if ((*it)->getID() == PAUSE_ID)
+		if ((*it)->getID() == id)
 			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 1)
-			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 2)
-			(*it)->setVisible(state);
-		else if ((*it)->getID() == PAUSE_ID + 3)
-			(*it)->setVisible(state);
+		// if ((*it)->getID() == PAUSE_ID)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 1)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 2)
+		// 	(*it)->setVisible(state);
+		// else if ((*it)->getID() == PAUSE_ID + 3)
+		// 	(*it)->setVisible(state);
 	}
 }
 
@@ -644,9 +679,14 @@ void IrrLib::removeEntities(std::vector<std::pair<int, Entity> > &vectorToRemove
 	}
 }
 
-void IrrLib::createPause(std::vector<std::unique_ptr<IEntity>> &menuItems)
+void IrrLib::newMenuItems(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);
 	}
+}
+
+void IrrLib::setSplitScreen(bool split)
+{
+	_splitScreen = split;
 }

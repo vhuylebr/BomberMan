@@ -23,6 +23,7 @@
 # include "EntityPos.hpp"
 # include "Music.hpp"
 # include "Metrics.hpp"
+# include "GameCore.hpp"
 
 enum
 {
@@ -60,7 +61,6 @@ class IrrLib {
 		bool getCheckboxState(std::unique_ptr<IEntity> &item);
 		std::wstring getLabelText(std::unique_ptr<IEntity> &item);
 		void initMenu(std::vector<std::unique_ptr<IEntity>> &);
-		void updateLabel(std::unique_ptr<IEntity>&);
 		
 		void drop();
 		void drawMenu();
@@ -69,20 +69,24 @@ class IrrLib {
 		void displayBackground();
 		void initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &,
 			pairUC size, std::vector<std::unique_ptr<IEntity> >&);
+
 		void drawGame();
 		void cleanMenu();
 		void removeItem(int);
 
-		void createPause(std::vector<std::unique_ptr<IEntity>> &menuItems);
+		void newMenuItems(std::vector<std::unique_ptr<IEntity>> &menuItems);
 		void initMenu(std::vector<MenuItem> &);
-		void updateLabel(MenuItem &item);
+		void updateLabel(std::unique_ptr<IEntity> &item);
 		void updatePlayer(std::unique_ptr<IEntity> &entity);
 		void updateCube(std::unique_ptr<IEntity> &entity);
 		void deletePause();
-		void setVisible(bool);
+		void setVisible(bool, int);
 		void dropAll();
 		void updateItem(std::unique_ptr<IEntity> &entity);
 		void addItem(std::unique_ptr<IEntity> &entity);
+		bool getSplitScreen() const {return _splitScreen; };
+		void setSplitScreen(bool split);
+		void removeSphere(int);
 		
 		// void addStaticText(std::unique_ptr<IEntity> &item);
 		// void AffEntities(std::vector<GameEntities>);
@@ -110,7 +114,7 @@ class IrrLib {
 		irr::scene::ICameraSceneNode	*_camera;
 		irr::scene::ISceneNode	*_skybox;
 		irr::scene::ISceneNode* _ground;
-//		Music	_gamemusic;
+		Music	_gamemusic;
 
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factory;
 		std::map<Entity, std::function<void(std::unique_ptr<IEntity>&)>> _factoryUpdate;

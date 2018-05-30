@@ -27,6 +27,8 @@ public:
 	void	pickupItem(std::unique_ptr<IEntity> &);
 	void	addPower();
 	float	getSpeed() const;
+	bool	getSuper() const;
+	void	setSuper(bool);
 
 	void	addBomb();
 	void	addPow();
@@ -40,6 +42,7 @@ private:
 	float	_speed;
 	int	_bombs;
 	int	_pow;
+	bool	_superB;
 };
 
 #endif /* !PLAYER_HPP_ */

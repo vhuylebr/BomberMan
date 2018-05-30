@@ -43,6 +43,7 @@ struct  parameters
 	std::pair<int,int> mapSize;
 	std::vector<eItem> bonuses;		// Vecteur de bonus actifs
 	std::string mapname;
+	bool split;
 };
 
 class GameCore {
@@ -64,9 +65,12 @@ public:
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
 	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
 	void	playerDropBomb(Player &player);
-	
+	void	saveMap(std::ofstream &file);
+	void 	saveMobileEntities(std::ofstream &file);
 	bool checkEnd(STATE &);
-	std::vector<std::unique_ptr<IEntity>> &handleEnd(Actions actions, STATE &state);
+	void handleEnd(Actions actions, STATE &state);
+	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
+	int getEndId() const;
 
 private:
 	void	bombManager(Actions &act);

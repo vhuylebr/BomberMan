@@ -8,7 +8,7 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id)
-	:_speed(1.0f), _bombs(2), _pow(3)
+	:_speed(1.0f), _bombs(2), _pow(3), _superB(false)
 {
 	_x = x;
 	_y = y;
@@ -64,12 +64,22 @@ int	Player::getPower() const
 
 void	Player::addSpeed()
 {
-	_speed += 0.1;
+	_speed += 0.4;
+}
+
+bool	Player::getSuper() const
+{
+	return (_superB);
 }
 
 void	Player::addPower()
 {
 	_pow += 1;
+}
+
+void	Player::setSuper(bool tmp)
+{
+	_superB = tmp;
 }
 
 void	Player::pickupItem(std::unique_ptr<IEntity> &item)
@@ -81,10 +91,17 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 		std::cout << "Picked up Bomb" << std::endl;
 	} else if (tmp == eItem::POWER_UP) {
 		this->addPower();
-		std::cout <<  "Picked up Power up" << std::endl;
+		std::cout << "Picked up Power up" << std::endl;
 	} else if (tmp == eItem::SPEED) {
 		std::cout << "Picked up Speed bonus" << std::endl;
 		this->addSpeed();
+	} else if (tmp == eItem::SUPER_BOMB) {
+		this->setSuper(true);
+		std::cout << "Picked up Super Bomb" << std::endl;
+	} else if (tmp == eItem::WALL_PASS) {
+		std::cout << "Picked up Wall pass" << std::endl;
+	} else if (tmp == eItem::KICK) {
+		std::cout << "Picked up Kick" << std::endl;
 	}
 }
 
