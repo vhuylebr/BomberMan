@@ -13,10 +13,21 @@ Menu::Menu()
 	: _step(1), _nbPlayer(1), _nbBots(4), _mapH(50), _mapW(50), _change_menu(true), _changeState(true), _changed(false)
 {
 	makeMainMenu();
+	initMaps();
+}
+
+void	Menu::initMaps()
+{
+	_maps.push_back({"img1.png", "Map 1", "map1.txt"});
+	_maps.push_back({"img2.png", "Map 2", "map2.txt"});
+	_maps.push_back({"empty", "Random", "empty"});
 }
 
 Menu::~Menu()
 {
+	_item.clear();
+	_maps.clear();
+	_bonus.clear();
 }
 
 void 	Menu::makeJoinMenu()
@@ -79,22 +90,35 @@ void    Menu::makeOptionMenu()
 void 	Menu::makeMapMenu()
 {
 	_item.clear();
-	std::vector<std::wstring> toto;
-	toto.push_back(L"map1");
-	toto.push_back(L"map2");
-	toto.push_back(L"map3");
-	toto.push_back(L"map4");
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Select your map", 500, 175, 600, 75)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 2, "", 500, 250, 600, 400)));
-	static_cast<MenuItem*>(_item[1].get())->setChoices(toto);
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Start Game", 700, 700, 200, 100)));
+	if (_maps.size() == 0)
+		_maps.push_back({"empty", "Random", "empty"});
+	// set une texture à < pour mettre une fleche
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "<", (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
+	for (int i = 0; i < 3; i++) {
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "", ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 400, 100, 100)));
+		// set la texture + set le isSetTexture à true
+		//_item.setTexture(true);
+		//_item.setTexture(*(_map.begin()).imgFileName);
+		std::rotate(_maps.begin(), _maps.begin() + 1, _maps.end());
+	}
+	for (int i = 0; i < 3; i++)
+		std::rotate(_maps.rbegin(), _maps.rbegin() + 1, _maps.rend());
+	// set une texture à < pour mettre une fleche
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, ">", (SCREEN_WIDTH / 5) * 4 + (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
+}
+
+void    Menu::makeModeMenu()
+{
+	_item.clear();
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "1 Player", (SCREEN_WIDTH * 0.1), 400, 600, 180)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "2 Player", (SCREEN_WIDTH * 0.55), 400, 600, 180)));
 }
 
 void    Menu::makeMainMenu()
 {
 	_item.clear();
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 280, 600, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Join Game", (SCREEN_WIDTH / 2) - 300, 430, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 430, 600, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 580, 600, 100)));
 }
 
@@ -106,13 +130,14 @@ void Menu::changeMenu()
 			makeMainMenu();
 			break;
 		case 2:
-			makeOptionMenu();
+			makeModeMenu();
+//			makeOptionMenu();
 			break;
 		case 3:
 			makeJoinMenu();
 			break;
-		// case 4:
-		// 	makeMapMenu(); Sayonara
+		case 4:
+		 	makeMapMenu();
 			break;
 	}
 }
@@ -136,6 +161,26 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 	}
 
 }
+
+void 	Menu::handleModeMenu(Actions &actions, STATE &state)
+{
+	if (actions.escape == true) {
+		_change_menu = true;
+		_step = 1;
+		_changeState = true;
+		_changed = true;
+	}
+	if (actions.buttonPressed == 1 || actions.buttonPressed == 2) {
+		_changed = true;
+		_change_menu = true;
+		_step = 4;
+	}
+	if (actions.buttonPressed == 1)
+		_nbPlayer = 1;
+	else if (actions.buttonPressed == 2)
+		_nbPlayer = 2;
+}
+
 
 void 	Menu::handleSecondMenu(Actions &actions, STATE &state)
 {
@@ -281,13 +326,13 @@ void Menu::getMenu(Actions &actions, STATE &state)
 			handleFirstMenu(actions, state);
 			break;
 		case 2:
-			handleSecondMenu(actions, state);
+			handleModeMenu(actions, state);
+			break;
+		case 4:
+			handleMapMenu(actions, state);
 			break;
 		case 3:
 			handleThirdMenu(actions, state);
 			break;
-		// case 4:
-		// 	handleMapMenu(actions, state);
-		// 	break; Sayonara
 	}
 }

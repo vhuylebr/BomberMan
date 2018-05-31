@@ -11,11 +11,18 @@
 # include <vector>
 # include <map>
 # include <memory>
+# include <algorithm>
 # include "Actions.hpp"
 # include "MenuItem.hpp"
 # include "Item.hpp"
 # include "State.hpp"
 # include "Metrics.hpp"
+
+struct Map {
+	std::string imgFileName;
+	std::string mapName;
+	std::string fileName;
+};
 
 class Menu {
 public:
@@ -33,9 +40,11 @@ public:
 	std::vector<eItem> &getBonus();
 	std::unique_ptr<IEntity> &getItemByID(int);
 	bool 	stepChanged(STATE &state);
-	int getStep() const {return _step;};
+	int getStep() const {return _step;}
+	void makeModeMenu();
 
 private:
+	void handleModeMenu(Actions &actions, STATE &state);
 	void firstMenuKey(Actions &actions, STATE &state);
 	void checkBonus(Actions &actions);
 	void handleFirstMenu(Actions &actions, STATE &state);
@@ -43,6 +52,7 @@ private:
 	void handleThirdMenu(Actions &actions, STATE &state);
 	void handleMapMenu(Actions &actions, STATE &state);
 
+	void initMaps();
 	void makeMainMenu();
 	void makeOptionMenu();
 	void makeJoinMenu();
@@ -57,6 +67,7 @@ private:
 	std::string _pseudo;
 	std::string _ip;
 	std::map<eItem, bool> _map_bonus;
+	std::vector<Map> _maps;
 	std::vector<std::unique_ptr<IEntity>> _item;
 	std::vector<eItem> _bonus;
 	int     _changeState;
