@@ -221,8 +221,7 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second), 0, item->getId(),
 				wText.c_str());
-	button->setPressed(item->isSelected());
-	button->setDrawBorder(true);
+	button->setImage(_driver->getTexture("./media/bomb.png"));
 	_buttons.push_back(button);
 }
 
@@ -450,7 +449,7 @@ void IrrLib::drawGame()
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
 	if (!_splitScreen) {
-		irr::core::vector3df camPos = _players[1]->getPosition();
+		irr::core::vector3df camPos = _players[0]->getPosition();
 		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_camera->setTarget(camPos);
 		_smgr->setActiveCamera(_camera);
