@@ -7,8 +7,8 @@
 
 #include "Player.hpp"
 
-Player::Player(float x, float y, unsigned int id)
-	:_speed(0.0f), _bombs(2), _pow(3), _superB(false)
+Player::Player(float x, float y, unsigned int id, int nb)
+	: _number(nb), _speed(0.0f), _bombs(2), _pow(3), _superB(false)
 {
 	_x = x;
 	_y = y;
@@ -108,4 +108,14 @@ void Player::setRotation(float rotation)
 
 void Player::ia()
 {
+}
+
+int Player::getNumber() const
+{
+	return _number;
+}
+
+void Player::setNumber(int nb)
+{
+	_number = nb;
 }
