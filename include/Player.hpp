@@ -15,14 +15,13 @@
 
 class Player : public AEntity {
 public:
-	Player(float, float, unsigned int);
+	Player(float, float, unsigned int, int nb = 2);
 	~Player() {};
 	void	poke();
-	Entity	getType() const final;
 	bool	isAlive() const;
 	void	setAlive(bool);
 	pairUC	getPos() const;
-	int	getPower() const;
+	int		getPower() const;
 	float	getRotation() const {return _rotation;};
 	void	setRotation(float);
 	void	pickupItem(std::unique_ptr<IEntity> &);
@@ -36,8 +35,12 @@ public:
 	void	addSpeed();
 	void	dropBomb();
 	int	getBombCount() const;
+	void	ia();
+	void	setNumber(int);
+	int	getNumber() const;
 
 private:
+	int 	_number;
 	float 	_rotation;
 	float	_speed;
 	int	_bombs;

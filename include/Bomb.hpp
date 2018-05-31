@@ -19,10 +19,6 @@ class Bomb : public AEntity {
 public:
     Bomb(float x, float y, unsigned int id, std::size_t);
     ~Bomb();
-    // void hit();
-    // struct s_bomb extractInfo();
-    // void insertInfo();
-    Entity getType() const;
     bool   isAlive() const;
     bool   isOutFire() const;
     void   tick(unsigned int &, std::vector<std::vector<std::unique_ptr<EntityPos>>> &,
@@ -34,7 +30,6 @@ public:
     void	setPower(int pow);
     void	detonate();
     void    setSuper(bool);
-    // int getStartingTime() const;
 
 private:
     int _counter;

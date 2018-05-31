@@ -20,15 +20,11 @@ Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
 	_dirs.push_back(std::make_pair(0, 1));
 	_dirs.push_back(std::make_pair(-1, 0));
 	_dirs.push_back(std::make_pair(0, -1));
+	_type = Entity::SPHERE;
 }
 
 Bomb::~Bomb()
 {
-}
-
-Entity	Bomb::getType() const
-{
-    return (Entity::SPHERE);
 }
 
 void	Bomb::setSuper(bool tmp)
@@ -89,7 +85,8 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 		_flames.push_back(add);
 	} else if (_counter == _flametime * -1) {
 		for (auto &a : _flames)
-			a.setAlive(false);
+			entitiesToRemove.push_back(std::make_pair<int, Entity>(a.getId(), Entity::CUBE));
+		_flames.clear();
 	}
 }
 
