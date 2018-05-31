@@ -450,7 +450,7 @@ void IrrLib::drawGame()
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
 	if (!_splitScreen) {
 		irr::core::vector3df camPos = _players[0]->getPosition();
-		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
+		_camera->setPosition(irr::core::vector3df(camPos.X, 20, camPos.Z - 0.1));
 		_camera->setTarget(camPos);
 		_smgr->setActiveCamera(_camera);
 		_smgr->drawAll();
