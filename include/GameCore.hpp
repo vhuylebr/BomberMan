@@ -46,6 +46,14 @@ struct  parameters
 	bool split;
 };
 
+struct	movement
+{
+	bool			action;
+	std::pair<int, int>	dir;
+	float			rotation;
+	unsigned char		player;
+};
+
 class GameCore {
 public:
 	GameCore();
@@ -71,6 +79,7 @@ public:
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
 	int getEndId() const;
+	void	handleIA();
 
 private:
 	void	bombManager(Actions &act);

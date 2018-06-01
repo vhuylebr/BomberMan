@@ -258,38 +258,24 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 bool 	GameCore::playerMovement(Actions act)
 {
 	bool changed = false;
+	std::pair<float, float>	playerPos;
 
-	if (act.right == true) {
-		movePlayer(_player1.getPos(), {1, 0}, _player1, 0.0f);
-		changed = true;
-	}
-	if (act.left == true) {
-		movePlayer(_player1.getPos(), {-1, 0}, _player1, 180.0f);
-		changed = true;
-	}
-	if (act.up == true) {
-		movePlayer(_player1.getPos(), {0, 1}, _player1, -90.0f);
-		changed = true;
-	}
-	if (act.down == true) {
-		movePlayer(_player1.getPos(), {0, -1}, _player1, 90.0f);
-		changed = true;
-	}
-	if (act.D == true) {
-		movePlayer(_player2.getPos(), {1, 0}, _player2, 0.0f);
-		changed = true;
-	}
-	if (act.Q == true) {
-		movePlayer(_player2.getPos(), {-1, 0}, _player2, 180.0f);
-		changed = true;
-	}
-	if (act.Z == true) {
-		movePlayer(_player2.getPos(), {0, 1}, _player2, -90.0f);
-		changed = true;
-	}
-	if (act.S == true) {
-		movePlayer(_player2.getPos(), {0, -1}, _player2, 90.0f);
-		changed = true;
+	movement	movement_table[8] = {
+		{act.right, std::make_pair(1, 0), 0.0f, 1},
+		{act.left, std::make_pair(-1, 0), 180.0f, 1},
+		{act.up, std::make_pair(0, 1), -90.0f, 1},
+		{act.down, std::make_pair(0, -1), 90.0f, 1},
+		{act.D, std::make_pair(1, 0), 0.0f, 2},
+		{act.Q, std::make_pair(-1, 0), 180.0f, 2},
+		{act.Z, std::make_pair(0, 1), -90.0f, 2},
+		{act.S, std::make_pair(0, -1), 90.0f, 2}
+	};
+	for (int i = 0; i < 8; i++) {
+		if (movement_table[i].action == true) {
+			playerPos = (movement_table[i].player == 1) ? _player1.getPos() : _player2.getPos();
+			movePlayer(playerPos, movement_table[i].dir, (movement_table[i].player == 1) ? _player1 : _player2, movement_table[i].rotation);
+			changed = true;
+		}
 	}
 	return (changed);
 }
@@ -302,6 +288,45 @@ bool GameCore::checkEnd(STATE &state)
 		return true;
 	}
 	return false;
+}
+
+void	GameCore::handleIA()
+{
+	std::pair<float, float>	myPos;
+	std::pair<float, float>	bombPos;
+
+	for (auto &it : _iaList) {
+		myPos = it.getPos();
+	        for (auto &i : _bombs) {
+			bombPos = i.getPos();
+			if (bombPos.second == std::round(myPos.second)) {
+				std::cout << "Je suis en " << std::round(myPos.second) << " - " << std::round(myPos.first) << std::endl;
+				if (_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)]->isEmpty())
+					movePlayer(myPos, {0, 1}, it, -90.0f);
+				else if (_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)]->isEmpty())
+					movePlayer(myPos, {0, -1}, it, 90.0f);
+				else {
+					if (bombPos.second > myPos.second)
+						movePlayer(myPos, {-1, 0}, it, 0.0f);
+					else
+						movePlayer(myPos, {1, 0}, it, 180.0f);	
+				}
+			}
+			else if (bombPos.first == std::round(myPos.first)) {
+				if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first + 1)]->isEmpty())
+					movePlayer(myPos, {1, 0}, it, 0.0f);
+			        else if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)]->isEmpty())
+					movePlayer(myPos, {-1, 0}, it, 180.0f);
+				else {
+					if (bombPos.first > myPos.first)
+						movePlayer(myPos, {0, -1}, it, 90.0f);
+					else
+						movePlayer(myPos, {0, 1}, it, -90.0f);
+				}
+			}
+		}
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+	}
 }
 
 std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
@@ -318,12 +343,7 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 	}
-	// for (auto &it : _iaList) {
-		// it.ia();
-		// playerDropBomb(it);
-		// movePlayer(it.getPos(), {0, 1}, it, 90.0f);
-		// _updateEntities.push_back(std::unique_ptr<IEntity>(&it));
-	// }
+	handleIA();
 	bombManager(act);
 	return (_updateEntities);
 }
