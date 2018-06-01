@@ -325,7 +325,8 @@ void GameCore::removeAll()
 	_pauseitem.clear();
 	_entitiesToRemove.clear();
 	_entities.clear();
-	_updateEntities.clear();
+	// _updateEntities.clear();
+	_iaList.clear();
 	_id = 0;
 }
 
@@ -390,7 +391,6 @@ void GameCore::handlePause(Actions actions, STATE &state)
 	}
 	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();
-		_updateEntities.clear();
 		state = STATE::MENU;
 	}
 	if (actions.buttonPressed == PAUSE_ID + 3)
