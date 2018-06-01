@@ -167,6 +167,21 @@ void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 	addCube(entity);
 }
 
+void IrrLib::removeCube(int id)
+{
+	int i = 0;
+
+	for (auto &it : _cubes) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
+	}
+}
+
 Actions	IrrLib::getActions()
 {
 	_actions.escape = false;
@@ -221,8 +236,7 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second), 0, item->getId(),
 				wText.c_str());
-	button->setPressed(item->isSelected());
-	button->setDrawBorder(true);
+	button->setImage(_driver->getTexture("./media/bomb.png"));
 	_buttons.push_back(button);
 }
 
@@ -324,12 +338,12 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	_buttons.clear();
 	_eventReceiver.resetIdButtonPressed();
 	_skybox = _smgr->addSkyBoxSceneNode(
-	_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
+	_driver->getTexture("./media/arrakisday/arrakisday_up.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_dn.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_rt.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_lf.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_ft.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_bk.tga"));
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/myfont.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
@@ -450,8 +464,8 @@ void IrrLib::drawGame()
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
 	if (!_splitScreen) {
-		irr::core::vector3df camPos = _players[1]->getPosition();
-		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
+		irr::core::vector3df camPos = _players[0]->getPosition();
+		_camera->setPosition(irr::core::vector3df(camPos.X, 20, camPos.Z - 0.1));
 		_camera->setTarget(camPos);
 		_smgr->setActiveCamera(_camera);
 		_smgr->drawAll();
@@ -654,21 +668,6 @@ void IrrLib::setVisible(bool state, int id)
 		// 	(*it)->setVisible(state);
 		// else if ((*it)->getID() == PAUSE_ID + 3)
 		// 	(*it)->setVisible(state);
-	}
-}
-
-void IrrLib::removeCube(int id)
-{
-	int i = 0;
-
-	for (auto &it : _cubes) {
-		if (id == it->getID()) {
-			it->setID(-1);
-			it->setVisible(false);
-			it->removeAll();
-			break;
-		}
-		++i;
 	}
 }
 

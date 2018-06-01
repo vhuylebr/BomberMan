@@ -37,14 +37,22 @@ enum class GameState {
 
 struct  parameters
 {
-	GameState state;                // State si la map doit être à nouveau ou doit être chargée depuis un fichier
-	std::wstring gameName;          // Le fichier dans lequel on devra sauvegarde ou get les infos de la map
+	GameState state;		// State si la map doit être à nouveau ou doit être chargée depuis un fichier
+	std::wstring gameName;		// Le fichier dans lequel on devra sauvegarde ou get les infos de la map
 	int nbPlayers;
 	int nbBots;
 	std::pair<int,int> mapSize;
 	std::vector<eItem> bonuses;		// Vecteur de bonus actifs
 	std::string mapname;
 	bool split;
+};
+
+struct	movement
+{
+	bool			action;
+	std::pair<int, int>	dir;
+	float			rotation;
+	unsigned char		player;
 };
 
 class GameCore {
@@ -72,6 +80,7 @@ public:
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
 	int getEndId() const;
+	void	handleIA();
 
 private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
@@ -94,6 +103,7 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 	int _nbPlayer;
+	parameters	_params;
 };
 
 #endif /* !GAMECORE_HPP_ */

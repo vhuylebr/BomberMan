@@ -105,8 +105,8 @@ void MapGenerator::generateEmptyMap()
 		}
 		_map.push_back(line);
 	}
-	dispMap();
-	std::cout << std::endl;
+	// dispMap();
+	// std::cout << std::endl;
 }
 
 void MapGenerator::generateMap()

@@ -23,7 +23,6 @@ void Menu::checkBonus(Actions &actions)
 	std::cout << "Check selected return " << findSelected(_item) << std::endl;
 	for (int i = 0; i < NB_ITEMS; i++) {
 		if (bonusButton[i].id == actions.buttonPressed) {
-			std::cout << "Change bonus\n";
 			changeBonus(bonusButton[i].bonus, _map_bonus);
 		}
 	}
