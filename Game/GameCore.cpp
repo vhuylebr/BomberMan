@@ -64,7 +64,6 @@ void    GameCore::init(parameters params)
 
 	generator.generateMap();
 	generator.generatePlayers(2, params.nbBots);
-	std::cout << std::endl;
 	generator.dispMap();
 	std::vector<std::vector<char>> map = generator.getMap();
 	createEntities(map, x, y, params);
@@ -252,7 +251,6 @@ void	GameCore::handleIA()
 	        for (auto &i : _bombs) {
 			bombPos = i.getPos();
 			if (bombPos.second == std::round(myPos.second)) {
-				std::cout << "Je suis en " << std::round(myPos.second) << " - " << std::round(myPos.first) << std::endl;
 				if (_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)]->isEmpty())
 					movePlayer(myPos, {0, 1}, it, -90.0f);
 				else if (_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)]->isEmpty())
