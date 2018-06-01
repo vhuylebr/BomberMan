@@ -85,7 +85,8 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 		_flames.push_back(add);
 	} else if (_counter == _flametime * -1) {
 		for (auto &a : _flames)
-			a.setAlive(false);
+			entitiesToRemove.push_back(std::make_pair<int, Entity>(a.getId(), Entity::CUBE));
+		_flames.clear();
 	}
 }
 

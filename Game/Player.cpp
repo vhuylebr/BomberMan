@@ -7,8 +7,8 @@
 
 #include "Player.hpp"
 
-Player::Player(float x, float y, unsigned int id)
-	:_speed(1.0f), _bombs(2), _pow(3), _superB(false)
+Player::Player(float x, float y, unsigned int id, int nb)
+	: _number(nb), _speed(0.0f), _bombs(2), _pow(3), _superB(false)
 {
 	_x = x;
 	_y = y;
@@ -64,7 +64,7 @@ int	Player::getPower() const
 
 void	Player::addSpeed()
 {
-	_speed += 0.4;
+	_speed += 0.01;
 }
 
 bool	Player::getSuper() const
@@ -88,16 +88,12 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 
 	if (tmp == eItem::BOMB_UP) {
 		this->addBomb();
-		std::cout << "Picked up Bomb" << std::endl;
 	} else if (tmp == eItem::POWER_UP) {
 		this->addPower();
-		std::cout << "Picked up Power up" << std::endl;
 	} else if (tmp == eItem::SPEED) {
-		std::cout << "Picked up Speed bonus" << std::endl;
 		this->addSpeed();
 	} else if (tmp == eItem::SUPER_BOMB) {
 		this->setSuper(true);
-		std::cout << "Picked up Super Bomb" << std::endl;
 	} else if (tmp == eItem::WALL_PASS) {
 		std::cout << "Picked up Wall pass" << std::endl;
 	} else if (tmp == eItem::KICK) {
@@ -112,4 +108,14 @@ void Player::setRotation(float rotation)
 
 void Player::ia()
 {
+}
+
+int Player::getNumber() const
+{
+	return _number;
+}
+
+void Player::setNumber(int nb)
+{
+	_number = nb;
 }
