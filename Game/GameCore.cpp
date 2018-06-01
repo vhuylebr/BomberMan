@@ -12,59 +12,6 @@ GameCore::GameCore()
 {
 }
 
-void GameCore::init(pairUC size)
-{
-	unsigned int x1 = 0;
-	unsigned int y1 = 0;
-	MapGenerator generator(10, 10);
-	std::string line;
-	// std::string filename = "./media/map1.txt";
-	// std::ifstream file(filename);
-
-	// std::cout << "Initializing new game" << std::endl;
-	// if (!file.is_open()) {
-	// 	std::cout << "Open has failed\n";
-	// } else {
-	std::cout << "OPEN HAS SUCCESS\n";
-	//	while (getline(file, line)) {
-	generator.generateMap();
-	std::vector<std::vector<char>> map = generator.getMap();
-	for (auto &line : map) {
-		x1 = 0;
-		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
-		for (auto &c : line) {
-			if (c == '0') {
-				_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
-				_id++;
-			} else if (c == '1') {
-				_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
-				_id++;
-			} else if (c == '2') {
-				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
-				_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
-				_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
-				_id++;
-			} else if (c == '3') {
-				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
-				_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
-				_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
-				_id++;
-			} else {
-				_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
-			}
-			x1 += 1;
-		}
-		y1 += 1;
-	}
-	_nbPlayer = 0;
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
-	_size.x = x1;
-	_size.y = y1;
-}
-
 void GameCore::createEntities(std::vector<std::vector<char>> &map,
 unsigned int &x, unsigned int &y, const parameters &params)
 {
@@ -138,12 +85,6 @@ GameCore::~GameCore()
 pairUC GameCore::getSize() const
 {
 	return (std::make_pair(_size.x, _size.y));
-}
-
-void GameCore::init(const std::string &file)
-{
-	init(std::make_pair(100, 100));
-	std::cout << "Loading " << file << std::endl;
 }
 
 std::vector<std::vector<std::unique_ptr<EntityPos>>> &GameCore::getEntities()
@@ -385,15 +326,15 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 void GameCore::initEndScreen()
 {
 	if (!_player1.isAlive() && !_player2.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", 600, 200, 400, 100)));
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
 	else if (!_player1.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P2_ID, "Player 2 won", 600, 200, 400, 100)));
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P2_ID, "Player 2 won", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
 	else if (!_player2.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID, "Player 1 won", 600, 200, 400, 100)));
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID, "Player 1 won", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
 	else
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", 600, 200, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PLAY_AGAIN_ID, "Play again", 600, 400, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, QUIT_END_ID, "Quit", 600, 600, 400, 100)));
+		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PLAY_AGAIN_ID, "Play again", (SCREEN_WIDTH / 2) - 200, 400, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, QUIT_END_ID, "Quit", (SCREEN_WIDTH / 2) - 200, 600, 400, 100)));
 }
 
 void GameCore::removeAll()
