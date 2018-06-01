@@ -58,7 +58,7 @@ void    GameCore::init(parameters params)
 {
 	unsigned int x = 0;
 	unsigned int y = 0;
-	MapGenerator generator(10, 10);
+	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
 
 	std::cout << "Initializing new game" << std::endl;
