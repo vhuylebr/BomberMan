@@ -324,12 +324,12 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	_buttons.clear();
 	_eventReceiver.resetIdButtonPressed();
 	_skybox = _smgr->addSkyBoxSceneNode(
-	_driver->getTexture("./media/mp_classm/classmplanet_up.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_dn.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_rt.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_lf.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_ft.tga"),
-	_driver->getTexture("./media/mp_classm/classmplanet_bk.tga"));
+	_driver->getTexture("./media/arrakisday/arrakisday_up.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_dn.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_rt.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_lf.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_ft.tga"),
+	_driver->getTexture("./media/arrakisday/arrakisday_bk.tga"));
 	irr::gui::IGUISkin* skin = _guienv->getSkin();
 	irr::gui::IGUIFont* font = _guienv->getFont("./media/myfont.png");
 	skin->setFont(_guienv->getBuiltInFont(), irr::gui::EGDF_TOOLTIP);
