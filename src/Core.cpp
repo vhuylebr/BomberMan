@@ -78,7 +78,6 @@ static void setPauseVisible(IrrLib &lib, bool state)
 
 static void setEndVisible(IrrLib &lib, bool state, char player)
 {
-	std::cout << "Set end visible " << state << std::endl;
 	if (player == 1)
 		lib.setVisible(state, WIN_P1_ID);
 	else if (player == 2)
