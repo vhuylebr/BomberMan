@@ -167,6 +167,21 @@ void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 	addCube(entity);
 }
 
+void IrrLib::removeCube(int id)
+{
+	int i = 0;
+
+	for (auto &it : _cubes) {
+		if (id == it->getID()) {
+			it->setID(-1);
+			it->setVisible(false);
+			it->removeAll();
+			break;
+		}
+		++i;
+	}
+}
+
 Actions	IrrLib::getActions()
 {
 	_actions.escape = false;
@@ -653,21 +668,6 @@ void IrrLib::setVisible(bool state, int id)
 		// 	(*it)->setVisible(state);
 		// else if ((*it)->getID() == PAUSE_ID + 3)
 		// 	(*it)->setVisible(state);
-	}
-}
-
-void IrrLib::removeCube(int id)
-{
-	int i = 0;
-
-	for (auto &it : _cubes) {
-		if (id == it->getID()) {
-			it->setID(-1);
-			it->setVisible(false);
-			it->removeAll();
-			break;
-		}
-		++i;
 	}
 }
 

@@ -284,6 +284,7 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 {
 	bool changed;
 
+	_entitiesToRemove.clear();
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
 	if (checkEnd(state) == true)
