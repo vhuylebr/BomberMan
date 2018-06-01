@@ -89,12 +89,19 @@ void    Menu::makeOptionMenu()
 
 void 	Menu::makeMapMenu()
 {
+	int size;
 	_item.clear();
 	if (_maps.size() == 0)
 		_maps.push_back({"empty", "Random", "empty"});
 	// set une texture à < pour mettre une fleche
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "<", (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
 	for (int i = 0; i < 3; i++) {
+		size = _maps.begin()->mapName.size() * 20 + 20;
+		if (size <= 100)
+			_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, _maps.begin()->mapName, ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 300, _maps.begin()->mapName.size() * 20 + 20, 40)));
+		else
+			_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, _maps.begin()->mapName,
+			((i + 1) * (SCREEN_WIDTH / 5)) + 100 - ((size - 100) / 2), 300, _maps.begin()->mapName.size() * 20 + 20, 40)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "", ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 400, 100, 100)));
 		// set la texture + set le isSetTexture à true
 		//_item.setTexture(true);
