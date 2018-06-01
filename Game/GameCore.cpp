@@ -62,7 +62,7 @@ void    GameCore::init(parameters params)
 	_nbPlayer = 0;
 
 	std::cout << "Initializing new game" << std::endl;
-
+	_params = params;
 	generator.generateMap();
 	generator.generatePlayers(2, params.nbBots);
 	std::cout << std::endl;
@@ -150,7 +150,7 @@ void GameCore::bombManager(Actions &act)
 	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) // remplacer 0 par player2.
 		playerDropBomb(_player2);
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
+		a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses, _updateEntities);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {

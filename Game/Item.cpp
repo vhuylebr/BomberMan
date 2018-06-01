@@ -10,8 +10,8 @@
 #include <iostream>
 #include "Item.hpp"
 
-Item::Item(float x, float y, unsigned int id)
-	: _x(x), _y(y), _id(id), _alive(false)
+Item::Item(float x, float y, unsigned int id, std::vector<eItem> &disp)
+	:_x(x), _y(y), _id(id), _alive(false)
 {
 	_getModel[SPEED] = "./media/speed.obj";
 	_getTexture[SPEED] = "./media/speed.png";
@@ -25,10 +25,20 @@ Item::Item(float x, float y, unsigned int id)
 	_getModel[SUPER_BOMB] = "./media/megaBomb.obj";
 	_getTexture[SUPER_BOMB] = "./media/megaBomb.png";
 	_getScale[SUPER_BOMB] = 1.0f;
-	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-	std::uniform_int_distribution<int> distrib{0, 4};
-	_bonusType = static_cast<eItem>(distrib(re));
+	loadType(disp);
 	_id = id;
+}
+
+void	Item::loadType(std::vector<eItem> &disp)
+{
+	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+	std::uniform_int_distribution<int> distrib{0, 99};
+	double nb = distrib(re);
+	int idx = (int)(nb / 100.0f * (double)disp.size());
+	_bonusType = disp[idx];
+	if (_bonusType == WALL_PASS || _bonusType == KICK)
+		loadType(disp);
+	//std::cout << "Got " << _bonusType << "from idx " << idx << " from rd " << nb << std::endl;
 }
 
 Item::~Item()

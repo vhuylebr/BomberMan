@@ -48,7 +48,7 @@ void	Bomb::detonate()
 }
 
 void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map,
-			std::vector<std::pair<int, Entity> > &entitiesToRemove,
+			std::vector<std::pair<int, Entity> > &entitiesToRemove, std::vector<eItem> params,
 			std::vector<std::unique_ptr<IEntity>> &_updateEntities)
 {
 	_counter -= 1;
@@ -68,9 +68,9 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 							map[tmp.second][tmp.first]->getType()));
 							map[tmp.second][tmp.first]->removeFirstEntity();
 							std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-							std::uniform_int_distribution<int> distrib{1, 10};
-							if (distrib(re) < 6) {
-								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id);
+							std::uniform_int_distribution<int> distrib{1, 100};
+							if (distrib(re) < 60) {
+								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id, params);
 								_updateEntities.push_back(std::unique_ptr<IEntity>(map[tmp.second][tmp.first]->getEntity().get()));
 							}
 							if (!_superB)

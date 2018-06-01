@@ -37,8 +37,8 @@ enum class GameState {
 
 struct  parameters
 {
-	GameState state;                // State si la map doit être à nouveau ou doit être chargée depuis un fichier
-	std::wstring gameName;          // Le fichier dans lequel on devra sauvegarde ou get les infos de la map
+	GameState state;		// State si la map doit être à nouveau ou doit être chargée depuis un fichier
+	std::wstring gameName;		// Le fichier dans lequel on devra sauvegarde ou get les infos de la map
 	int nbPlayers;
 	int nbBots;
 	std::pair<int,int> mapSize;
@@ -94,6 +94,7 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 	int _nbPlayer;
+	parameters	_params;
 };
 
 #endif /* !GAMECORE_HPP_ */
