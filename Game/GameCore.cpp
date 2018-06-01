@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2018
-** game
+** Game
 ** File description:
 ** game
 */
@@ -16,6 +16,7 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 unsigned int &x, unsigned int &y, const parameters &params)
 {
 	y = 0;
+	_iaList.clear();
 	for (auto &line : map) {
 		x = 0;
 		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
@@ -138,51 +139,9 @@ void GameCore::bombManager(Actions &act)
 			for (auto &b : a.getFlames())
 				_entitiesToRemove.push_back(std::make_pair<int, Entity>(b.getId(),
 							b.getType()));
-		}
+		}	
 	} // Plus tard les deux boucles seront assemblables
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
-<<<<<<< HEAD
-		return x.isOver(); 
-	}), _bombs.end());
-	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive()) {
-		auto pos = _player1.getPos();
-		for (auto &a : _bombs) {
-			if (a.getPos().first == std::ceil(pos.first - 0.5) &&
-			std::ceil(pos.second - 0.5) == a.getPos().second) {
-				pos.first = -1;
-				pos.second = -1;
-				break;
-			}
-		}
-		if (pos.first != -1 && pos.second != -1) {
-			Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player1.getId());
-			_player1.dropBomb();
-			tmp.setPower(_player1.getPower());
-			tmp.setSuper(_player1.getSuper());
-			_bombs.push_back(tmp);
-			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
-		}
-	} 
-	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) {
-		auto pos = _player2.getPos();
-		for (auto &a : _bombs) {
-			if (a.getPos().first == std::ceil(pos.first - 0.5) &&
-			std::ceil(pos.second - 0.5) == a.getPos().second) {
-				pos.first = -1;
-				pos.second = -1;
-				break;
-			}
-		}
-		if (pos.first != -1 && pos.second != -1) {
-			Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id++, _player2.getId());
-			_player2.dropBomb();
-			tmp.setPower(_player2.getPower());
-			tmp.setSuper(_player2.getSuper());
-			_bombs.push_back(tmp);
-			_updateEntities.push_back(std::unique_ptr<IEntity>(&_bombs.back()));
-		}
-	}
-=======
 			     return x.isOver();
 		     }),
 		     _bombs.end());
@@ -190,7 +149,6 @@ void GameCore::bombManager(Actions &act)
 		playerDropBomb(_player1);
 	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) // remplacer 0 par player2.
 		playerDropBomb(_player2);
->>>>>>> e3c362d969594d2fdc1aadb08ea1d7374547e9d8
 	for (auto &a : _bombs) {
 		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
 		if (a.isExplode()) {
