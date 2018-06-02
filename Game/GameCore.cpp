@@ -35,7 +35,7 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 					_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
 					_id++;
 					_nbPlayer++;
-				} else if (_nbPlayer == 1) {
+				} else if (_nbPlayer == 1 && params.nbPlayers > 1) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 1));
 					_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
 					_nbPlayer++;
