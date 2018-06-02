@@ -106,6 +106,7 @@ private:
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 	int _nbPlayer;
 	parameters	_params;
+	int _i;
 };
 
 #endif /* !GAMECORE_HPP_ */

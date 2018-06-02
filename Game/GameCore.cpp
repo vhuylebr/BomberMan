@@ -8,7 +8,7 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0), _i(0)
 {
 }
 
@@ -52,7 +52,6 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 		}
 		y += 1;
 	}
-	displayAroundPlayer();
 }
 
 void    GameCore::init(parameters params)
@@ -61,6 +60,7 @@ void    GameCore::init(parameters params)
 	unsigned int y = 0;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
+	_i = 0;
 
 	std::cout << "Initializing new game" << std::endl;
 	_params = params;
@@ -289,17 +289,17 @@ void	GameCore::handleIA()
 void GameCore::displayAroundPlayer(void)
 {
 	// set updateEnties around the player
-	for (int y = _player1.getPos().second - 10; y < _player1.getPos().second + 10; ++y) {
+	for (int y = _player1.getPos().second - 14; y < _player1.getPos().second + 14; ++y) {
 		if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-			for (int x = _player1.getPos().first - 10; x < _player1.getPos().first + 10; ++x) {
+			for (int x = _player1.getPos().first - 14; x < _player1.getPos().first + 14; ++x) {
 				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
 					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
 					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
 			}
 	}
-	for (int y = _player2.getPos().second - 10; y < _player2.getPos().second + 10; ++y) {
+	for (int y = _player2.getPos().second - 14; y < _player2.getPos().second + 14; ++y) {
 		if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-			for (int x = _player2.getPos().first - 10; x < _player2.getPos().first + 10; ++x) {
+			for (int x = _player2.getPos().first - 14; x < _player2.getPos().first + 14; ++x) {
 				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
 					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
 					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
@@ -320,11 +320,13 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 	changed = playerMovement(act);
 	handleIA();
 	bombManager(act);
-	if (changed)
-	{
+	if (changed) {
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 		displayAroundPlayer();
+	} else if (_i == 0) {
+		displayAroundPlayer();
+		++_i;
 	}
 	return (_updateEntities);
 }
