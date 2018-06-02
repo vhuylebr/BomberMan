@@ -228,7 +228,7 @@ bool 	GameCore::playerMovement(Actions act)
 		{act.Z, std::make_pair(0, 1), -90.0f, 2},
 		{act.S, std::make_pair(0, -1), 90.0f, 2}
 	};
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < (_params.nbPlayers > 1 ? 8 : 4); i++) {
 		if (movement_table[i].action == true) {
 			playerPos = (movement_table[i].player == 1) ? _player1.getPos() : _player2.getPos();
 			movePlayer(playerPos, movement_table[i].dir, (movement_table[i].player == 1) ? _player1 : _player2, movement_table[i].rotation);
