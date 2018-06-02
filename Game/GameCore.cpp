@@ -334,11 +334,11 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		if (_params.nbPlayers > 1)
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+		else
+			displayScore();
 		displayAroundPlayer();
-		displayScore();
 	} else if (_i == 0) {
 		displayAroundPlayer();
-		displayScore();
 		++_i;
 	}
 	return (_updateEntities);
