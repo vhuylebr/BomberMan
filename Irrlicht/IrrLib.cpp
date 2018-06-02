@@ -17,7 +17,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_driver = _device->getVideoDriver();
 	_smgr = _device->getSceneManager();
 	_cameras[0] = _smgr->addCameraSceneNode();
-    _cameras[1] = _smgr->addCameraSceneNode();
+	_cameras[1] = _smgr->addCameraSceneNode();
 	_camera = _smgr->addCameraSceneNode();
 	_guienv = _device->getGUIEnvironment();
 	_geomentryCreator = _smgr->getGeometryCreator();
@@ -236,7 +236,8 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second), 0, item->getId(),
 				wText.c_str());
-	button->setImage(_driver->getTexture("./media/bomb.png"));
+	if (item->isSetTexture())
+		button->setImage(_driver->getTexture(item->getTexture().c_str()));
 	_buttons.push_back(button);
 }
 

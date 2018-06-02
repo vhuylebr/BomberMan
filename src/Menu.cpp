@@ -18,9 +18,9 @@ Menu::Menu()
 
 void	Menu::initMaps()
 {
-	_maps.push_back({"img1.png", "Map 1", "map1.txt"});
-	_maps.push_back({"img2.png", "Map 2", "map2.txt"});
-	_maps.push_back({"empty", "Random", "empty"});
+	_maps.push_back({"media/img1.png", "Map 1", "map1.txt"});
+	_maps.push_back({"media/img2.png", "Map 2", "map2.txt"});
+	_maps.push_back({"media/random.png", "Random", "empty"});
 }
 
 Menu::~Menu()
@@ -255,6 +255,8 @@ static void displayThreeMaps(std::vector<Map> &maps, std::vector<std::unique_ptr
 		// set la texture + set le isSetTexture à true
 		//_item.setTexture(true);
 		//_item.setTexture(*(_map.begin()).imgFileName);
+		static_cast<MenuItem *>(item.back().get())->setTexture(maps.begin()->imgFileName);
+		static_cast<MenuItem *>(item.back().get())->setTexture(true);
 		std::rotate(maps.begin(), maps.begin() + 1, maps.end());
 	}
 }
