@@ -87,32 +87,6 @@ void    Menu::makeOptionMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 34, "-", 780, 640, 100, 100)));
 }
 
-void 	Menu::makeMapMenu()
-{
-	int size;
-	_item.clear();
-	if (_maps.size() == 0)
-		_maps.push_back({"empty", "Random", "empty"});
-	// set une texture à < pour mettre une fleche
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "<", (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
-	for (int i = 0; i < 3; i++) {
-		size = _maps.begin()->mapName.size() * 20 + 20;
-		if (size <= 100)
-			_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, _maps.begin()->mapName, ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 300, _maps.begin()->mapName.size() * 20 + 20, 40)));
-		else
-			_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, _maps.begin()->mapName,
-			((i + 1) * (SCREEN_WIDTH / 5)) + 100 - ((size - 100) / 2), 300, _maps.begin()->mapName.size() * 20 + 20, 40)));
-		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "", ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 400, 100, 100)));
-		// set la texture + set le isSetTexture à true
-		//_item.setTexture(true);
-		//_item.setTexture(*(_map.begin()).imgFileName);
-		std::rotate(_maps.begin(), _maps.begin() + 1, _maps.end());
-	}
-	for (int i = 0; i < 3; i++)
-		std::rotate(_maps.rbegin(), _maps.rbegin() + 1, _maps.rend());
-	// set une texture à < pour mettre une fleche
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, ">", (SCREEN_WIDTH / 5) * 4 + (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
-}
 
 void    Menu::makeModeMenu()
 {
@@ -165,6 +139,7 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 			_changed = true;
 		}
 		_change_menu = true;
+		actions.buttonPressed = 0;
 	}
 
 }
@@ -177,15 +152,16 @@ void 	Menu::handleModeMenu(Actions &actions, STATE &state)
 		_changeState = true;
 		_changed = true;
 	}
-	if (actions.buttonPressed == 1 || actions.buttonPressed == 2) {
-		_changed = true;
-		_change_menu = true;
-		_step = 4;
-	}
 	if (actions.buttonPressed == 1)
 		_nbPlayer = 1;
 	else if (actions.buttonPressed == 2)
 		_nbPlayer = 2;
+	if (actions.buttonPressed == 1 || actions.buttonPressed == 2) {
+		_changed = true;
+		_change_menu = true;
+		_step = 4;
+		actions.buttonPressed = 0;
+	}
 }
 
 
@@ -264,16 +240,73 @@ void 	Menu::handleThirdMenu(Actions &actions, STATE &state)
 	}
 }
 
+static void displayThreeMaps(std::vector<Map> &maps, std::vector<std::unique_ptr<IEntity>> &item)
+{
+	int size;
+
+	for (int i = 0; i < 3; i++) {
+		size = maps.begin()->mapName.size() * 20 + 20;
+		if (size <= 100)
+			item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, maps.begin()->mapName, ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 300, maps.begin()->mapName.size() * 20 + 20, 40)));
+		else
+			item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, maps.begin()->mapName,
+			((i + 1) * (SCREEN_WIDTH / 5)) + 100 - ((size - 100) / 2), 300, maps.begin()->mapName.size() * 20 + 20, 40)));
+		item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, i + 2, "", ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 400, 100, 100)));
+		// set la texture + set le isSetTexture à true
+		//_item.setTexture(true);
+		//_item.setTexture(*(_map.begin()).imgFileName);
+		std::rotate(maps.begin(), maps.begin() + 1, maps.end());
+	}
+}
+
+void 	Menu::makeMapMenu()
+{
+	_item.clear();
+	if (_maps.size() == 0)
+		_maps.push_back({"empty", "Random", "empty"});
+	// set une texture à < pour mettre une fleche
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "<", (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
+	displayThreeMaps(_maps, _item);
+	for (int i = 0; i < 3; i++)
+		std::rotate(_maps.rbegin(), _maps.rbegin() + 1, _maps.rend());
+	// set une texture à < pour mettre une fleche
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 5, ">", (SCREEN_WIDTH / 5) * 4 + (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
+}
+
+void	Menu::rotateMaps(bool left)
+{
+	_item.clear();
+	if (left)
+		std::rotate(_maps.begin(), _maps.begin() + 1, _maps.end());
+	else
+		std::rotate(_maps.rbegin(), _maps.rbegin() + 1, _maps.rend());	
+	if (_maps.size() == 0)
+		_maps.push_back({"empty", "Random", "empty"});
+	// set une texture à < pour mettre une fleche
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "<", (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
+	displayThreeMaps(_maps, _item);
+	for (int i = 0; i < 3; i++)
+		std::rotate(_maps.rbegin(), _maps.rbegin() + 1, _maps.rend());
+	// set une texture à < pour mettre une fleche
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 5, ">", (SCREEN_WIDTH / 5) * 4 + (SCREEN_WIDTH / 5) / 2 - 50, 400, 100, 100)));
+}
+
 void 	Menu::handleMapMenu(Actions &actions, STATE &state)
 {
 	if (actions.escape == true) {
 		_change_menu = true;
 		_changed = true;
+		actions.escape = false;
 		_step = 2;
-	} else if (actions.buttonPressed == 3) {
-		state = STATE::GAME;
+	} else if (actions.buttonPressed == 1) {
+		std::cout << "Rotate left\n";
+		rotateMaps(true);
+		_changed = true;
+	} else if (actions.buttonPressed == 5) {
+		rotateMaps(false);
 		_changed = true;
 	}
+	actions.buttonPressed = 0;
 }
 
 bool 	Menu::stepChanged(STATE &state)

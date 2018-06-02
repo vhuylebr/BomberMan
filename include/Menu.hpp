@@ -44,6 +44,7 @@ public:
 	void makeModeMenu();
 
 private:
+	void rotateMaps(bool left);
 	void handleModeMenu(Actions &actions, STATE &state);
 	void firstMenuKey(Actions &actions, STATE &state);
 	void checkBonus(Actions &actions);
