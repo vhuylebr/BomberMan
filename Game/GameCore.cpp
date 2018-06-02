@@ -297,15 +297,25 @@ void GameCore::displayAroundPlayer(void)
 					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
 			}
 	}
-	for (int y = _player2.getPos().second - 14; y < _player2.getPos().second + 14; ++y) {
-		if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-			for (int x = _player2.getPos().first - 14; x < _player2.getPos().first + 14; ++x) {
-				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
-					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
-					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
-			}
-	}
+	if (_params.nbPlayers > 1)
+		for (int y = _player2.getPos().second - 14; y < _player2.getPos().second + 14; ++y) {
+			if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
+				for (int x = _player2.getPos().first - 14; x < _player2.getPos().first + 14; ++x) {
+					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
+						&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
+						_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
+				}
+		}
 	// end
+}
+
+void GameCore::displayScore()
+{
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 0, "Speed: " + std::to_string(_player1.getSpeed()), 0, 0, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 1, "Bombs: " + std::to_string(_player1.getBombCount()), 0, 100, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 2, "Power: " + std::to_string(_player1.getPower()), 0, 200, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 3, "Super: " + std::string(_player1.getSuper() ? "activate" : "desactivate"), 0, 300, 300, 100));
+
 }
 
 std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
@@ -322,10 +332,13 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 	bombManager(act);
 	if (changed) {
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
-		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+		if (_params.nbPlayers > 1)
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 		displayAroundPlayer();
+		displayScore();
 	} else if (_i == 0) {
 		displayAroundPlayer();
+		displayScore();
 		++_i;
 	}
 	return (_updateEntities);

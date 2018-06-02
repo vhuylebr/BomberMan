@@ -80,8 +80,10 @@ public:
 	bool checkEnd(STATE &);
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
-	int getEndId() const;
+	int		getEndId() const;
 	void	handleIA();
+	void	displayScore();
+	
 
 private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
