@@ -38,6 +38,7 @@ public:
 	void	ia();
 	void	setNumber(int);
 	int	getNumber() const;
+	bool isBot() const {return _isBot; };
 
 private:
 	int 	_number;
@@ -46,6 +47,7 @@ private:
 	int	_bombs;
 	int	_pow;
 	bool	_superB;
+	bool	_isBot;
 };
 
 #endif /* !PLAYER_HPP_ */

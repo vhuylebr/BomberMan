@@ -17,6 +17,7 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 {
 	y = 0;
 	_iaList.clear();
+	_nbPlayer = 0;
 	for (auto &line : map) {
 		x = 0;
 		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
@@ -27,24 +28,23 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 			} else if (c == '1') {
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x), static_cast<float>(y), _id));
 				_id++;
-			} else if (c == '2') {
+			} else if (c == '4') {
+				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
 				if (_nbPlayer == 0) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 0));
 					_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
-					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+					_id++;
 					_nbPlayer++;
-				} else {
+				} else if (_nbPlayer == 1) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 1));
 					_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
-					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
-				}
-				_id++;
-			} else if (c == '4') {
-				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
-				if (static_cast<int>(_iaList.size()) < params.nbBots) {
+					_nbPlayer++;
+					_id++;
+				} else if (static_cast<int>(_iaList.size()) < params.nbBots) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
 					_iaList.push_back(Player(static_cast<float>(x), static_cast<float>(y), _id));
 					_id++;
+					_nbPlayer++;
 				}
 			} else
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
