@@ -465,7 +465,7 @@ void IrrLib::drawGame()
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
 	if (!_splitScreen) {
 		irr::core::vector3df camPos = _players[0]->getPosition();
-		_camera->setPosition(irr::core::vector3df(camPos.X, 20, camPos.Z - 0.1));
+		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_camera->setTarget(camPos);
 		_smgr->setActiveCamera(_camera);
 		_smgr->drawAll();
@@ -568,16 +568,19 @@ void IrrLib::removeItem(int id)
 	}
 }
 
-void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
-	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
+void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities,
+	std::vector<std::unique_ptr<IEntity> > &updateEntities)
 {
 	drop();
 	createPlane(size);
-	for (auto &it : gameEntities) {
-		for (auto &it2 : it) {
-			if (!it2->isEmpty())
-					_factory[it2->getType()](it2->getEntity());
-		}
+	// for (auto &it : gameEntities) {
+	// 	for (auto &it2 : it) {
+	// 		if (!it2->isEmpty())
+	// 				_factory[it2->getType()](it2->getEntity());
+	// 	}
+	// }
+	for (auto &it: updateEntities) {
+		_factoryUpdate[it->getType()](it);
 	}
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
@@ -623,14 +626,14 @@ void IrrLib::drop()
 		it->remove();
 		// it->drop();
 	}
-	// for (auto &it : _checkboxes) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
-	// for (auto &it : _inputs) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
+	for (auto &it : _checkboxes) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _inputs) {
+		it->remove();
+		// it->drop();
+	}
 	// _smgr = _device->getSceneManager();
 	// _labels.clear();
 	// _checkboxes.clear();
