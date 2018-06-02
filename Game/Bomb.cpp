@@ -10,7 +10,7 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
-	:_counter(100),_owner(owner), _pow(1), _superB(false), _flametime(10)
+	:_counter(100),_owner(owner), _pow(1), _superB(false), _flametime(10), _momentum{0, 0}
 {
 	_alive = true;
 	_x = x;
@@ -98,6 +98,21 @@ bool 	Bomb::isAlive() const
 bool    Bomb::isExplode() const
 {
 	return (_counter == 0);
+}
+
+bool	Bomb::isMoving() const
+{
+	return (_momentum.x || _momentum.y);
+}
+
+void	Bomb::move()
+{
+	
+}
+
+void	Bomb::takeDir(pairUC dir)
+{
+
 }
 
 bool	Bomb::isOutFire() const

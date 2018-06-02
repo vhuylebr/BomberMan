@@ -15,6 +15,12 @@
 # include "Fire.hpp"
 # include "Player.hpp"
 
+template<typename T>
+struct posxy {
+    T   x;
+    T   y;
+};
+
 class Bomb : public AEntity {
 public:
     Bomb(float x, float y, unsigned int id, std::size_t);
@@ -30,16 +36,19 @@ public:
     void	setPower(int pow);
     void	detonate();
     void    setSuper(bool);
+    bool	isMoving() const;
+    void	move();
+    void	takeDir(pairUC dir);
 
 private:
-    int _counter;
+    int     _counter;
     std::size_t _owner;
     int         _pow;
     bool        _superB;
     std::vector<Fire> _flames;
     std::vector<pairUC> _dirs;
     int           _flametime;
-    // Direction _direction;
+    posxy<float>   _momentum;
 };
 
 #endif /* !BOMB_HPP_ */
