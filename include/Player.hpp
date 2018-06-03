@@ -40,6 +40,7 @@ public:
 	void	setNumber(int);
 	void	setKick(bool);
 	int	getNumber() const;
+	bool isBot() const {return _isBot; };
 
 private:
 	int 	_number;
@@ -48,7 +49,11 @@ private:
 	int	_bombs;
 	int	_pow;
 	bool	_superB;
+<<<<<<< HEAD
 	bool	_kick;
+=======
+	bool	_isBot;
+>>>>>>> 7a06a5ca4f54a6eb01c7f688a2b805cf4339ee39
 };
 
 #endif /* !PLAYER_HPP_ */

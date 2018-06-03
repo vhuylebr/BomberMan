@@ -73,8 +73,8 @@ IrrLib::~IrrLib()
 
 void IrrLib::createPlane(pairUC &size)
 {
-	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
-		irr::core::dimension2d<irr::u32>(size.second, size.second));
+	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(15, 15),
+		irr::core::dimension2d<irr::u32>(15, 15));
 	_ground = _smgr->addMeshSceneNode(plane);
 	_ground->setPosition(irr::core::vector3df(0, 0, 0));
 	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
@@ -568,8 +568,7 @@ void IrrLib::removeItem(int id)
 	}
 }
 
-void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities,
-	std::vector<std::unique_ptr<IEntity> > &updateEntities)
+void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
 	drop();
 	createPlane(size);
@@ -579,9 +578,6 @@ void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobil
 	// 				_factory[it2->getType()](it2->getEntity());
 	// 	}
 	// }
-	for (auto &it: updateEntities) {
-		_factoryUpdate[it->getType()](it);
-	}
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}

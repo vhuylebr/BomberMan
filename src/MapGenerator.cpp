@@ -173,9 +173,9 @@ void MapGenerator::generatePlayers(const int nbPlayers, const int nbIA)
 		h++;
 
 	}
-	putPlayers('2', _map, coords);
+	putPlayers('4', _map, coords);
 	if (nbPlayers > 1)
-		putPlayers('2', _map, coords);
+		putPlayers('4', _map, coords);
 	for (int i = 0; i < nbIA && static_cast<unsigned int>(i) < coords.size(); i++) {
 		putPlayers('4', _map, coords);
 	}
