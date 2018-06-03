@@ -10,7 +10,7 @@
 #include "Bomb.hpp"
 
 Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
-	:_counter(100),_owner(owner), _pow(1), _superB(false), _flametime(10), _momentum{0, 0}
+	:_counter(100),_owner(owner), _pow(1), _superB(false), _flametime(10), _direction{0, 0}, _momentum(0)
 {
 	_alive = true;
 	_x = x;
@@ -100,19 +100,26 @@ bool    Bomb::isExplode() const
 	return (_counter == 0);
 }
 
-bool	Bomb::isMoving() const
+bool	Bomb::isPushed() const
 {
-	return (_momentum.x || _momentum.y);
+	return (_direction.x || _direction.y);
 }
 
 void	Bomb::move()
 {
-	
+	_x += _direction.x / 15.0f + 1.4f * _momentum * _direction.x;
+	_y += _direction.y / 15.0f + 1.4f * _momentum * _direction.y;
 }
 
-void	Bomb::takeDir(pairUC dir)
+pairUC	Bomb::getNextPos()
 {
+	return (std::make_pair<float, float>(std::round(_x + 0.6 * _direction.x), std::round(_y + 0.6 * _direction.y)));
+}
 
+void	Bomb::takeDir(pairUC playerPos, float power)
+{
+	_direction = {playerPos.first, playerPos.second};
+	_momentum = power;
 }
 
 bool	Bomb::isOutFire() const

@@ -36,9 +36,10 @@ public:
     void	setPower(int pow);
     void	detonate();
     void    setSuper(bool);
-    bool	isMoving() const;
+    bool	isPushed() const;
     void	move();
-    void	takeDir(pairUC dir);
+    pairUC	getNextPos();
+    void	takeDir(pairUC dir, float pow);
 
 private:
     int     _counter;
@@ -48,7 +49,8 @@ private:
     std::vector<Fire> _flames;
     std::vector<pairUC> _dirs;
     int           _flametime;
-    posxy<float>   _momentum;
+    posxy<float>   _direction;
+    float          _momentum;
 };
 
 #endif /* !BOMB_HPP_ */
