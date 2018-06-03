@@ -64,7 +64,8 @@ int	Player::getPower() const
 
 void	Player::addSpeed()
 {
-	_speed += 0.01;
+	if (_speed < 0.2)
+		_speed += 0.01;
 }
 
 bool	Player::getSuper() const
