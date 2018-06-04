@@ -95,6 +95,7 @@ private:
 	void	iaMoving(Player &);
 	void	iaAction(std::unique_ptr<EntityPos> &, Player &, std::pair<int, int>, float);
 	void	displayAroundPlayer(void);
+	bool	haveBombed(Player);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
