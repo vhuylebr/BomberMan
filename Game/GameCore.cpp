@@ -293,10 +293,14 @@ bool	GameCore::haveBombed(Player player)
 
 void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std::pair<int, int> dir, float orientation)
 {
+	std::pair<int, int>	pos = player.getIa();
+	
 	if (entity->isEmpty() || entity->getType() == Entity::ITEM)
 		movePlayer(player.getPos(), dir, player, orientation);
-	else if (entity->getSubType() == ItemStatic::CRATE && !haveBombed(player))
+	else if (entity->getSubType() == ItemStatic::CRATE && !haveBombed(player)) {
 	        playerDropBomb(player);
+		player.setIa(std::make_pair((pos.first == 0) ? 0 : pos.first * -1, (pos.second == 0) ? 0 : pos.second * -1));
+	}
 	else
 		player.setIa(std::make_pair(0, 0));
 }
