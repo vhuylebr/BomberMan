@@ -293,7 +293,7 @@ bool	GameCore::haveBombed(Player player)
 
 void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std::pair<int, int> dir, float orientation)
 {
-	if (entity->isEmpty())
+	if (entity->isEmpty() || entity->getType() == Entity::ITEM)
 		movePlayer(player.getPos(), dir, player, orientation);
 	else if (entity->getSubType() == ItemStatic::CRATE && !haveBombed(player))
 	        playerDropBomb(player);
@@ -319,14 +319,30 @@ void	GameCore::iaMoving(Player &player)
 	std::pair<float, float>	myPos = player.getPos();
 	int			rand;
 
-	if (dir == std::make_pair(0, 1) && !existBomb(myPos.second + 1, myPos.first))
-		iaAction(_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)], player, {0, 1}, -90.0f);
-	else if (dir == std::make_pair(0, -1)  && !existBomb(myPos.second - 1, myPos.first))
-	        iaAction(_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)], player, {0, -1}, 90.0f);
-	else if (dir == std::make_pair(1, 0) && !existBomb(myPos.second, myPos.first + 1))
-		iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first + 1)], player, {1, 0}, 0.0f);
-	else if (dir == std::make_pair(-1, 0) && !existBomb(myPos.second, myPos.first - 1))
-		iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)], player, {-1, 0}, 180.0f);
+	if (dir == std::make_pair(0, 1)) {
+		if (existBomb(myPos.second + 1, myPos.first))
+			player.setIa(std::make_pair(0, 0));
+		else
+			iaAction(_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)], player, {0, 1}, -90.0f);
+	}
+	else if (dir == std::make_pair(0, -1)) {  
+		if (existBomb(myPos.second - 1, myPos.first))
+			player.setIa(std::make_pair(0, 0));
+		else
+			iaAction(_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)], player, {0, -1}, 90.0f);
+	}
+	else if (dir == std::make_pair(1, 0)) {
+		if (existBomb(myPos.second, myPos.first + 1))
+			player.setIa(std::make_pair(0, 0));
+		else
+			iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first + 1)], player, {1, 0}, 0.0f);
+	}
+	else if (dir == std::make_pair(-1, 0)) {
+		if (existBomb(myPos.second, myPos.first - 1))
+			player.setIa(std::make_pair(0, 0));
+		else
+			iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)], player, {-1, 0}, 180.0f);
+	}
 	else if (dir == std::make_pair(0, 0)) {
 		std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
 		std::uniform_int_distribution<int>	distrib{1, 4};
