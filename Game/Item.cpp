@@ -28,6 +28,9 @@ Item::Item(float x, float y, unsigned int id, std::vector<eItem> &disp)
 	_getModel[KICK] = "./media/Shoes.obj";
 	_getTexture[KICK] = "./media/Shoes.png";
 	_getScale[KICK] = 0.1f;
+	_getModel[SHIELD] = "./media/Fireball.obj";
+	_getTexture[SHIELD] = "./media/shield.jpg";
+	_getScale[SHIELD] = 1.0f;
 	loadType(disp);
 	_id = id;
 }
@@ -36,9 +39,10 @@ void	Item::loadType(std::vector<eItem> &disp)
 {
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
 	std::uniform_int_distribution<int> distrib{0, 99};
-	double nb = distrib(re);
-	int idx = (int)(nb / 100.0f * (double)disp.size());
+	disp.push_back(eItem::SHIELD);
+	int idx = (int)(distrib(re) / 100.0f * (double)disp.size());
 	_bonusType = disp[idx];
+	//_bonusType = eItem::SHIELD;
 	if (_bonusType == WALL_PASS)
 		loadType(disp);
 	//std::cout << "Got " << _bonusType << "from idx " << idx << " from rd " << nb << std::endl;
