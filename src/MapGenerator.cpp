@@ -64,13 +64,18 @@ bool MapGenerator::checkCase(const int l, const int h)
 
 void MapGenerator::putWall(const int l, const int h)
 {
-	char nb = std::rand() % 5;
+	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+	std::uniform_int_distribution<int> distrib{0, 5};
+	char nb = distrib(re);
+	// char nb = std::rand() % 5;
 
 
 	if (checkCase(l, h) && nb < 2 && _map[h][l] != ' ')
 		_map[h][l] = '0';
 	if (h == 1 || h == _y - 2 || l == 1 || l == _x - 2) {
-		if ((nb = (std::rand() % 8)) == 4)
+		std::uniform_int_distribution<int> distrib2{0, 8};
+		//if ((nb = (std::rand()) == 4)
+		if ((nb = distrib(re)) == 4)
 			_map[h][l] = ' ';
 	}
 }

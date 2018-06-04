@@ -48,6 +48,7 @@ static const t_bonus bonusButton[NB_ITEMS] {
 void 	Core::getParametersFromMenu()
 {
 	if (_menu.getStep() == 2) {
+		_param.map = _menu.getMap();
 		_param.state = GameState::NEWGAME;
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
 		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));

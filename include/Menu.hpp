@@ -17,12 +17,7 @@
 # include "Item.hpp"
 # include "State.hpp"
 # include "Metrics.hpp"
-
-struct Map {
-	std::string imgFileName;
-	std::string mapName;
-	std::string fileName;
-};
+# include "Map.hpp"
 
 class Menu {
 public:
@@ -40,8 +35,9 @@ public:
 	std::vector<eItem> &getBonus();
 	std::unique_ptr<IEntity> &getItemByID(int);
 	bool 	stepChanged(STATE &state);
-	int getStep() const {return _step;}
+	int getStep() const { return _step;}
 	void makeModeMenu();
+	Map getMap() const { return _map; }
 
 private:
 	void rotateMaps(bool left);
@@ -52,19 +48,23 @@ private:
 	void handleSecondMenu(Actions &actions, STATE &state);
 	void handleThirdMenu(Actions &actions, STATE &state);
 	void handleMapMenu(Actions &actions, STATE &state);
+	void handleParamsMenu(Actions &actions, STATE &state);
 
 	void initMaps();
+	void makeParamsMenu();
 	void makeMainMenu();
 	void makeOptionMenu();
 	void makeJoinMenu();
 	void makeMapMenu();
 
+	bool _randomMode;
 	int _step;
 	int _nbPlayer;
 	int _nbBots;
 	int _mapH;
 	int _mapW;
 	bool _change_menu;
+	Map _map;
 	std::string _pseudo;
 	std::string _ip;
 	std::map<eItem, bool> _map_bonus;

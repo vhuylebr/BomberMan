@@ -103,6 +103,51 @@ void    Menu::makeMainMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 580, 600, 100)));
 }
 
+void	Menu::makeParamsMenu()
+{
+	if (_map.mapName == "Random")
+		_randomMode = true;
+	_item.clear();
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name :", 780, 120, 400, 70)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 780, 190, 400, 70)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 780, 800, 400, 100)));
+
+	// Bonus
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", SCREEN_WIDTH - 450, 0, 820, 1000)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", SCREEN_WIDTH - 400, 200, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", SCREEN_WIDTH - 350, 200, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 11, "", SCREEN_WIDTH - 400, 300, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 12, "Power Up", SCREEN_WIDTH - 350, 300, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 13, "", SCREEN_WIDTH - 400, 400, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 14, "Penetration", SCREEN_WIDTH - 350, 400, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 15, "", SCREEN_WIDTH - 400, 500, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", SCREEN_WIDTH - 350, 500, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 17, "", SCREEN_WIDTH - 400, 600, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", SCREEN_WIDTH - 350, 600, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 19, "", SCREEN_WIDTH - 400, 700, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", SCREEN_WIDTH - 350, 700, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 44, "", SCREEN_WIDTH - 400, 750, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 45, "Shield", SCREEN_WIDTH - 350, 750, 250, 50)));
+
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 21, "Your name :", 100, 120, 400, 70)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Toto", 100, 190, 400, 70)));
+	// Number of Bots
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 23, "+", 400, 640, 100, 100)));
+//	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(_nbBots), 250, 640, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(0), 250, 640, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 25, "-", 100, 640, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 26, "Number of Bots :", 100, 540, 400, 90)));
+	// Map height
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 27, "Map size", 780, 300, 400, 90)));
+	if (_randomMode) {
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 28, "+", 1080, 400, 100, 100)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 30, "-", 780, 400, 100, 100)));
+	}
+	// afficher les tailles qui sont dans Map
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 29,
+	std::to_string(10) + "x" + std::to_string(10), 930, 400, 100, 100)));
+}
+
 void Menu::changeMenu()
 {
 	_change_menu = false;
@@ -119,6 +164,9 @@ void Menu::changeMenu()
 			break;
 		case 4:
 		 	makeMapMenu();
+			break;
+		case 5:
+			makeParamsMenu();
 			break;
 	}
 }
@@ -301,13 +349,32 @@ void 	Menu::handleMapMenu(Actions &actions, STATE &state)
 		actions.escape = false;
 		_step = 2;
 	} else if (actions.buttonPressed == 1) {
-		std::cout << "Rotate left\n";
 		rotateMaps(true);
 		_changed = true;
 	} else if (actions.buttonPressed == 5) {
 		rotateMaps(false);
 		_changed = true;
+	} else if (actions.buttonPressed > 1) {
+		for (int i = 2; i < actions.buttonPressed; i++)
+			std::rotate(_maps.begin(), _maps.begin() + 1, _maps.end());
+		_map = _maps.front();
+		_change_menu = true;
+		_step = 5;
+		_changed = true;
 	}
+	actions.buttonPressed = 0;
+}
+
+void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
+{
+	// if (actions.escape == true) {
+	// 	_change_menu = true;
+	// 	_changed = true;
+	// 	actions.escape = false;
+	// 	_step = 4;
+	// }
+
+	
 	actions.buttonPressed = 0;
 }
 
@@ -329,10 +396,6 @@ static bool keyPressed(Actions &actions, bool changeState)
 
 bool 	Menu::getState(Actions &actions, STATE &state)
 {
- 	// if (_step == 4 && actions.buttonPressed == 3) {
-		// state = STATE::GAME;
- 	// 	return false;
- 	// } Sayonara
  	if (_step == 2 && actions.buttonPressed == 7) {
 		state = STATE::GAME;
  		return false;
@@ -375,6 +438,9 @@ void Menu::getMenu(Actions &actions, STATE &state)
 			break;
 		case 3:
 			handleThirdMenu(actions, state);
+			break;
+		case 5:
+			handleParamsMenu(actions, state);
 			break;
 	}
 }
