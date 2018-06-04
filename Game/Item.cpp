@@ -25,6 +25,9 @@ Item::Item(float x, float y, unsigned int id, std::vector<eItem> &disp)
 	_getModel[SUPER_BOMB] = "./media/megaBomb.obj";
 	_getTexture[SUPER_BOMB] = "./media/megaBomb.png";
 	_getScale[SUPER_BOMB] = 1.0f;
+	_getModel[KICK] = "./media/Shoes.obj";
+	_getTexture[KICK] = "./media/Shoes.png";
+	_getScale[KICK] = 0.1f;
 	loadType(disp);
 	_id = id;
 }
@@ -36,7 +39,7 @@ void	Item::loadType(std::vector<eItem> &disp)
 	double nb = distrib(re);
 	int idx = (int)(nb / 100.0f * (double)disp.size());
 	_bonusType = disp[idx];
-	if (_bonusType == WALL_PASS || _bonusType == KICK)
+	if (_bonusType == WALL_PASS)
 		loadType(disp);
 	//std::cout << "Got " << _bonusType << "from idx " << idx << " from rd " << nb << std::endl;
 }
