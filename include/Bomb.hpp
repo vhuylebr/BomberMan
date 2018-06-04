@@ -42,7 +42,7 @@ public:
     void	takeDir(pairUC dir, float pow);
 
 private:
-    int     _counter;
+    int         _counter;
     std::size_t _owner;
     int         _pow;
     bool        _superB;
