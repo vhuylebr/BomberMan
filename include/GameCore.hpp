@@ -88,9 +88,9 @@ private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
 	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
-	int	dodgeBomb(std::pair<float, float>, std::pair<float, float>, Player);
-	void	iaMoving(Player);
-	void	iaAction(std::unique_ptr<EntityPos> &, Player, std::pair<int, int>, float);
+	int	dodgeBomb(std::pair<float, float>, std::pair<float, float>, Player &);
+	void	iaMoving(Player &);
+	void	iaAction(std::unique_ptr<EntityPos> &, Player &, std::pair<int, int>, float);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;

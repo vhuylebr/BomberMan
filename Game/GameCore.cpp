@@ -249,11 +249,12 @@ bool GameCore::checkEnd(STATE &state)
 	return false;
 }
 
-int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float> myPos, Player player)
+int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float> myPos, Player &player)
 {
 	if (bombPos.second == std::round(myPos.second)) {
-		if (_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)]->isEmpty())
+		if (_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)]->isEmpty()) {
 			movePlayer(myPos, {0, 1}, player, -90.0f);
+		}
 		else if (_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)]->isEmpty())
 			movePlayer(myPos, {0, -1}, player, 90.0f);
 		else {
@@ -278,7 +279,7 @@ int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float>
 	return 1;
 }
 
-void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player player, std::pair<int, int> dir, float orientation)
+void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std::pair<int, int> dir, float orientation)
 {
 	if (entity->isEmpty())
 		movePlayer(player.getPos(), dir, player, orientation);
@@ -288,7 +289,7 @@ void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player player, std::
 		player.setIa(std::make_pair(0, 0));
 }
 
-void	GameCore::iaMoving(Player player)
+void	GameCore::iaMoving(Player &player)
 {
 	std::pair<int, int>	dir = player.getIa();
 	std::pair<float, float>	myPos = player.getPos();
@@ -324,6 +325,8 @@ void	GameCore::handleIA()
 	std::pair<float, float>	bombPos;
 
 	for (auto &it : _iaList) {
+		if (it.isAlive() == false)
+			continue ;
 		myPos = it.getPos();
 	        for (auto &i : _bombs) {
 			bombPos = i.getPos();
@@ -342,8 +345,8 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
-	//if (checkEnd(state) == true)
-	//	return _updateEntities;
+	if (checkEnd(state) == true)
+		return _updateEntities;
 	changed = playerMovement(act);
 	if (changed)
 	{
