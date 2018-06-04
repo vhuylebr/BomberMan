@@ -73,8 +73,8 @@ IrrLib::~IrrLib()
 
 void IrrLib::createPlane(pairUC &size)
 {
-	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(size.first, size.first),
-		irr::core::dimension2d<irr::u32>(size.second, size.second));
+	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(15, 15),
+		irr::core::dimension2d<irr::u32>(15, 15));
 	_ground = _smgr->addMeshSceneNode(plane);
 	_ground->setPosition(irr::core::vector3df(0, 0, 0));
 	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
@@ -466,7 +466,7 @@ void IrrLib::drawGame()
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
 	if (!_splitScreen) {
 		irr::core::vector3df camPos = _players[0]->getPosition();
-		_camera->setPosition(irr::core::vector3df(camPos.X, 20, camPos.Z - 0.1));
+		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_camera->setTarget(camPos);
 		_smgr->setActiveCamera(_camera);
 		_smgr->drawAll();
@@ -569,17 +569,16 @@ void IrrLib::removeItem(int id)
 	}
 }
 
-void IrrLib::initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &gameEntities,
-	pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
+void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
 {
 	drop();
 	createPlane(size);
-	for (auto &it : gameEntities) {
-		for (auto &it2 : it) {
-			if (!it2->isEmpty())
-					_factory[it2->getType()](it2->getEntity());
-		}
-	}
+	// for (auto &it : gameEntities) {
+	// 	for (auto &it2 : it) {
+	// 		if (!it2->isEmpty())
+	// 				_factory[it2->getType()](it2->getEntity());
+	// 	}
+	// }
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}
@@ -624,14 +623,14 @@ void IrrLib::drop()
 		it->remove();
 		// it->drop();
 	}
-	// for (auto &it : _checkboxes) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
-	// for (auto &it : _inputs) {
-	// 	it->remove();
-	// 	// it->drop();
-	// }
+	for (auto &it : _checkboxes) {
+		it->remove();
+		// it->drop();
+	}
+	for (auto &it : _inputs) {
+		it->remove();
+		// it->drop();
+	}
 	// _smgr = _device->getSceneManager();
 	// _labels.clear();
 	// _checkboxes.clear();
