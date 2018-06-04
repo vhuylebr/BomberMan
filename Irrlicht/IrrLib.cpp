@@ -406,7 +406,10 @@ std::wstring  IrrLib::getLabelText(std::unique_ptr<IEntity> &item)
 std::wstring	IrrLib::getListBoxChoice(std::unique_ptr<IEntity> &item)
 {
 	int toto = _listbox->getSelected();
-	return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
+	if (toto == -1)
+		return (L"");
+	else
+		return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
 }
 
 int IrrLib::getIdButtonPressed() const

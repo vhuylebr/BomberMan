@@ -6,6 +6,7 @@
 */
 
 #include "GameCore.hpp"
+#include <sstream>
 
 GameCore::GameCore()
 	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0), _i(0)
@@ -54,21 +55,157 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 	}
 }
 
+
+void GameCore::loadEntities(std::vector<std::vector<char>> &map,
+unsigned int &x, unsigned int &y, const parameters &params)
+{
+	y = 0;
+	_iaList.clear();
+	std::cout << "1" << std::endl;
+	for (auto &line : map) {
+		x = 0;
+		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
+		for (auto &c : line) {
+			if (c == '0') {
+				_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x), static_cast<float>(y), _id));
+				_id++;
+			} else if (c == '1') {
+				_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x), static_cast<float>(y), _id));
+				_id++;
+			} else
+				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+			x += 1;
+		}
+		y += 1;
+	}
+	std::cout << "2" << std::endl;
+}
+
+void GameCore::loadMovingEntities(std::vector<std::vector<char>> &map,
+unsigned int &x, unsigned int &y, const parameters &params)
+{
+	std::cout << "here" << std::endl;
+	std::ifstream fd(/*file);*/"save.txt");
+	std::string line;
+
+	y = 0;
+	int item = 1;
+	while (std::getline(fd, line))
+		if (line == "separateur")
+			break ;
+	while (std::getline(fd, line)) {
+		std::istringstream ss(line);
+		std::string tmpstr;
+		ss >> tmpstr;
+		if (tmpstr == "Player1" || tmpstr == "Player2" || tmpstr == "IA") {
+			int power;
+			bool super;
+			float xplayer;
+			float yplayer;
+			ss >> xplayer;
+			ss >> yplayer;
+			ss >> power;
+			ss >> super;
+			if (tmpstr == "Player1") {
+				int bombcount;
+				float speed;
+				bool kick;
+				ss >> bombcount;
+				ss >> speed;
+				ss >> kick;
+				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(xplayer, yplayer, _id, 0));
+				_player1 = Player(xplayer, yplayer, _id);
+				_player1.setPower(power);
+				_player1.setSuper(super);
+				_player1.setBombs(bombcount);
+				_player1.setSpeed(speed);
+				_player1.setKick(kick);
+				_nbPlayer++;
+			} else if (tmpstr == "Player2") {
+				int bombcount;
+				float speed;
+				bool kick;
+				ss >> bombcount;
+				ss >> speed;
+				ss >> kick;
+				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(xplayer, yplayer, _id, 1));
+				_player2 = Player(xplayer, yplayer, _id);
+				_player2.setPower(power);
+				_player2.setSuper(super);
+				_player2.setBombs(bombcount);
+				_player2.setSpeed(speed);
+				_player2.setKick(kick);
+			} else if (tmpstr == "IA") {
+				std::cout << "---- item :" << item << std::endl;
+				std::cout << "----------a" << std::endl;
+	//			_vectorEntities[std::round(yplayer)].push_back(std::make_unique<EntityPos>());
+				std::cout << "----------b" << std::endl;
+//				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(xplayer), static_cast<float>(yplayer), _id));
+				_iaList.push_back(Player(static_cast<float>(xplayer), static_cast<float>(yplayer), _id));
+				std::cout << "----------c" << std::endl;
+				item++;
+			}
+		} else if (tmpstr == "Bomb") {
+			// Bomb tmp(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id, player.getId());
+			// tmp.setPower(player.getPower());
+			// tmp.setSuper(player.getSuper());
+			// _bombs.push_back(tmp);
+			// _updateEntities.push_back(std::make_unique<Bomb>(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id, player.getId()));
+			std::cout << "Une bombe ici" << std::endl;
+		}
+		_id++;
+		std::cout << "---------------" << std::endl;
+	}
+	std::cout << "it seems ok" << std::endl;
+}
+
+std::vector<std::vector<char>> GameCore::loadGame(std::wstring filename)
+{
+	std::cout << "gonna crash" << std::endl;
+	std::vector<std::vector<char>> map;
+	std::string file;
+	file.assign(filename.begin(), filename.end());
+	std::ifstream fd(/*file);*/"save.txt");
+	std::string line;
+
+	while (std::getline(fd, line))
+	{
+		if (line == "separateur")
+			break ;
+		std::vector<char> tmp;
+		for (char c : line)
+			tmp.push_back(c);
+		map.push_back(tmp);
+		tmp.clear();
+	}
+	return (map);
+}
+
 void    GameCore::init(parameters params)
 {
 	unsigned int x = 0;
 	unsigned int y = 0;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
-	_i = 0;
-
-	std::cout << "Initializing new game" << std::endl;
+	std::vector<std::vector<char>> map;
 	_params = params;
-	generator.generateMap();
-	generator.generatePlayers(2, params.nbBots);
-	generator.dispMap();
-	std::vector<std::vector<char>> map = generator.getMap();
-	createEntities(map, x, y, params);
+	if (params.state == GameState::NEWGAME) {
+		std::cout << "Initializing new game" << std::endl;
+		generator.generateMap();
+		generator.generatePlayers(2, params.nbBots);
+		generator.dispMap();
+		map = generator.getMap();
+		createEntities(map, x, y, params);
+	}
+	if (params.state == GameState::LOADGAME) {
+		std::cout << "Loading game from save" << std::endl;
+		map = loadGame(params.gameName);
+		loadEntities(map, x, y, params);
+		loadMovingEntities(map, x, y, params);
+	}
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
@@ -76,6 +213,29 @@ void    GameCore::init(parameters params)
 	_size.x = x;
 	_size.y = y;
 }
+
+// void    GameCore::init(parameters params)
+// {
+// 	unsigned int x = 0;
+// 	unsigned int y = 0;
+// 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
+// 	_nbPlayer = 0;
+// 	_i = 0;
+
+// 	std::cout << "Initializing new game" << std::endl;
+// 	_params = params;
+// 	generator.generateMap();
+// 	generator.generatePlayers(2, params.nbBots);
+// 	generator.dispMap();
+// 	std::vector<std::vector<char>> map = generator.getMap();
+// 	createEntities(map, x, y, params);
+// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
+// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
+// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+// 	_size.x = x;
+// 	_size.y = y;
+// }
 
 GameCore::~GameCore()
 {
@@ -419,11 +579,17 @@ std::map<eItem, std::string> myItem =
 
 void 	GameCore::saveMobileEntities(std::ofstream &file)
 {
-	file << "Player1 " << std::round(_player1.getX()) << " " << std::round(_player1.getY()) << "\n";
-	if (true)
-		file << "Player2 " << std::round(_player2.getX()) << " " << std::round(_player2.getY()) << "\n";
+	file << "Player1 " << std::round(_player1.getX()) << " " << std::round(_player1.getY()) << " " <<  _player1.getPower()
+	<< " " << _player1.getSuper() << " " << _player1.getBombCount() << " " << _player1.getSpeed() << " " << _player1.hasKick() << "\n";
+	if (_player2.getX() != -1 && _player2.getY() != -1)
+		file << "Player2 " << std::round(_player2.getX()) << " " << std::round(_player2.getY()) << " " <<  _player2.getPower()
+		<< " " << _player2.getSuper() << " " << _player2.getBombCount() << " " << _player2.getSpeed() << " " << _player1.hasKick() << "\n";
 	for (auto &i : _bombs)
-		file << "Bomb " << i.getX() << " " << i.getY() << "\n";
+		file << "Bomb " << i.getX() << " " << i.getY() << " " << i.getPower() << " " << i.getSuper() << "\n";
+	for (auto &i :_iaList) {
+		std::cout << "IA here" << std::endl;
+		file << "IA " << i.getX() << " " << i.getY() << " " << i.getPower() << " " << i.getSuper() << "\n";
+	}
 	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
 		for (unsigned int y = 0; y != _vectorEntities[idx].size(); y++) {
 			if (_vectorEntities[idx][y]->isEmpty() == false &&

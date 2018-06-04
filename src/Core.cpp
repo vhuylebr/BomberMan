@@ -45,7 +45,7 @@ static const t_bonus bonusButton[NB_ITEMS] {
 	{19, eItem::KICK},
 };
 
-void 	Core::getParametersFromMenu()
+int 	Core::getParametersFromMenu()
 {
 	if (_menu.getStep() == 2) {
 		_param.state = GameState::NEWGAME;
@@ -64,8 +64,11 @@ void 	Core::getParametersFromMenu()
 	{
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
+		if (_param.gameName == L"")
+			return (-1);
 		_param.mapname = "./media/map1.txt";
 	}
+	return (0);
 }
 
 static void setPauseVisible(IrrLib &lib, bool state)
@@ -150,7 +153,10 @@ int	Core::loop()
 				_coremusic.stop(SOUND::MENU);
 				_coremusic.play(SOUND::GAME);
 				_coremusic.setLoop(SOUND::GAME, true);
-				getParametersFromMenu();
+				if (getParametersFromMenu() == -1) {
+					_state = STATE::MENU;
+					continue;
+				}
 				_lib.cleanMenu();
 			}
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE

@@ -32,9 +32,19 @@ void	Player::addBomb()
 	_bombs += 1;
 }
 
+void 	Player::setBombs(int bombs)
+{
+	_bombs = bombs;
+}
+
 float	Player::getSpeed() const
 {
 	return (_speed);
+}
+
+void 	Player::setSpeed(float speed)
+{
+	_speed = speed;
 }
 
 int	Player::getBombCount() const
@@ -60,6 +70,11 @@ bool	Player::hasKick() const
 pairUC	Player::getPos() const
 {
 	return std::make_pair(_x, _y);
+}
+
+void 	Player::setPower(int pow)
+{
+	_pow = pow;
 }
 
 int	Player::getPower() const

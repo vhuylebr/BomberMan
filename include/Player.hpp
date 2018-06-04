@@ -27,15 +27,18 @@ public:
 	void	pickupItem(std::unique_ptr<IEntity> &);
 	void	addPower();
 	float	getSpeed() const;
+	void 	setSpeed(float speed);
 	bool	getSuper() const;
 	bool	hasKick() const;
 	void	setSuper(bool);
+	void	setPower(int);
 
 	void	addBomb();
 	void	addPow();
 	void	addSpeed();
+	void 	setBombs(int bombs);
 	void	dropBomb();
-	int	getBombCount() const;
+	int		getBombCount() const;
 	void	ia();
 	void	setNumber(int);
 	void	setKick(bool);

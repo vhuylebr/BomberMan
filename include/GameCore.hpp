@@ -83,7 +83,9 @@ public:
 	int		getEndId() const;
 	void	handleIA();
 	void	displayScore();
-	
+	void 	loadEntities(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
+	void 	loadMovingEntities(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
+	std::vector<std::vector<char>>	loadGame(std::wstring filename);	
 
 private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
