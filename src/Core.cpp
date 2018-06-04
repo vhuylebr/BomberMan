@@ -93,7 +93,7 @@ void	Core::gameManager(STATE &last)
 	if (last == STATE::MENU) {
 		_game.init(_param);
 		_lib.setSplitScreen(_param.split);
-		_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
+		_lib.initGame(_game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
 		_lib.drawGame();
@@ -106,7 +106,7 @@ void	Core::gameManager(STATE &last)
 			setEndVisible(_lib, false, _game.getEndId());
 			_game.init(_param);
 			_lib.setSplitScreen(_param.split);
-			_lib.initGame(_game.getEntities(), _game.getSize(), _game.getMobileEntities());
+			_lib.initGame(_game.getSize(), _game.getMobileEntities());
 		}
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();

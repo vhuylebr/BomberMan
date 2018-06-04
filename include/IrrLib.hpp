@@ -67,8 +67,7 @@ class IrrLib {
 		int getIdButtonPressed() const;
 		std::wstring getListBoxChoice(std::unique_ptr<IEntity>&);
 		void displayBackground();
-		void initGame(std::vector<std::vector<std::unique_ptr<EntityPos> > > &,
-			pairUC size, std::vector<std::unique_ptr<IEntity> >&);
+		void initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >&);
 
 		void drawGame();
 		void cleanMenu();

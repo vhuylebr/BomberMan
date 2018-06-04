@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2018
-** game
+** Game
 ** File description:
 ** game
 */
@@ -8,14 +8,16 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0), _i(0)
 {
 }
 
 void GameCore::createEntities(std::vector<std::vector<char>> &map,
-unsigned int &x, unsigned int &y, const parameters &params)
+		unsigned int &x, unsigned int &y, const parameters &params)
 {
 	y = 0;
+	_iaList.clear();
+	_nbPlayer = 0;
 	for (auto &line : map) {
 		x = 0;
 		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
@@ -26,24 +28,23 @@ unsigned int &x, unsigned int &y, const parameters &params)
 			} else if (c == '1') {
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x), static_cast<float>(y), _id));
 				_id++;
-			} else if (c == '2') {
+			} else if (c == '4') {
+				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
 				if (_nbPlayer == 0) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 0));
 					_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
-					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+					_id++;
 					_nbPlayer++;
-				} else {
+				} else if (_nbPlayer == 1 && params.nbPlayers > 1) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 1));
 					_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
-					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
-				}
-				_id++;
-			} else if (c == '4') {
-				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
-				if (static_cast<int>(_iaList.size()) < params.nbBots) {
+					_nbPlayer++;
+					_id++;
+				} else if (static_cast<int>(_iaList.size()) < params.nbBots) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
 					_iaList.push_back(Player(static_cast<float>(x), static_cast<float>(y), _id));
 					_id++;
+					_nbPlayer++;
 				}
 			} else
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
@@ -57,11 +58,12 @@ void    GameCore::init(parameters params)
 {
 	unsigned int x = 0;
 	unsigned int y = 0;
-	MapGenerator generator(10, 10);
+	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
+	_i = 0;
 
 	std::cout << "Initializing new game" << std::endl;
-
+	_params = params;
 	generator.generateMap();
 	generator.generatePlayers(2, params.nbBots);
 	generator.dispMap();
@@ -94,6 +96,11 @@ std::vector<std::vector<std::unique_ptr<EntityPos>>> &GameCore::getEntities()
 std::vector<std::unique_ptr<IEntity>> &GameCore::getMobileEntities()
 {
 	return _mobileEntities;
+}
+
+std::vector<std::unique_ptr<IEntity>> &GameCore::getUpdateEntities()
+{
+	return _updateEntities;
 }
 
 void GameCore::releaseUpdateEntities()
@@ -137,7 +144,7 @@ void GameCore::bombManager(Actions &act)
 			for (auto &b : a.getFlames())
 				_entitiesToRemove.push_back(std::make_pair<int, Entity>(b.getId(),
 							b.getType()));
-		}
+		}	
 	} // Plus tard les deux boucles seront assemblables
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
 			     return x.isOver();
@@ -148,7 +155,7 @@ void GameCore::bombManager(Actions &act)
 	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) // remplacer 0 par player2.
 		playerDropBomb(_player2);
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities, _entitiesToRemove, _updateEntities);
+		a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses, _updateEntities);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {
@@ -183,6 +190,12 @@ void GameCore::bombManager(Actions &act)
 			if (a.getOwner() == static_cast<unsigned int>(_player2.getId()))
 				_player2.addBomb();
 			break;
+		} else if (a.isAlive() && a.isPushed()) {
+			if (_vectorEntities[a.getNextPos().second][a.getNextPos().first]->isEmpty() == true) {
+				a.move();
+				_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
+			} else
+				a.takeDir({0, 0}, 0);
 		}
 	}
 }
@@ -204,6 +217,15 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 		if ((thereIsBomb(std::round(from.first + 0.5 * dir.first), std::round(from.second + 0.5 * dir.second)) == false ||
 		thereIsBomb(std::round(from.first), std::round(from.second)) == true))
 			player.setPos(from.first + (0.07 + player.getSpeed()) * dir.first, from.second + (0.07 + player.getSpeed()) * dir.second);
+		else if (thereIsBomb(std::round(from.first + 0.5 * dir.first), std::round(from.second + 0.5 * dir.second)) && player.hasKick()) {
+			std::cout << "KICK" << std::endl;
+			for (auto &it : _bombs) {
+				if (it.getPos().first == std::round(from.first + 0.5 * dir.first) && it.getPos().second == std::round(from.second + 0.5 * dir.second)) {
+					it.takeDir(dir, player.getSpeed());
+					break ;
+				}
+			}
+		}
 	} else if (_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType() == Entity::ITEM) {
 		player.pickupItem(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getEntity());
 		_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getId(),
@@ -229,7 +251,7 @@ bool 	GameCore::playerMovement(Actions act)
 		{act.Z, std::make_pair(0, 1), -90.0f, 2},
 		{act.S, std::make_pair(0, -1), 90.0f, 2}
 	};
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < (_params.nbPlayers > 1 ? 8 : 4); i++) {
 		if (movement_table[i].action == true) {
 			playerPos = (movement_table[i].player == 1) ? _player1.getPos() : _player2.getPos();
 			movePlayer(playerPos, movement_table[i].dir, (movement_table[i].player == 1) ? _player1 : _player2, movement_table[i].rotation);
@@ -339,22 +361,61 @@ void	GameCore::handleIA()
 	}
 }
 
+void GameCore::displayAroundPlayer(void)
+{
+	// set updateEnties around the player
+	for (int y = _player1.getPos().second - 14; y < _player1.getPos().second + 14; ++y) {
+		if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
+			for (int x = _player1.getPos().first - 14; x < _player1.getPos().first + 14; ++x) {
+				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
+					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
+					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
+			}
+	}
+	if (_params.nbPlayers > 1)
+		for (int y = _player2.getPos().second - 14; y < _player2.getPos().second + 14; ++y) {
+			if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
+				for (int x = _player2.getPos().first - 14; x < _player2.getPos().first + 14; ++x) {
+					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
+						&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
+						_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
+				}
+		}
+	// end
+}
+
+void GameCore::displayScore()
+{
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 0, "Speed: " + std::to_string(_player1.getSpeed()), 0, 0, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 1, "Bombs: " + std::to_string(_player1.getBombCount()), 0, 100, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 2, "Power: " + std::to_string(_player1.getPower()), 0, 200, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 3, "Super: " + std::string(_player1.getSuper() ? "activate" : "desactivate"), 0, 300, 300, 100));
+
+}
+
 std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 {
 	bool changed;
 
+	_entitiesToRemove.clear();
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
 	if (checkEnd(state) == true)
 		return _updateEntities;
 	changed = playerMovement(act);
-	if (changed)
-	{
-		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
-		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
-	}
 	handleIA();
 	bombManager(act);
+	if (changed) {
+		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
+		if (_params.nbPlayers > 1)
+			_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+		else
+			displayScore();
+		displayAroundPlayer();
+	} else if (_i == 0) {
+		displayAroundPlayer();
+		++_i;
+	}
 	return (_updateEntities);
 }
 

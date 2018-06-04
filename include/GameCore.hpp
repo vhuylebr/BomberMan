@@ -39,8 +39,8 @@ enum class GameState {
 
 struct  parameters
 {
-	GameState state;                // State si la map doit être à nouveau ou doit être chargée depuis un fichier
-	std::wstring gameName;          // Le fichier dans lequel on devra sauvegarde ou get les infos de la map
+	GameState state;		// State si la map doit être à nouveau ou doit être chargée depuis un fichier
+	std::wstring gameName;		// Le fichier dans lequel on devra sauvegarde ou get les infos de la map
 	int nbPlayers;
 	int nbBots;
 	std::pair<int,int> mapSize;
@@ -73,6 +73,7 @@ public:
 	std::vector<std::unique_ptr<IEntity>> 	&createPause();
 	bool 	playerMovement(Actions act);
 	std::vector<std::unique_ptr<IEntity>>	&getMobileEntities();
+	std::vector<std::unique_ptr<IEntity>>	&getUpdateEntities();
 	std::vector<std::pair<int, Entity> >	&getEntitiesToRemove();
 	void	movePlayer(std::pair<float, float>, std::pair<int, int>, Player &, float);
 	void	playerDropBomb(Player &player);
@@ -81,16 +82,19 @@ public:
 	bool checkEnd(STATE &);
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
-	int getEndId() const;
+	int		getEndId() const;
 	void	handleIA();
+	void	displayScore();
+	
 
 private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
 	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
-	int	dodgeBomb(std::pair<float, float>, std::pair<float, float>, Player &);
+	int		dodgeBomb(std::pair<float, float>, std::pair<float, float>, Player &);
 	void	iaMoving(Player &);
 	void	iaAction(std::unique_ptr<EntityPos> &, Player &, std::pair<int, int>, float);
+	void	displayAroundPlayer(void);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
@@ -108,6 +112,8 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
 	int _nbPlayer;
+	parameters	_params;
+	int _i;
 };
 
 #endif /* !GAMECORE_HPP_ */

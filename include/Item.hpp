@@ -11,6 +11,7 @@
 # include "AEntity.hpp"
 # include <string>
 # include <map>
+# include <vector>
 # define NB_ITEMS 6 // Nombre d'items implémentés
 
 enum eItem {
@@ -25,7 +26,7 @@ enum eItem {
 
 class Item : public IEntity {
 public:
-	Item(float, float, unsigned int);
+	Item(float, float, unsigned int, std::vector<eItem> &);
 	~Item();
 
 	eItem		getItemType() const;
@@ -39,6 +40,8 @@ public:
 	float		getScale();
 
 private:
+
+	void	loadType(std::vector<eItem> &);
 
 	eItem		_bonusType;
 	float		_x;

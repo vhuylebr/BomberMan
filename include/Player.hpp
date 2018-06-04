@@ -21,7 +21,7 @@ public:
 	bool	isAlive() const;
 	void	setAlive(bool);
 	pairUC	getPos() const;
-	int		getPower() const;
+	int	getPower() const;
 	float	getRotation() const {return _rotation;};
 	void	setRotation(float);
 	void	pickupItem(std::unique_ptr<IEntity> &);
@@ -30,6 +30,7 @@ public:
 	bool	getSuper() const;
 	std::pair<int, int>	getIa() const {return _iaDir;};
 	void	setIa(std::pair<int, int>);
+	bool	hasKick() const;
 	void	setSuper(bool);
 
 	void	addBomb();
@@ -39,7 +40,9 @@ public:
 	int	getBombCount() const;
 	void	ia();
 	void	setNumber(int);
+	void	setKick(bool);
 	int	getNumber() const;
+	bool isBot() const {return _isBot; };
 
 private:
 	int 	_number;
@@ -49,6 +52,8 @@ private:
 	int	_pow;
 	bool	_superB;
 	std::pair<int, int>	_iaDir;
+	bool	_kick;
+	bool	_isBot;
 };
 
 #endif /* !PLAYER_HPP_ */

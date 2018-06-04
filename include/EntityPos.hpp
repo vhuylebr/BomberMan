@@ -44,7 +44,7 @@ class EntityPos {
 		int getId() const;
 		std::unique_ptr<IEntity> &getEntity();
 		void removeFirstEntity();
-		void addEntity(float, float, unsigned int &);
+		void addEntity(float, float, unsigned int &, std::vector<eItem> &);
 		
 		// Entity getFirstEntity() const;
 		// void addEntity(std::unique_ptr<Entity>&);
