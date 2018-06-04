@@ -279,11 +279,23 @@ int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float>
 	return 1;
 }
 
+bool	GameCore::haveBombed(Player player)
+{
+	int	id = player.getId();
+	int	posed = 0;
+
+	for (auto &it : _bombs) {
+		if (it.getOwner() == static_cast<size_t>(id))
+			posed = 1;
+	}
+	return (posed == 1) ? true : false;
+}
+
 void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std::pair<int, int> dir, float orientation)
 {
 	if (entity->isEmpty())
 		movePlayer(player.getPos(), dir, player, orientation);
-	else if (entity->getSubType() == ItemStatic::CRATE)
+	else if (entity->getSubType() == ItemStatic::CRATE && !haveBombed(player))
 	        playerDropBomb(player);
 	else
 		player.setIa(std::make_pair(0, 0));
