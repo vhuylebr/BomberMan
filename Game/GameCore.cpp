@@ -217,6 +217,14 @@ void GameCore::bombManager(Actions &act)
 					&& c.getPos().second == b.getPos().second)
 						c.detonate();
 				}
+				for (auto &it : _iaList) {
+					if (std::round(it.getPos().first) == b.getPos().first &&
+					    std::round(it.getPos().second) == b.getPos().second)
+					{
+						it.setAlive(false);
+						_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+					}
+				}
 			}
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
 			if (a.getOwner() == static_cast<unsigned int>(_player1.getId()))
@@ -290,8 +298,77 @@ bool GameCore::checkEnd(STATE &state)
 	return false;
 }
 
+int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float> myPos, Player player)
+{
+	if (bombPos.second == std::round(myPos.second)) {
+		if (_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)]->isEmpty())
+			movePlayer(myPos, {0, 1}, player, -90.0f);
+		else if (_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)]->isEmpty())
+			movePlayer(myPos, {0, -1}, player, 90.0f);
+		else {
+			if (bombPos.second > myPos.second)
+				movePlayer(myPos, {-1, 0}, player, 0.0f);
+			else
+				movePlayer(myPos, {1, 0}, player, 180.0f);
+		}
+	}
+	else if (bombPos.first == std::round(myPos.first)) {
+		if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first + 1)]->isEmpty())
+			movePlayer(myPos, {1, 0}, player, 0.0f);
+		else if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)]->isEmpty())
+			movePlayer(myPos, {-1, 0}, player, 180.0f);
+		else {
+			if (bombPos.first > myPos.first)
+				movePlayer(myPos, {0, -1}, player, 90.0f);
+			else
+				movePlayer(myPos, {0, 1}, player, -90.0f);
+		}
+	}
+	return 1;
+}
+
+void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player player, std::pair<int, int> dir, float orientation)
+{
+	if (entity->isEmpty())
+		movePlayer(player.getPos(), dir, player, orientation);
+	else if (entity->getSubType() == ItemStatic::CRATE)
+	        playerDropBomb(player);
+	else
+		player.setIa(std::make_pair(0, 0));
+}
+
+void	GameCore::iaMoving(Player player)
+{
+	std::pair<int, int>	dir = player.getIa();
+	std::pair<float, float>	myPos = player.getPos();
+	int			rand;
+
+	if (dir == std::make_pair(0, 1))
+		iaAction(_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)], player, {0, 1}, -90.0f);
+	else if (dir == std::make_pair(0, -1))
+	        iaAction(_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)], player, {0, -1}, 90.0f);
+	else if (dir == std::make_pair(1, 0))
+		iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first + 1)], player, {1, 0}, 0.0f);
+	else if (dir == std::make_pair(-1, 0))
+		iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)], player, {-1, 0}, 180.0f);
+	else if (dir == std::make_pair(0, 0)) {
+		std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+		std::uniform_int_distribution<int>	distrib{1, 4};
+		rand = distrib(re);
+		if (rand == 1)
+			player.setIa(std::make_pair(0, 1));
+		else if (rand == 2)
+			player.setIa(std::make_pair(0, -1));
+		else if (rand == 3)
+			player.setIa(std::make_pair(1, 0));
+		else
+		        player.setIa(std::make_pair(-1, 0));
+	}
+}
+
 void	GameCore::handleIA()
 {
+	int			dodging = 0;
 	std::pair<float, float>	myPos;
 	std::pair<float, float>	bombPos;
 
@@ -299,32 +376,12 @@ void	GameCore::handleIA()
 		myPos = it.getPos();
 	        for (auto &i : _bombs) {
 			bombPos = i.getPos();
-			if (bombPos.second == std::round(myPos.second)) {
-				std::cout << "Je suis en " << std::round(myPos.second) << " - " << std::round(myPos.first) << std::endl;
-				if (_vectorEntities[std::round(myPos.second + 1)][std::round(myPos.first)]->isEmpty())
-					movePlayer(myPos, {0, 1}, it, -90.0f);
-				else if (_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)]->isEmpty())
-					movePlayer(myPos, {0, -1}, it, 90.0f);
-				else {
-					if (bombPos.second > myPos.second)
-						movePlayer(myPos, {-1, 0}, it, 0.0f);
-					else
-						movePlayer(myPos, {1, 0}, it, 180.0f);	
-				}
-			}
-			else if (bombPos.first == std::round(myPos.first)) {
-				if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first + 1)]->isEmpty())
-					movePlayer(myPos, {1, 0}, it, 0.0f);
-			        else if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)]->isEmpty())
-					movePlayer(myPos, {-1, 0}, it, 180.0f);
-				else {
-					if (bombPos.first > myPos.first)
-						movePlayer(myPos, {0, -1}, it, 90.0f);
-					else
-						movePlayer(myPos, {0, 1}, it, -90.0f);
-				}
-			}
+			if (bombPos.second == std::round(myPos.second) || bombPos.first == std::round(myPos.first))
+				dodging = dodgeBomb(bombPos, myPos, it);
+			
 		}
+		if (dodging == 0)
+			iaMoving(it);
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
 	}
 }
@@ -335,8 +392,8 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
-	if (checkEnd(state) == true)
-		return _updateEntities;
+	//if (checkEnd(state) == true)
+	//	return _updateEntities;
 	changed = playerMovement(act);
 	if (changed)
 	{
@@ -430,11 +487,11 @@ void GameCore::handlePause(Actions actions, STATE &state)
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
 	if (actions.buttonPressed == PAUSE_ID + 1) {
-		std::ofstream file("save.txt");
+		/*std::ofstream file("save.txt");
 		saveMap(file);
 		file << "separateur\n";
 		saveMobileEntities(file);
-		file.close();
+		file.close();*/
 	}
 	if (actions.buttonPressed == PAUSE_ID + 2) {
 		removeAll();

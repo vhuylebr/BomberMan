@@ -8,7 +8,7 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id)
-	:_speed(1.0f), _bombs(2), _pow(3), _superB(false)
+	:_speed(1.0f), _bombs(2), _pow(3), _superB(false), _iaDir({0, 0})
 {
 	_x = x;
 	_y = y;
@@ -110,6 +110,7 @@ void Player::setRotation(float rotation)
 	_rotation = rotation;
 }
 
-void Player::ia()
+void	Player::setIa(std::pair<int, int> dir)
 {
+	_iaDir = dir;
 }

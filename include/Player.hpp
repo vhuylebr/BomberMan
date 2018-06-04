@@ -28,6 +28,8 @@ public:
 	void	addPower();
 	float	getSpeed() const;
 	bool	getSuper() const;
+	std::pair<int, int>	getIa() const {return _iaDir;};
+	void	setIa(std::pair<int, int>);
 	void	setSuper(bool);
 
 	void	addBomb();
@@ -43,6 +45,7 @@ private:
 	int	_bombs;
 	int	_pow;
 	bool	_superB;
+	std::pair<int, int>	_iaDir;
 };
 
 #endif /* !PLAYER_HPP_ */
