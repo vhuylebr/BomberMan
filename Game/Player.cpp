@@ -133,6 +133,9 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 	else if (tmp == eItem::KICK) {
 		this->setKick(true);
 		std::cout << "Picked up Kick" << std::endl;
+	} else if (tmp == eItem::SHIELD) {
+		this->addShield();
+		std::cout << "Picked up Shield" << std::endl;
 	}
 }
 

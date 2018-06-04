@@ -346,6 +346,8 @@ void GameCore::displayScore()
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 1, "Bombs: " + std::to_string(_player1.getBombCount()), 0, 100, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 2, "Power: " + std::to_string(_player1.getPower()), 0, 200, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 3, "Super: " + std::string(_player1.getSuper() ? "activate" : "desactivate"), 0, 300, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 4, "Kick: " + std::string(_player1.hasKick() ? "activate" : "desactivate"), 0, 400, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "Shields: " + std::to_string(_player1.getShield()), 0, 500, 300, 100));
 
 }
 
@@ -430,7 +432,7 @@ std::map<eItem, std::string> myItem =
 	{SUPER_BOMB, "SUPER_BOMB"},
 	{WALL_PASS, "WALL_PASS"},
 	{KICK, "KICK"},
-	{NONE, "NONE"}
+	{SHIELD, "SHIELD"}
 };
 
 void 	GameCore::saveMobileEntities(std::ofstream &file)
