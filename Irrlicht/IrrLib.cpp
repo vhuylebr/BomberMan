@@ -109,9 +109,10 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == static_cast<Bomb*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
-			if (static_cast<Bomb*>(entity.get())->isAlive() == false)
+			if (static_cast<Bomb*>(entity.get())->isAlive() == false) {
 				it->setID(-1);
-			_gamemusic.play(SOUND::BOOM);
+				_gamemusic.play(SOUND::BOOM);
+			}
 			return ;
 		}
 	}
