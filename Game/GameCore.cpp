@@ -162,13 +162,29 @@ void GameCore::bombManager(Actions &act)
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
 				if (std::round(_player1.getPos().first) == b.getPos().first &&
 				std::round(_player1.getPos().second) == b.getPos().second) {
-					_player1.setAlive(false);
+					if (_player1.hasShield())
+						_player1.rmShield();
+					else
+						_player1.setAlive(false);
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 				}
 				if (std::round(_player2.getPos().first) == b.getPos().first &&
 				std::round(_player2.getPos().second) == b.getPos().second) {
-					_player2.setAlive(false);
+					if (_player2.hasShield())
+						_player2.rmShield();
+					else
+						_player2.setAlive(false);
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+				}
+				for (auto &it : _iaList) {
+					if (std::round(it.getPos().first) == b.getPos().first &&
+					std::round(it.getPos().second) == b.getPos().second) {
+						if (it.hasShield())
+							it.rmShield();
+						else
+							it.setAlive(false);
+						_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+					}
 				}
 				for (auto &c : _bombs) {
 					if (c.isAlive() && c.getPos().first == b.getPos().first
@@ -330,6 +346,8 @@ void GameCore::displayScore()
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 1, "Bombs: " + std::to_string(_player1.getBombCount()), 0, 100, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 2, "Power: " + std::to_string(_player1.getPower()), 0, 200, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 3, "Super: " + std::string(_player1.getSuper() ? "activate" : "desactivate"), 0, 300, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 4, "Kick: " + std::string(_player1.hasKick() ? "activate" : "desactivate"), 0, 400, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "Shields: " + std::to_string(_player1.getShield()), 0, 500, 300, 100));
 
 }
 
@@ -414,7 +432,7 @@ std::map<eItem, std::string> myItem =
 	{SUPER_BOMB, "SUPER_BOMB"},
 	{WALL_PASS, "WALL_PASS"},
 	{KICK, "KICK"},
-	{NONE, "NONE"}
+	{SHIELD, "SHIELD"}
 };
 
 void 	GameCore::saveMobileEntities(std::ofstream &file)

@@ -30,9 +30,13 @@ public:
 	bool	getSuper() const;
 	bool	hasKick() const;
 	void	setSuper(bool);
+	bool	hasShield() const;
+	int	getShield() const;
 
-	void	addBomb();
+	void	addShield();
+	void	rmShield();
 	void	addPow();
+	void	addBomb();
 	void	addSpeed();
 	void	dropBomb();
 	int	getBombCount() const;
@@ -40,9 +44,10 @@ public:
 	void	setNumber(int);
 	void	setKick(bool);
 	int	getNumber() const;
-	bool isBot() const {return _isBot; };
+	bool	isBot() const {return _isBot; };
 
 private:
+
 	int 	_number;
 	float 	_rotation;
 	float	_speed;
@@ -51,6 +56,7 @@ private:
 	bool	_superB;
 	bool	_kick;
 	bool	_isBot;
+	char	_shields;
 };
 
 #endif /* !PLAYER_HPP_ */
