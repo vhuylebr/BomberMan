@@ -15,7 +15,7 @@
 
 class Player : public AEntity {
 public:
-	Player(float, float, unsigned int);
+	Player(float, float, unsigned int, int nb = 2);
 	~Player() {};
 	void	poke();
 	bool	isAlive() const;
@@ -38,8 +38,11 @@ public:
 	void	dropBomb();
 	int	getBombCount() const;
 	void	ia();
+	void	setNumber(int);
+	int	getNumber() const;
 
 private:
+	int 	_number;
 	float 	_rotation;
 	float	_speed;
 	int	_bombs;
