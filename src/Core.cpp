@@ -11,17 +11,10 @@ void 	Core::menuManager(STATE &last)
 {
 	_act = _lib.getActions();
 	_lib.displayBackground();
-
-	if (_menu.getState( _act, _state) == true) {
+	if (_menu.getState(_act, _state) == true) {
 		_menu.getMenu(_act, _state);
-		if (_menu.getStep() == 2 && (_act.buttonPressed == 2 || _act.buttonPressed == 4))
-			_lib.updateLabel(_menu.getItemByID(3));
-		if (_menu.getStep() == 2 && (_act.buttonPressed == 23 || _act.buttonPressed == 25))
-			_lib.updateLabel(_menu.getItemByID(24));
-		if (_menu.getStep() == 2 && (_act.buttonPressed == 28 || _act.buttonPressed == 30))
-			_lib.updateLabel(_menu.getItemByID(29));
-		if (_menu.getStep() == 2 && (_act.buttonPressed == 32 || _act.buttonPressed == 34))
-			_lib.updateLabel(_menu.getItemByID(33));
+		if (_menu.getLabelToUpdate())
+			_lib.updateLabel(_menu.getItemByID(_menu.getIdToUpdate(_act)));
 	}
 	if (_menu.stepChanged(last) == true) {
 		_menu.getMenu(_act, _state);
@@ -43,6 +36,7 @@ static const t_bonus bonusButton[NB_ITEMS] {
 	{15, eItem::SPEED},
 	{17, eItem::WALL_PASS},
 	{19, eItem::KICK},
+	{44, eItem::SHIELD},
 };
 
 void 	Core::getParametersFromMenu()
@@ -60,9 +54,7 @@ void 	Core::getParametersFromMenu()
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
-	}
-	else if (_menu.getStep() == 3)
-	{
+	} else if (_menu.getStep() == 3) {
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
 		_param.mapname = "./media/map1.txt";

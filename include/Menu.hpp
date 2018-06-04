@@ -38,6 +38,8 @@ public:
 	int getStep() const { return _step;}
 	void makeModeMenu();
 	Map getMap() const { return _map; }
+	bool getLabelToUpdate() { if (_changeState) { _changeState = false; return true; } return false; }
+	int getIdToUpdate(const Actions &actions);
 
 private:
 	void rotateMaps(bool left);
@@ -57,10 +59,13 @@ private:
 	void makeJoinMenu();
 	void makeMapMenu();
 
+	int _idToUpdate;
 	bool _randomMode;
+	int _nbBotsMax;
 	int _step;
 	int _nbPlayer;
 	int _nbBots;
+	int _sizeMap;
 	int _mapH;
 	int _mapW;
 	bool _change_menu;
