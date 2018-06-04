@@ -162,13 +162,29 @@ void GameCore::bombManager(Actions &act)
 				_updateEntities.push_back(std::unique_ptr<IEntity>(&b));
 				if (std::round(_player1.getPos().first) == b.getPos().first &&
 				std::round(_player1.getPos().second) == b.getPos().second) {
-					_player1.setAlive(false);
+					if (_player1.hasShield())
+						_player1.rmShield();
+					else
+						_player1.setAlive(false);
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 				}
 				if (std::round(_player2.getPos().first) == b.getPos().first &&
 				std::round(_player2.getPos().second) == b.getPos().second) {
-					_player2.setAlive(false);
+					if (_player2.hasShield())
+						_player2.rmShield();
+					else
+						_player2.setAlive(false);
 					_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
+				}
+				for (auto &it : _iaList) {
+					if (std::round(it.getPos().first) == b.getPos().first &&
+					std::round(it.getPos().second) == b.getPos().second) {
+						if (it.hasShield())
+							it.rmShield();
+						else
+							it.setAlive(false);
+						_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+					}
 				}
 				for (auto &c : _bombs) {
 					if (c.isAlive() && c.getPos().first == b.getPos().first
