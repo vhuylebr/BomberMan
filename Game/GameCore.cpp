@@ -61,7 +61,6 @@ unsigned int &x, unsigned int &y, const parameters &params)
 {
 	y = 0;
 	_iaList.clear();
-	std::cout << "1" << std::endl;
 	for (auto &line : map) {
 		x = 0;
 		_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
@@ -78,7 +77,6 @@ unsigned int &x, unsigned int &y, const parameters &params)
 		}
 		y += 1;
 	}
-	std::cout << "2" << std::endl;
 }
 
 void GameCore::loadMovingEntities(std::vector<std::vector<char>> &map,

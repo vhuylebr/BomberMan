@@ -49,8 +49,8 @@ bool MyEventReceiver::OnEvent(const irr::SEvent& event)
 	}
 	if (event.EventType == irr::EET_MOUSE_INPUT_EVENT) {
 		if (event.MouseInput.Event == irr::EMIE_LMOUSE_PRESSED_DOWN) {
-			std::cout << "x =" << MouseState.Position.X;
-			std::cout << "y =" << MouseState.Position.Y << std::endl;
+			// std::cout << "x =" << MouseState.Position.X;
+			// std::cout << "y =" << MouseState.Position.Y << std::endl;
 		}
 		if (event.MouseInput.Event == irr::EMIE_MOUSE_MOVED) {
 			MouseState.Position.X = event.MouseInput.X;

@@ -126,7 +126,6 @@ bool	Player::getSuper() const
 
 void	Player::setPos(float x, float y)
 {
-	//std::cout << "asdasd" << std::endl;
 	_x = x;
 	_y = y;
 	for (auto it : _shields)

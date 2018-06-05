@@ -126,7 +126,6 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 			return ;
 		}
 	}
-//	std::cout << "here" << entity->getId() << std::endl;
 	addSphere(entity);
 }
 
@@ -136,7 +135,6 @@ void IrrLib::removeSphere(int id)
 
 	for (auto &it : _spheres) {
 		if (id == it->getID()) {
-			std::cout << id << std::endl;
 			it->setID(-1);
 			it->setVisible(false);
 			it->removeAll();
