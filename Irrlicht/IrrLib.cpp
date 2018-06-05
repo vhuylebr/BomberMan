@@ -116,6 +116,7 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 			return ;
 		}
 	}
+	std::cout << "here" << entity->getId() << std::endl;
 	addSphere(entity);
 }
 

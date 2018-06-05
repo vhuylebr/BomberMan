@@ -223,10 +223,13 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 {
 	if (_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->isEmpty() == true) {
 		if ((thereIsBomb(std::round(from.first + 0.5 * dir.first), std::round(from.second + 0.5 * dir.second)) == false ||
-		thereIsBomb(std::round(from.first), std::round(from.second)) == true))
+		thereIsBomb(std::round(from.first), std::round(from.second)) == true)) {
 			player.setPos(from.first + (0.07 + player.getSpeed()) * dir.first, from.second + (0.07 + player.getSpeed()) * dir.second);
+			for (auto &it : player.getShields()) {
+				_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+			}
+		}
 		else if (thereIsBomb(std::round(from.first + 0.5 * dir.first), std::round(from.second + 0.5 * dir.second)) && player.hasKick()) {
-			std::cout << "KICK" << std::endl;
 			for (auto &it : _bombs) {
 				if (it.getPos().first == std::round(from.first + 0.5 * dir.first) && it.getPos().second == std::round(from.second + 0.5 * dir.second)) {
 					it.takeDir(dir, player.getSpeed());
@@ -235,7 +238,7 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 			}
 		}
 	} else if (_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType() == Entity::ITEM) {
-		player.pickupItem(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getEntity());
+		player.pickupItem(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getEntity(), _id, _updateEntities);
 		_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getId(),
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType()));
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->removeFirstEntity();
@@ -347,8 +350,22 @@ void GameCore::displayScore()
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 2, "Power: " + std::to_string(_player1.getPower()), 0, 200, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 3, "Super: " + std::string(_player1.getSuper() ? "activate" : "desactivate"), 0, 300, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 4, "Kick: " + std::string(_player1.hasKick() ? "activate" : "desactivate"), 0, 400, 300, 100));
-	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "Shields: " + std::to_string(_player1.getShield()), 0, 500, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "Shields: " + std::to_string(_player1.getShields().size()), 0, 500, 300, 100));
 
+}
+
+void	GameCore::playerShield(Player &player)
+{
+}
+
+
+void	GameCore::shieldManager()
+{
+	playerShield(_player1);
+	playerShield(_player2);
+	for (auto &ref : _iaList) {
+		playerShield(ref);
+	}
 }
 
 std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
@@ -374,6 +391,7 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 		displayAroundPlayer();
 		++_i;
 	}
+	shieldManager();
 	return (_updateEntities);
 }
 

@@ -9,7 +9,7 @@
 
 Player::Player(float x, float y, unsigned int id, int nb)
 	: _number(nb), _speed(0.0f), _bombs(2), _pow(3),
-	_superB(false), _kick(false), _shields(0)
+	_superB(false), _kick(false)
 {
 	_x = x;
 	_y = y;
@@ -20,7 +20,6 @@ Player::Player(float x, float y, unsigned int id, int nb)
 
 void 	Player::poke()
 {
-	std::cout << "Player here, pos " << _x << ":" << _y << std::endl;
 }
 
 void	Player::dropBomb()
@@ -35,24 +34,30 @@ void	Player::addBomb()
 
 bool	Player::hasShield() const
 {
-	return (_shields > 0);
+	return (_shields.size() > 0);
 }
 
-int	Player::getShield() const
+std::vector<Shield>	&Player::getShields()
 {
 	return (_shields);
 }
 
-void	Player::addShield()
+void	Player::addShield(unsigned int &id)
 {
-	if (_shields < 2)
-		_shields += 1;
+	if (_shields.size() < 2) {
+		_shields.push_back(Shield(_x, _y, id));
+		id += 1;
+	}
 }
 
-void	Player::rmShield()
+int	Player::rmShield()
 {
-	if (_shields)
-		_shields -= 1;
+	if (_shields.size()) {
+		unsigned int	tmp = _shields.back().getId();
+		_shields.pop_back();
+		return (static_cast<int>(tmp));
+	}
+	return (-1);
 }
 
 float	Player::getSpeed() const
@@ -101,6 +106,15 @@ bool	Player::getSuper() const
 	return (_superB);
 }
 
+void	Player::setPos(float x, float y)
+{
+	std::cout << "asdasd" << std::endl;
+	_x = x;
+	_y = y;
+	for (auto it : _shields)
+		it.setPos(x, y);
+}
+
 void	Player::addPower()
 {
 	_pow += 1;
@@ -116,7 +130,7 @@ void	Player::setKick(bool tmp)
 	_kick = tmp;
 }
 
-void	Player::pickupItem(std::unique_ptr<IEntity> &item)
+void	Player::pickupItem(std::unique_ptr<IEntity> &item, unsigned int &id, std::vector<std::unique_ptr<IEntity>> &addVec)
 {
 	eItem	tmp = static_cast<Item *>(item.get())->getItemType();
 
@@ -129,13 +143,12 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 	else if (tmp == eItem::SUPER_BOMB)
 		this->setSuper(true);
 	else if (tmp == eItem::WALL_PASS)
-		std::cout << "Picked up Wall pass" << std::endl;
-	else if (tmp == eItem::KICK) {
+		return ;
+	else if (tmp == eItem::KICK)
 		this->setKick(true);
-		std::cout << "Picked up Kick" << std::endl;
-	} else if (tmp == eItem::SHIELD) {
-		this->addShield();
-		std::cout << "Picked up Shield" << std::endl;
+	else if (tmp == eItem::SHIELD) {
+		this->addShield(id);
+		addVec.push_back(std::unique_ptr<IEntity>(&_shields.back()));
 	}
 }
 

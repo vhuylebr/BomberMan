@@ -8,27 +8,28 @@
 #ifndef GAMECORE_HPP_
 # define GAMECORE_HPP_
 
-# include <string>
-# include <iostream>
-# include <vector>
-# include <fstream>
-# include <memory>
-# include <utility>
-# include <algorithm>
-# include <cmath>
-# include "Item.hpp"
-# include "Actions.hpp"
-# include "IEntity.hpp"
-# include "Wall.hpp"
-# include "Crate.hpp"
-# include "Player.hpp"
-# include "State.hpp"
-# include "BombFactory.hpp"
-# include "MenuItem.hpp"
-# include "Fire.hpp"
-# include "EntityPos.hpp"
-# include "Metrics.hpp"
-# include "MapGenerator.hpp"
+#include <string>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <memory>
+#include <utility>
+#include <algorithm>
+#include <cmath>
+#include "Item.hpp"
+#include "Actions.hpp"
+#include "IEntity.hpp"
+#include "Wall.hpp"
+#include "Crate.hpp"
+#include "Player.hpp"
+#include "State.hpp"
+#include "BombFactory.hpp"
+#include "MenuItem.hpp"
+#include "Shield.hpp"
+#include "Fire.hpp"
+#include "EntityPos.hpp"
+#include "Metrics.hpp"
+#include "MapGenerator.hpp"
 
 enum class GameState {
 	NEWGAME,
@@ -90,6 +91,8 @@ private:
 	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
 	void	displayAroundPlayer(void);
+	void	shieldManager();
+	void	playerShield(Player &player);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
@@ -105,7 +108,7 @@ private:
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>	_pauseitem;
 	std::vector<std::unique_ptr<IEntity>>	_endItem;
-	std::vector<std::pair<int, Entity> >	_entitiesToRemove;
+	std::vector<std::pair<int, Entity>>	_entitiesToRemove;
 	int _nbPlayer;
 	parameters	_params;
 	int _i;

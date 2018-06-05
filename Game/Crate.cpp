@@ -16,5 +16,4 @@ Crate::Crate(float x, float y, int id)
 
 void 	Crate::poke()
 {
-	std::cout << "Crate here, pos " << _pos.x << ":" << _pos.y << std::endl;
 }
