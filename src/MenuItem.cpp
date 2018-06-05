@@ -8,7 +8,7 @@
 #include "MenuItem.hpp"
 
 MenuItem::MenuItem(std::string text)
-    : _text(text), _selected(false)
+    : _stateTexture(false), _texture(std::string()), _text(text), _selected(false)
 {
 }
 

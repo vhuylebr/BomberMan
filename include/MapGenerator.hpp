@@ -8,6 +8,8 @@
 #ifndef MAPGENERATOR_HPP_
 # define MAPGENERATOR_HPP_
 # include <vector>
+# include <random>
+# include <chrono>
 # include <iostream>
 
 struct t_coord {

@@ -53,14 +53,18 @@
 # include "EntityPos.hpp"
 # include "Metrics.hpp"
 # include "MapGenerator.hpp"
+# include "Map.hpp"
 
 enum class GameState {
 	NEWGAME,
 	LOADGAME
 };
 
+
+
 struct  parameters
 {
+	Map map;
 	GameState state;		// State si la map doit être à nouveau ou doit être chargée depuis un fichier
 	std::wstring gameName;		// Le fichier dans lequel on devra sauvegarde ou get les infos de la map
 	int nbPlayers;
@@ -125,6 +129,7 @@ private:
 	void	playerShield(Player &player);
 	bool	haveBombed(Player);
 	bool	existBomb(float, float);
+	void	getMapFromFile(Map map, parameters params);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;

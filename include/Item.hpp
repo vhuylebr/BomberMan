@@ -12,16 +12,16 @@
 # include <string>
 # include <map>
 # include <vector>
-# define NB_ITEMS 6 // Nombre d'items implémentés 7
+# define NB_ITEMS 6 // Nombre d'items implémentés
 
 enum eItem {
 	BOMB_UP,
 	POWER_UP,
 	SPEED,
 	SUPER_BOMB,
-	WALL_PASS,
 	KICK,
-	SHIELD
+	SHIELD,
+	NONE
 };
 
 class Item : public IEntity {

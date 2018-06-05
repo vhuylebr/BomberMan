@@ -43,8 +43,8 @@ void	Item::loadType(std::vector<eItem> &disp)
 	int idx = (int)(distrib(re) / 100.0f * (double)disp.size());
 	_bonusType = disp[idx];
 	//_bonusType = eItem::SHIELD;
-	if (_bonusType == WALL_PASS)
-		loadType(disp);
+//	if (_bonusType == WALL_PASS)
+//		loadType(disp);
 	//std::cout << "Got " << _bonusType << "from idx " << idx << " from rd " << nb << std::endl;
 }
 
