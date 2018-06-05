@@ -65,6 +65,13 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_gamemusic.load(SOUND::POWERUP, "./media/Sound/powerup.wav");
 	_gamemusic.load(SOUND::LOSE, "./media/Sound/lose.wav");
 	_gamemusic.load(SOUND::WIN, "./media/Sound/lose.wav");
+	
+	irr::core::array<irr::SJoystickInfo> joystickInfo;
+    if (_device->activateJoysticks(joystickInfo)) {
+        std::cout << "Joystick support is enabled" << std::endl;
+    } else {
+        std::cout << "Joystick support is not enabled." << std::endl;
+    }
 }
 
 IrrLib::~IrrLib()
@@ -87,6 +94,7 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == -1) {
 			it->setID(entity->getId());
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
+			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 			it->setVisible(true);
 			it->render();
 			return;
@@ -95,21 +103,30 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
-	ball->setMaterialTexture(0, _driver->getTexture("./media/bomb.png"));
+	ball->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
-	ball->setID(static_cast<Bomb*>(entity.get())->getId());
+	ball->setVisible(static_cast<ASphere*>(entity.get())->isAlive()); // You're important...
+	ball->setID(static_cast<ASphere*>(entity.get())->getId());
+	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
+		_gamemusic.play(SOUND::TICTAC);
+	} else if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBSHIELD) {
+		std::cout << "Setting scale" << std::endl;
+		ball->setScale(irr::core::vector3df(1.5f, 1.5f, 1.5f));
+		std::cout << "Scale set, setting transparent" << std::endl;
+		ball->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+		std::cout << "Transparent set" << std::endl;
+	}
 	_spheres.push_back(ball);
-	_gamemusic.play(SOUND::TICTAC);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
-		if (it->getID() == static_cast<Bomb*>(entity.get())->getId()) {
+		if (it->getID() == static_cast<ASphere*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
-			if (static_cast<Bomb*>(entity.get())->isAlive() == false) {
+			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
+			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
+			if (static_cast<ASphere*>(entity.get())->isAlive() == false) {
 				it->setID(-1);
 				_gamemusic.play(SOUND::BOOM);
 			}
@@ -185,6 +202,12 @@ void IrrLib::removeCube(int id)
 
 Actions	IrrLib::getActions()
 {
+	const irr::SEvent::SJoystickEvent &joystickData = _eventReceiver.GetJoystickState();
+	irr::f32 moveHorizontal = 0;
+	irr::f32 moveVertical = 0;
+	moveHorizontal = (irr::f32)joystickData.Axis[irr::SEvent::SJoystickEvent::AXIS_X] / 32767.f;
+	moveVertical = (irr::f32)joystickData.Axis[irr::SEvent::SJoystickEvent::AXIS_Y] / -32767.f;
+
 	_actions.escape = false;
 	_actions.space = false;
 	_actions.right = false;
@@ -198,17 +221,17 @@ Actions	IrrLib::getActions()
 	_actions.D = false;
 	_actions.W = false;
 	_actions.buttonPressed = getIdButtonPressed();
-	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT))
+	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT) || moveHorizontal < -0.8f)
 		_actions.left = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT))
+	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT) || moveHorizontal > 0.8f)
 		_actions.right = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_UP))
+	if (_eventReceiver.IsKeyDown(irr::KEY_UP) || moveVertical > 0.8f)
 		_actions.up = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_DOWN))
+	if (_eventReceiver.IsKeyDown(irr::KEY_DOWN) || moveVertical < -0.8f)
 		_actions.down = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_ESCAPE))
 		_actions.escape = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE))
+	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE) || (irr::u32)joystickData.IsButtonPressed(0))
 		_actions.space = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RETURN))
 		_actions.enter = true;

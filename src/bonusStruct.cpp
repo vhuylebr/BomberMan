@@ -20,7 +20,6 @@ static void changeBonus(const eItem bonus, std::map<eItem, bool> &map_bonus)
 
 void Menu::checkBonus(Actions &actions)
 {
-	std::cout << "Check selected return " << findSelected(_item) << std::endl;
 	for (int i = 0; i < NB_ITEMS; i++) {
 		if (bonusButton[i].id == actions.buttonPressed) {
 			changeBonus(bonusButton[i].bonus, _map_bonus);

@@ -12,6 +12,7 @@
 #include <iostream>
 #include "Item.hpp"
 #include "AEntity.hpp"
+#include "Shield.hpp"
 
 class Player : public AEntity {
 public:
@@ -24,7 +25,7 @@ public:
 	int	getPower() const;
 	float	getRotation() const {return _rotation;};
 	void	setRotation(float);
-	void	pickupItem(std::unique_ptr<IEntity> &);
+	void	pickupItem(std::unique_ptr<IEntity> &, unsigned int &id, std::vector<std::unique_ptr<IEntity>> &);
 	void	addPower();
 	float	getSpeed() const;
 	void 	setSpeed(float speed);
@@ -35,10 +36,10 @@ public:
 	void	setSuper(bool);
 	void	setPower(int);
 	bool	hasShield() const;
-	int	getShield() const;
-
-	void	addShield();
-	void	rmShield();
+	std::vector<Shield>	&getShields();
+	void	setPos(float x, float y);
+	void	addShield(unsigned int &);
+	int	rmShield();
 	void	addPow();
 	void	addBomb();
 	void	addSpeed();
@@ -64,7 +65,7 @@ private:
 	std::pair<int, int>	_iaDir;
 	bool	_kick;
 	bool	_isBot;
-	char	_shields;
+	std::vector<Shield>	_shields;
 };
 
 #endif /* !PLAYER_HPP_ */

@@ -11,7 +11,7 @@
 # include <vector>
 # include <cmath>
 # include "EntityPos.hpp"
-# include "AEntity.hpp"
+# include "ASphere.hpp"
 # include "Fire.hpp"
 # include "Player.hpp"
 
@@ -21,7 +21,7 @@ struct posxy {
     T   y;
 };
 
-class Bomb : public AEntity {
+class Bomb : public ASphere {
 public:
     Bomb(float x, float y, unsigned int id, std::size_t);
     ~Bomb();
@@ -42,6 +42,7 @@ public:
     void	move();
     pairUC	getNextPos();
     void	takeDir(pairUC dir, float pow);
+    SphereSubType getSubType() const { return (_subtype); }
 
 private:
     int         _counter;

@@ -24,6 +24,7 @@ public:
 	virtual bool IsKeyUp(irr::EKEY_CODE keyCode) const;
 	int getIdButtonPressed() const;
 	void resetIdButtonPressed();
+	const irr::SEvent::SJoystickEvent &GetJoystickState(void) const;
 
 private:
 	struct SMouseState
@@ -36,6 +37,7 @@ private:
 	bool KeyIsDown[irr::KEY_KEY_CODES_COUNT];
 	bool KeyIsUp[irr::KEY_KEY_CODES_COUNT];
 	int _idButtonPressed = -1;
+	irr::SEvent::SJoystickEvent JoystickState;
 };
 
 
