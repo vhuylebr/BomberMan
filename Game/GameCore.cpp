@@ -157,6 +157,14 @@ unsigned int &x, unsigned int &y, const parameters &params)
 			_bombs.push_back(tmp);
 			_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(ix - 0.5), std::ceil(iy - 0.5), _id, playerid));
 		}
+		else if (tmpstr == "Item") {
+			int ix;
+			int iy;
+			int type;
+			ss >> ix;
+			ss >> iy;
+			ss >> type;
+		}
 		_id++;
 	}
 }
@@ -716,7 +724,7 @@ void 	GameCore::saveMobileEntities(std::ofstream &file)
 				_vectorEntities[idx][y]->getType() == Entity::ITEM) {
 				auto pos = _vectorEntities[idx][y]->getEntity()->getPos();
 				file << "Item " << pos.first << " " << pos.second << " " <<
-				myItem[static_cast<Item *>(_vectorEntities[idx][y]->getEntity().get())->getItemType()] << "\n";
+				static_cast<Item *>(_vectorEntities[idx][y]->getEntity().get())->getItemType() << "\n";
 			}
 		}
 	}
