@@ -381,7 +381,7 @@ void GameCore::bombManager(Actions &act)
 		}	
 	} // Plus tard les deux boucles seront assemblables
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
-				return x.isOver()
+				return x.isOver();
 			}),
 			_bombs.end());
 	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive())

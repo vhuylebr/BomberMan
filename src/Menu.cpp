@@ -166,7 +166,7 @@ void	Menu::makeParamsMenu()
 	}
 	// afficher les tailles qui sont dans Map
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 29,
-	std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap), 930, 400, 100, 100)));
+	std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap), 915, 400, 130, 100)));
 }
 
 void Menu::changeMenu()
@@ -342,7 +342,7 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		if (_sizeMap < 100)
 			_sizeMap += 10;
 		_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
-		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
+		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap));
 		_changeState = true;
 	} else if (actions.buttonPressed == 30) {
 		if (_sizeMap > 10)
@@ -354,7 +354,7 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 				static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots)); // ne s'update pas sur l'écran..
 			}
 		}
-		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
+		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap));
 		_changeState = true;
 	}
 	if (_changeState == false)
