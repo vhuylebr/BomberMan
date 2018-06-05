@@ -69,7 +69,7 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
 							map[tmp.second][tmp.first]->getType()));
 							map[tmp.second][tmp.first]->removeFirstEntity();
-							std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+							std::random_device re;
 							std::uniform_int_distribution<int> distrib{1, 100};
 							if (distrib(re) < 60) {
 								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id, params);
