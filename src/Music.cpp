@@ -15,39 +15,31 @@ Music::~Music()
 {
 }
 
-void 	playMusic(sf::Music *music)
+void 	playsMusic(std::pair<irrklang::ISoundEngine *, std::pair<std::string, bool>> sound)
 {
-	music->play();
+	sound.first->play2D(sound.second.first.c_str(), sound.second.second);
 }
 
 void 	Music::play(SOUND id)
 {
-	std::thread tmp(playMusic, _sounds[id]);
-	tmp.detach();
+	std::thread tmp2(playsMusic, _sound[id]);
+	tmp2.join();
 }
 
 bool 	Music::load(SOUND id, std::string pathname)
 {
-	sf::Music *tmp = new sf::Music();
-	int ret = tmp->openFromFile(pathname);
+	irrklang::ISoundEngine* tmp2 = irrklang::createIrrKlangDevice();
 
-	if (!ret)
-		return false;
-	_sounds.insert(std::make_pair(id, tmp));
+	_sound.insert(std::make_pair(id, std::make_pair(tmp2, std::make_pair(pathname, false))));
 	return true;
 }
 
 void 	Music::setLoop(SOUND id, bool state)
 {
-	_sounds[id]->setLoop(state);
+	_sound[id].second.second = state;
 }
 
 void 	Music::stop(SOUND id)
 {
-	_sounds[id]->stop();
-}
-
-void 	Music::pause(SOUND id)
-{
-	_sounds[id]->pause();
+	_sound[id].first->drop();
 }

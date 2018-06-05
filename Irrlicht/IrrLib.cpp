@@ -107,9 +107,16 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	ball->setVisible(static_cast<ASphere*>(entity.get())->isAlive()); // You're important...
 	ball->setID(static_cast<ASphere*>(entity.get())->getId());
-	_spheres.push_back(ball);
-	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 		_gamemusic.play(SOUND::TICTAC);
+	} else if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBSHIELD) {
+		std::cout << "Setting scale" << std::endl;
+		ball->setScale(irr::core::vector3df(1.5f, 1.5f, 1.5f));
+		std::cout << "Scale set, setting transparent" << std::endl;
+		ball->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+		std::cout << "Transparent set" << std::endl;
+	}
+	_spheres.push_back(ball);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
@@ -222,7 +229,7 @@ Actions	IrrLib::getActions()
 		_actions.up = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_DOWN) || moveVertical < -0.8f)
 		_actions.down = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_ESCAPE))
+	if (_eventReceiver.IsKeyDown(irr::KEY_ESCAPE) || (irr::u32)joystickData.IsButtonPressed(7))
 		_actions.escape = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE) || (irr::u32)joystickData.IsButtonPressed(0))
 		_actions.space = true;

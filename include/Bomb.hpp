@@ -42,6 +42,7 @@ public:
     void	move();
     pairUC	getNextPos();
     void	takeDir(pairUC dir, float pow);
+    SphereSubType getSubType() const { return (_subtype); }
 
 private:
     int         _counter;
