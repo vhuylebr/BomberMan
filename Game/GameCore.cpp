@@ -381,9 +381,9 @@ void GameCore::bombManager(Actions &act)
 		}	
 	} // Plus tard les deux boucles seront assemblables
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
-			     return x.isOver();
-		     }),
-		     _bombs.end());
+				return x.isOver()
+			}),
+			_bombs.end());
 	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive())
 		playerDropBomb(_player1);
 	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) // remplacer 0 par player2.

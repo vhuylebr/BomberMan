@@ -155,7 +155,7 @@ void	Menu::makeParamsMenu()
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Batman", 100, 400, 400, 70)));
 	}
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 23, "+", 400, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(_nbBotsMax), 250, 640, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(_nbBots), 250, 640, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 25, "-", 100, 640, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 26, "Number of Bots :", 100, 540, 400, 90)));
 	// Map height
@@ -349,7 +349,10 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 			_sizeMap -= 10;
 		if (_nbBotsMax > (_sizeMap - (2 * (_sizeMap / 10)) - 2)) {
 			_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
-			static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBotsMax)); // ne s'update pas sur l'écran..
+			if (_nbBots > _nbBotsMax) {
+				_nbBots = _nbBotsMax;
+				static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots)); // ne s'update pas sur l'écran..
+			}
 		}
 		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
 		_changeState = true;
