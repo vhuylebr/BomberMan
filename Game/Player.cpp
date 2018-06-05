@@ -115,7 +115,7 @@ int	Player::getPower() const
 
 void	Player::addSpeed()
 {
-	if (_speed < 0.2)
+	if (_speed < 0.1)
 		_speed += 0.01;
 }
 
@@ -126,7 +126,6 @@ bool	Player::getSuper() const
 
 void	Player::setPos(float x, float y)
 {
-	//std::cout << "asdasd" << std::endl;
 	_x = x;
 	_y = y;
 	for (auto it : _shields)
