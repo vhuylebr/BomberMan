@@ -13,8 +13,11 @@ void 	Core::menuManager(STATE &last)
 	_lib.displayBackground();
 	if (_menu.getState(_act, _state) == true) {
 		_menu.getMenu(_act, _state);
-		if (_menu.getLabelToUpdate())
-			_lib.updateLabel(_menu.getItemByID(_menu.getIdToUpdate(_act)));
+		if (_menu.isLabelToUpdate()) {
+			auto ids = _menu.getIdToUpdate(_act);
+			for (auto &id: ids)
+				_lib.updateLabel(_menu.getItemByID(id));
+		}
 	}
 	if (_menu.stepChanged(last) == true) {
 		_menu.getMenu(_act, _state);

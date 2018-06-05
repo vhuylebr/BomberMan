@@ -358,24 +358,24 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		actions.buttonPressed = 0;
 }
 
-int	Menu::getIdToUpdate(const Actions &actions)
+std::vector<int>	Menu::getIdToUpdate(const Actions &actions)
 {
 	if (getStep() == 2) {
 		if (actions.buttonPressed == 2 || actions.buttonPressed == 4)
-			return 3;
+			return std::vector<int>({3});
 		if (actions.buttonPressed == 23 || actions.buttonPressed == 25)
-			return 24;
+			return std::vector<int>({24});
 		if (actions.buttonPressed == 28 || actions.buttonPressed == 30)
-			return 29;
+			return std::vector<int>({29});
 		if (actions.buttonPressed == 32 || actions.buttonPressed == 34)
-			return 33;
+			return std::vector<int>({33});
 	} else if (getStep() == 5) {
 		if (actions.buttonPressed == 25 || actions.buttonPressed == 23)
-			return 24;
+			return std::vector<int>({24});
 		if (actions.buttonPressed == 28 || actions.buttonPressed == 30)
-			return 29;
+			return std::vector<int>({29});
 	}
-	return 0;
+	return std::vector<int>({0});
 }
 
 bool 	Menu::stepChanged(STATE &state)

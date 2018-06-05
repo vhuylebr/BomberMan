@@ -39,8 +39,8 @@ public:
 	int getStep() const { return _step;}
 	void makeModeMenu();
 	Map getMap() const { return _map; }
-	bool getLabelToUpdate() { if (_changeState) { _changeState = false; return true; } return false; }
-	int getIdToUpdate(const Actions &actions);
+	bool isLabelToUpdate() { if (_changeState) { _changeState = false; return true; } return false; }
+	std::vector<int> getIdToUpdate(const Actions &actions);
 	int getMapSize() const { return _sizeMap; }
 
 private:
