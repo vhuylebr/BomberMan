@@ -229,7 +229,7 @@ Actions	IrrLib::getActions()
 		_actions.up = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_DOWN) || moveVertical < -0.8f)
 		_actions.down = true;
-	if (_eventReceiver.IsKeyDown(irr::KEY_ESCAPE))
+	if (_eventReceiver.IsKeyDown(irr::KEY_ESCAPE) || (irr::u32)joystickData.IsButtonPressed(7))
 		_actions.escape = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_SPACE) || (irr::u32)joystickData.IsButtonPressed(0))
 		_actions.space = true;

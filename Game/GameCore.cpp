@@ -413,7 +413,7 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 			player.setPos(from.first + (0.07 + player.getSpeed()) * dir.first, from.second + (0.07 + player.getSpeed()) * dir.second);
 			for (auto &it : player.getShields()) {
 				it.setPos(from.first + (0.07 + player.getSpeed()) * dir.first, from.second + (0.07 + player.getSpeed()) * dir.second);
-				_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
+				_updateEntities.push_back(std::unique_ptr<IEntity>(new Shield(it)));
 			}
 		}
 		else if (thereIsBomb(std::round(from.first + 0.5 * dir.first), std::round(from.second + 0.5 * dir.second)) && player.hasKick()) {
