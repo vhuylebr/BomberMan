@@ -202,12 +202,13 @@ void GameCore::getMapFromFile(Map map, parameters params)
 {
 	std::ifstream file(map.fileName);
 	std::string line;
+	int nbBots = 0;
 
-	std::cout << "Initializing new game" << std::endl;
 	_size.x = params.mapSize.first;
 	_size.y = params.mapSize.second;
 	unsigned int x1 = 0;
 	unsigned int y1 = 0;
+
 	if (!file.is_open()) {
 		std::cout << "Open has failed\n";
 	} else {
@@ -227,12 +228,13 @@ void GameCore::getMapFromFile(Map map, parameters params)
 					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				} else if (line[j] == '3') {
+				} else if (line[j] == '3' && params.nbPlayers == 2) {
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
 					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					_id++;
-				} else if (line[j] == '4') {
+				} else if (line[j] == '4' && nbBots < params.nbBots) {
+					nbBots++;
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 					if (static_cast<int>(_iaList.size()) < params.nbBots) {
 						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));

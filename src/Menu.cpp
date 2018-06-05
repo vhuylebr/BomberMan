@@ -210,7 +210,6 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 		_change_menu = true;
 		actions.buttonPressed = 0;
 	}
-
 }
 
 void 	Menu::handleModeMenu(Actions &actions, STATE &state)
@@ -328,25 +327,21 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 	}
 	if (actions.buttonPressed == 7) {
 		state = STATE::GAME;
-	} else if (actions.buttonPressed == 23) {
-		if (_nbBots < _nbBotsMax)
-			_nbBots += 1;
+	} else if (actions.buttonPressed == 23 && _nbBots < _nbBotsMax) {
+		_nbBots += 1;
 		static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots));
 		_changeState = true;
-	} else if (actions.buttonPressed == 25) {
-		if (_nbBots > 0)
-			_nbBots -= 1;
+	} else if (actions.buttonPressed == 25 && _nbBots > 0 && !(_randomMode == false && _nbPlayer == 1 && _nbBots <= 1)) {
+		_nbBots -= 1;
 		static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots));
 		_changeState = true;
-	} else if (actions.buttonPressed == 28) {
-		if (_sizeMap < 100)
-			_sizeMap += 10;
+	} else if (actions.buttonPressed == 28 && _sizeMap < 100) {
+		_sizeMap += 10;
 		_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
 		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap));
 		_changeState = true;
-	} else if (actions.buttonPressed == 30) {
-		if (_sizeMap > 10)
-			_sizeMap -= 10;
+	} else if (actions.buttonPressed == 30 && _sizeMap > 10) {
+		_sizeMap -= 10;
 		if (_nbBotsMax > (_sizeMap - (2 * (_sizeMap / 10)) - 2)) {
 			_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
 			if (_nbBots > _nbBotsMax) {
