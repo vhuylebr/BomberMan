@@ -28,6 +28,7 @@ public:
 	void	setPos(float x, float y) {_x = x; _y = y;}
 	float	getX() const { return (_x); }
 	float	getY() const { return (_y); }
+	float	getScale() const { return (_scale); };
 protected:
 	bool	_alive;
 	float	_x;
@@ -36,5 +37,6 @@ protected:
 	Entity	_type;
 	std::string	_texture;
 	SphereSubType 	_subtype;
+	float _scale;
 };
 #endif /* ASPHERE_HPP_ */

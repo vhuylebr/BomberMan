@@ -94,27 +94,38 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == -1) {
 			it->setID(entity->getId());
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
+			it->setMaterialType(irr::video::EMT_SOLID);
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 			it->setVisible(true);
+			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
+			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+				_gamemusic.play(SOUND::TICTAC);
+			else {
+				irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(0,1,0));
+				it->addAnimator(ani);
+				ani->drop();
+				it->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+			}
 			it->render();
 			return;
 		}
 	}
-	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
+	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh();
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
 	ball->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 	ball->setVisible(static_cast<ASphere*>(entity.get())->isAlive()); // You're important...
 	ball->setID(static_cast<ASphere*>(entity.get())->getId());
-	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
+	ball->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
+	ball->setMaterialType(irr::video::EMT_SOLID);
+	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
 		_gamemusic.play(SOUND::TICTAC);
-	} else if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBSHIELD) {
-		std::cout << "Setting scale" << std::endl;
-		ball->setScale(irr::core::vector3df(1.5f, 1.5f, 1.5f));
-		std::cout << "Scale set, setting transparent" << std::endl;
+	else {
+		irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,0,0));
+		ball->addAnimator(ani);
+		ani->drop();
 		ball->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
-		std::cout << "Transparent set" << std::endl;
 	}
 	_spheres.push_back(ball);
 }
@@ -126,6 +137,7 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
+			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
 			if (static_cast<ASphere*>(entity.get())->isAlive() == false) {
 				it->setID(-1);
 				_gamemusic.play(SOUND::BOOM);
@@ -626,37 +638,29 @@ void IrrLib::drop()
 {
 	for (auto &it : _spheres) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _players) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _cubes) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _items) {
 		it->remove();
-		// it->drop();
 	}
 	if (_ground)
 		_ground->remove();
 	for (auto &it : _buttons) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _labels) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _checkboxes) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _inputs) {
 		it->remove();
-		// it->drop();
 	}
 	// _smgr = _device->getSceneManager();
 	// _labels.clear();
