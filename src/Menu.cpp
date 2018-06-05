@@ -373,7 +373,7 @@ std::vector<int>	Menu::getIdToUpdate(const Actions &actions)
 		if (actions.buttonPressed == 25 || actions.buttonPressed == 23)
 			return std::vector<int>({24});
 		if (actions.buttonPressed == 28 || actions.buttonPressed == 30)
-			return std::vector<int>({29});
+			return std::vector<int>({29, 24});
 	}
 	return std::vector<int>({0});
 }

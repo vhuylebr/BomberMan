@@ -13,7 +13,7 @@ MenuItem::MenuItem(std::string text)
 }
 
 MenuItem::MenuItem(Entity type, int id, std::string text, ui x, ui y, ui lenght, ui height)
-	: _type(type), _id(id), _text(text),_coord(x, y), _size(lenght, height)
+	: _stateTexture(false), _texture(std::string()), _type(type), _id(id), _text(text),_coord(x, y), _size(lenght, height)
 {
 
 }

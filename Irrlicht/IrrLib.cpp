@@ -262,7 +262,7 @@ Actions	IrrLib::getActions()
 
 void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 {
-	auto item = static_cast<MenuItem*>(entity.get());
+	MenuItem *item = static_cast<MenuItem*>(entity.get());
 	std::wstring wText;
 	std::string str = item->getText();
 
@@ -272,7 +272,7 @@ void IrrLib::addButton(std::unique_ptr<IEntity> &entity)
 		item->getPos().second, item->getPos().first + item->getSize().first,
 			item->getPos().second + item->getSize().second), 0, item->getId(),
 				wText.c_str());
-	if (item->isSetTexture())
+	if (item->isSetTexture() == true)
 		button->setImage(_driver->getTexture(item->getTexture().c_str()));
 	_buttons.push_back(button);
 }
