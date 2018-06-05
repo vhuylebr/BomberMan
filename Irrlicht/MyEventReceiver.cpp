@@ -35,6 +35,11 @@ void MyEventReceiver::resetIdButtonPressed()
 	_idButtonPressed = -1;
 }
 
+const irr::SEvent::SJoystickEvent &MyEventReceiver::GetJoystickState(void) const
+{
+	return JoystickState;
+}
+
 bool MyEventReceiver::OnEvent(const irr::SEvent& event)
 {
 	// Remember whether each key is down or up
@@ -57,6 +62,10 @@ bool MyEventReceiver::OnEvent(const irr::SEvent& event)
 		int id = event.GUIEvent.Caller->getID();
 		if (event.GUIEvent.EventType == irr::gui::EGET_BUTTON_CLICKED)
 			_idButtonPressed = id;
+	}
+	if (event.EventType == irr::EET_JOYSTICK_INPUT_EVENT
+		&& event.JoystickEvent.Joystick == 0) {
+			JoystickState = event.JoystickEvent;
 	}
 	return false;
 }

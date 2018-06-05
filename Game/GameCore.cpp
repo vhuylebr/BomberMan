@@ -91,6 +91,16 @@ unsigned int &x, unsigned int &y, const parameters &params)
 	while (std::getline(fd, line))
 		if (line == "separateur")
 			break ;
+	std::getline(fd, line);
+	std::istringstream iss(line);
+	std::string tmp;
+	iss >> _params.nbPlayers;
+	iss >> _params.nbBots;
+	iss >> _params.split;
+	std::getline(fd, line);
+	std::string str;
+	while (iss >> str)
+		_params.bonuses.push_back(static_cast<eItem>((std::stoi(str))));
 	while (std::getline(fd, line)) {
 		std::istringstream ss(line);
 		std::string tmpstr;
@@ -705,6 +715,14 @@ std::map<eItem, std::string> myItem =
 	{SHIELD, "SHIELD"}
 };
 
+void 	GameCore::saveParameters(std::ofstream &file)
+{
+	file << _params.nbPlayers << " " << _params.nbBots << " " << _params.split << "\n";
+	for (auto &i : _params.bonuses)
+		file << i << " ";
+	file << "\n";
+}
+
 void 	GameCore::saveMobileEntities(std::ofstream &file)
 {
 	file << "Player1 " << std::round(_player1.getX()) << " " << std::round(_player1.getY()) << " " <<  _player1.getPower()
@@ -714,10 +732,8 @@ void 	GameCore::saveMobileEntities(std::ofstream &file)
 		<< " " << _player2.getSuper() << " " << _player2.getMaxBombs() << " " << _player2.getSpeed() << " " << _player1.hasKick() << "\n";
 	for (auto &i : _bombs)
 		file << "Bomb " << i.getX() << " " << i.getY() << " " << i.getPower() << " " << i.getSuper() << " " << i.getOwner() << "\n";
-	for (auto &i :_iaList) {
-		std::cout << "IA here" << std::endl;
+	for (auto &i :_iaList)
 		file << "IA " << i.getX() << " " << i.getY() << " " << i.getPower() << " " << i.getSuper() << "\n";
-	}
 	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
 		for (unsigned int y = 0; y != _vectorEntities[idx].size(); y++) {
 			if (_vectorEntities[idx][y]->isEmpty() == false &&
@@ -738,6 +754,7 @@ void GameCore::handlePause(Actions actions, STATE &state)
 		std::ofstream file("save.txt");
 		saveMap(file);
 		file << "separateur\n";
+		saveParameters(file);
 		saveMobileEntities(file);
 		file.close();
 	}

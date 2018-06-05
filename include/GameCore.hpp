@@ -79,6 +79,7 @@ public:
 	void	playerDropBomb(Player &player);
 	void	saveMap(std::ofstream &file);
 	void 	saveMobileEntities(std::ofstream &file);
+	void 	saveParameters(std::ofstream &file);
 	bool checkEnd(STATE &);
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
