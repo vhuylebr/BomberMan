@@ -39,17 +39,17 @@ static const t_bonus bonusButton[NB_ITEMS] {
 	{44, eItem::SHIELD},
 };
 
-void 	Core::getParametersFromMenu()
+int 	Core::getParametersFromMenu()
 {
-	if (_menu.getStep() == 2) {
+	if (_menu.getStep() == 5) {
 		_param.map = _menu.getMap();
 		_param.state = GameState::NEWGAME;
 		_param.gameName = _lib.getInputText(_menu.getItemByID(6));
-		_param.nbPlayers = std::stoi(_lib.getLabelText(_menu.getItemByID(3)));
-		_param.nbBots = std::stoi(_lib.getLabelText(_menu.getItemByID(24)));
-		_param.mapSize.first = std::stoi(_lib.getLabelText(_menu.getItemByID(29))); // Height
-		_param.mapSize.second = std::stoi(_lib.getLabelText(_menu.getItemByID(33))); // Width
-		_param.mapname = "./media/map1.txt";
+		_param.nbPlayers = _menu.getNbPlayer();
+		_param.nbBots = _menu.getNbBots();
+		_param.mapSize.first = _menu.getMapSize();
+		_param.mapSize.second = _menu.getMapSize();
+		_param.mapname = _param.map.mapName;
 		_param.split = _param.nbPlayers - 1;
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
@@ -57,8 +57,11 @@ void 	Core::getParametersFromMenu()
 	} else if (_menu.getStep() == 3) {
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
+		if (_param.gameName == L"")
+			return (-1);
 		_param.mapname = "./media/map1.txt";
 	}
+	return (0);
 }
 
 static void setPauseVisible(IrrLib &lib, bool state)
@@ -143,7 +146,10 @@ int	Core::loop()
 				_coremusic.stop(SOUND::MENU);
 				_coremusic.play(SOUND::GAME);
 				_coremusic.setLoop(SOUND::GAME, true);
-				getParametersFromMenu();
+				if (getParametersFromMenu() == -1) {
+					_state = STATE::MENU;
+					continue;
+				}
 				_lib.cleanMenu();
 			}
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE

@@ -7,7 +7,7 @@
 
 #include "Menu.hpp"
 #include <iostream>
-
+#include <experimental/filesystem>
 
 Menu::Menu()
 	: _step(1), _nbPlayer(1), _nbBots(4), _mapH(50), _mapW(50), _change_menu(true), _changeState(true), _changed(false)
@@ -35,11 +35,20 @@ void 	Menu::makeJoinMenu()
 {
 	_item.clear();
 	std::vector<std::wstring> toto;
-	toto.push_back(L"Save1");
-	toto.push_back(L"Save2");
-	toto.push_back(L"Save3");
-	toto.push_back(L"Save4");
-
+//    std::string path = MAPS_DIRECTORY;
+	std::string path = "./media/maps/";
+	try {
+	    for (auto &p : std::experimental::filesystem::directory_iterator(path)) {
+			std::string file = p.path();
+			std::wstring ws;
+			ws.assign(file.begin(), file.end());
+			toto.push_back(ws);
+		}
+	} catch (const std::experimental::filesystem::filesystem_error &e) {
+		std::cout << "Error occured : Maps folder does not exist" << std::endl;
+		std::cout << e.what() << std::endl;
+		exit(84);
+	}
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LISTBOX, 1, "", (SCREEN_WIDTH / 2) - 300, 250, 600, 400)));
 	static_cast<MenuItem*>(_item[0].get())->setChoices(toto);
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", (SCREEN_WIDTH / 2) - 300, 150, 600, 100)));
@@ -319,8 +328,6 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		actions.escape = false;
 	}
 	if (actions.buttonPressed == 7) {
-		_changed = true;
-		_change_menu = true;
 		state = STATE::GAME;
 	} else if (actions.buttonPressed == 23) {
 		if (_nbBots < _nbBotsMax)
@@ -340,6 +347,10 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 	} else if (actions.buttonPressed == 30) {
 		if (_sizeMap > 10)
 			_sizeMap -= 10;
+		if (_nbBotsMax > (_sizeMap - (2 * (_sizeMap / 10)) - 2)) {
+			_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
+			static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBotsMax)); // ne s'update pas sur l'écran..
+		}
 		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
 		_changeState = true;
 	}

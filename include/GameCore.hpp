@@ -16,6 +16,8 @@
 # include <utility>
 # include <algorithm>
 # include <cmath>
+#include <random>
+#include <chrono>
 # include "Item.hpp"
 # include "Actions.hpp"
 # include "IEntity.hpp"
@@ -81,19 +83,27 @@ public:
 	void	playerDropBomb(Player &player);
 	void	saveMap(std::ofstream &file);
 	void 	saveMobileEntities(std::ofstream &file);
+	void 	saveParameters(std::ofstream &file);
 	bool checkEnd(STATE &);
 	void handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
 	int		getEndId() const;
 	void	handleIA();
 	void	displayScore();
-	
+	void 	loadEntities(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
+	void 	loadMovingEntities(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
+	std::vector<std::vector<char>>	loadGame(std::wstring filename);	
 
 private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
 	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
+	int		dodgeBomb(std::pair<float, float>, std::pair<float, float>, Player &);
+	void	iaMoving(Player &);
+	void	iaAction(std::unique_ptr<EntityPos> &, Player &, std::pair<int, int>, float);
 	void	displayAroundPlayer(void);
+	bool	haveBombed(Player);
+	bool	existBomb(float, float);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;

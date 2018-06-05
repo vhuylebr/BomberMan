@@ -8,7 +8,7 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id, int nb)
-	: _number(nb), _speed(0.0f), _bombs(2), _pow(3), _superB(false), _kick(false)
+	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(2), _pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false), _shields(0)
 {
 	_x = x;
 	_y = y;
@@ -32,9 +32,42 @@ void	Player::addBomb()
 	_bombs += 1;
 }
 
+void 	Player::setBombs(int bombs)
+{
+	_bombs = bombs;
+	_maxbombs = bombs;
+}
+
+bool	Player::hasShield() const
+{
+	return (_shields > 0);
+}
+
+int	Player::getShield() const
+{
+	return (_shields);
+}
+
+void	Player::addShield()
+{
+	if (_shields < 2)
+		_shields += 1;
+}
+
+void	Player::rmShield()
+{
+	if (_shields)
+		_shields -= 1;
+}
+
 float	Player::getSpeed() const
 {
 	return (_speed);
+}
+
+void 	Player::setSpeed(float speed)
+{
+	_speed = speed;
 }
 
 int	Player::getBombCount() const
@@ -62,6 +95,11 @@ pairUC	Player::getPos() const
 	return std::make_pair(_x, _y);
 }
 
+void 	Player::setPower(int pow)
+{
+	_pow = pow;
+}
+
 int	Player::getPower() const
 {
 	return _pow;
@@ -69,7 +107,7 @@ int	Player::getPower() const
 
 void	Player::addSpeed()
 {
-	if (_speed < 0.1)
+	if (_speed < 0.2)
 		_speed += 0.01;
 }
 
@@ -97,8 +135,10 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 {
 	eItem	tmp = static_cast<Item *>(item.get())->getItemType();
 
-	if (tmp == eItem::BOMB_UP)
+	if (tmp == eItem::BOMB_UP) {
+		_maxbombs += 1;
 		this->addBomb();
+	}
 	else if (tmp == eItem::POWER_UP)
 		this->addPower();
 	else if (tmp == eItem::SPEED)
@@ -110,6 +150,9 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item)
 	else if (tmp == eItem::KICK) {
 		this->setKick(true);
 		std::cout << "Picked up Kick" << std::endl;
+	} else if (tmp == eItem::SHIELD) {
+		this->addShield();
+		std::cout << "Picked up Shield" << std::endl;
 	}
 }
 
@@ -118,8 +161,9 @@ void Player::setRotation(float rotation)
 	_rotation = rotation;
 }
 
-void Player::ia()
+void	Player::setIa(std::pair<int, int> dir)
 {
+	_iaDir = dir;
 }
 
 int Player::getNumber() const

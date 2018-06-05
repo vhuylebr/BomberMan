@@ -34,15 +34,17 @@ public:
     bool    isExplode() const;
     std::vector<Fire>   &getFlames();
     void	setPower(int pow);
+    int     getPower() const { return _pow; }
     void	detonate();
     void    setSuper(bool);
+    bool    getSuper() const { return _superB; }
     bool	isPushed() const;
     void	move();
     pairUC	getNextPos();
     void	takeDir(pairUC dir, float pow);
 
 private:
-    int     _counter;
+    int         _counter;
     std::size_t _owner;
     int         _pow;
     bool        _superB;

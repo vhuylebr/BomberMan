@@ -29,6 +29,7 @@ public:
 	std::string getIP() const { return _ip; }
 	std::string getPseudo() const { return _pseudo; }
 	unsigned char getNbPlayer() const { return _nbPlayer; }
+	int getNbBots() const { return _nbBots; }
 	std::vector<std::unique_ptr<IEntity>> &getMenuItems();
 	void changeMenu();
 	bool getState(Actions &actions, STATE &state);
@@ -40,6 +41,7 @@ public:
 	Map getMap() const { return _map; }
 	bool getLabelToUpdate() { if (_changeState) { _changeState = false; return true; } return false; }
 	int getIdToUpdate(const Actions &actions);
+	int getMapSize() const { return _sizeMap; }
 
 private:
 	void rotateMaps(bool left);
