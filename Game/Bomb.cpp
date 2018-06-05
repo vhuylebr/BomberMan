@@ -21,6 +21,8 @@ Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
 	_dirs.push_back(std::make_pair(-1, 0));
 	_dirs.push_back(std::make_pair(0, -1));
 	_type = Entity::SPHERE;
+	_texture = "./media/bomb.png";
+	_subtype = SphereSubType::SUBBOMB;
 }
 
 Bomb::~Bomb()

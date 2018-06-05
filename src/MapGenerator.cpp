@@ -114,7 +114,7 @@ void MapGenerator::generateMap()
 {
 	generateEmptyMap();
 	fillMap();
-	dispMap();
+	// dispMap();
 }
 
 static void putOnMap(int x, int y, char c, std::vector<std::vector<char>> &map)

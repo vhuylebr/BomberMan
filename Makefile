@@ -27,6 +27,7 @@ SRCS	=	$(SRC)Menu.cpp			\
 		$(GAME)Fire.cpp			\
 		$(GAME)EntityPos.cpp		\
 		$(GAME)Item.cpp 		\
+		$(GAME)Shield.cpp 		\
 		$(SRC)Music.cpp			\
 		$(SRC)MapGenerator.cpp
 
