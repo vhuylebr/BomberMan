@@ -64,7 +64,7 @@ bool MapGenerator::checkCase(const int l, const int h)
 
 void MapGenerator::putWall(const int l, const int h)
 {
-	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+	std::random_device re;
 	std::uniform_int_distribution<int> distrib{0, 4};
 	char nb = distrib(re);
 
@@ -122,7 +122,7 @@ static void putOnMap(int x, int y, char c, std::vector<std::vector<char>> &map)
 
 static void putPlayers(char player, std::vector<std::vector<char>> &map, std::vector<t_coord> &coords)
 {
-	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+	std::random_device re;
 	std::uniform_int_distribution<int> distrib{0, static_cast<int>(coords.size() - 1)};
 	int nb = distrib(re);
 	t_coord tmp;
