@@ -625,37 +625,29 @@ void IrrLib::drop()
 {
 	for (auto &it : _spheres) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _players) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _cubes) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _items) {
 		it->remove();
-		// it->drop();
 	}
 	if (_ground)
 		_ground->remove();
 	for (auto &it : _buttons) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _labels) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _checkboxes) {
 		it->remove();
-		// it->drop();
 	}
 	for (auto &it : _inputs) {
 		it->remove();
-		// it->drop();
 	}
 	// _smgr = _device->getSceneManager();
 	// _labels.clear();
