@@ -131,12 +131,13 @@ void	Core::gameManager(STATE &last)
 
 int		Core::startMusic()
 {
+	std::cout << "toto" <<  std::endl;
 	if (_coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
 		return -1;
 	if (_coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
 		return -1;
-	_coremusic.play(SOUND::MENU);
 	_coremusic.setLoop(SOUND::MENU, true);
+	_coremusic.play(SOUND::MENU);
 	return 0;
 }
 
@@ -151,8 +152,8 @@ int	Core::loop()
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
 				_coremusic.stop(SOUND::MENU);
-				_coremusic.play(SOUND::GAME);
 				_coremusic.setLoop(SOUND::GAME, true);
+				_coremusic.play(SOUND::GAME);
 				if (getParametersFromMenu() == -1) {
 					_state = STATE::MENU;
 					continue;

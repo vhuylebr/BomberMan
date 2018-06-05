@@ -32,9 +32,9 @@ SRCS	=	$(SRC)Menu.cpp			\
 
 		#$(GAME)eItem.cpp
 
-CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -lstdc++fs
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -pthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -lstdc++fs -lIrrKlang
 
-CXX	=	g++ 
+CXX	=	g++
 
 RM	=	rm -f
 

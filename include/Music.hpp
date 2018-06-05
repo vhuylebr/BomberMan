@@ -8,9 +8,9 @@
 #ifndef MUSIC_HPP_
 	#define MUSIC_HPP_
 
-#include <SFML/Audio.hpp>
 #include <map>
 #include <thread>
+#include <irrKlang.h>
 
 enum class SOUND {
 	MENU,
@@ -30,10 +30,8 @@ class Music {
 		bool load(SOUND id, std::string pathname);
 		void setLoop(SOUND id, bool state);
 		void stop(SOUND id);
-		void pause(SOUND id);
 
 	private:
-		std::map<SOUND, sf::Music *> _sounds;
+		std::map<SOUND, std::pair<irrklang::ISoundEngine *, std::pair<std::string, bool>>> _sound;
 };
-
 #endif /* !MUSIC_HPP_ */
