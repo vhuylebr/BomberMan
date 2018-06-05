@@ -18,9 +18,12 @@ Menu::Menu()
 
 void	Menu::initMaps()
 {
-	_maps.push_back({"media/img1.png", "Map 1", "map1.txt"});
-	_maps.push_back({"media/img2.png", "Map 2", "map2.txt"});
+	// _maps.push_back({"media/img1.png", "Map 1", "map1.txt"});
+	// _maps.push_back({"media/img2.png", "Map 2", "map2.txt"});
+	_maps.push_back({"media/map-t.jpg", "Map T", "media/mapT.txt"});
 	_maps.push_back({"media/random.png", "Random", "empty"});
+	_maps.push_back({"media/map-x.jpg", "Map X", "media/mapX.txt"});
+	_maps.push_back({"media/map-m.png", "Map M", "media/mapM.txt"});
 	_sizeMap = 10;
 }
 
@@ -115,7 +118,6 @@ void    Menu::makeMainMenu()
 
 void	Menu::makeParamsMenu()
 {
-	std::cout << "NameMap: " << _map.mapName << std::endl;
 	if (_map.mapName == "Random") {
 		_randomMode = true;
 		_nbBotsMax = _sizeMap - (2 * (_sizeMap / 10)) - 2;
@@ -254,10 +256,7 @@ static void displayThreeMaps(std::vector<Map> &maps, std::vector<std::unique_ptr
 		else
 			item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, maps.begin()->mapName,
 			((i + 1) * (SCREEN_WIDTH / 5)) + 100 - ((size - 100) / 2), 300, maps.begin()->mapName.size() * 20 + 20, 40)));
-		item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, i + 2, "", ((i + 1) * (SCREEN_WIDTH / 5)) + 100, 400, 100, 100)));
-		// set la texture + set le isSetTexture à true
-		//_item.setTexture(true);
-		//_item.setTexture(*(_map.begin()).imgFileName);
+		item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, i + 2, "", ((i + 1) * (SCREEN_WIDTH / 5)), 400, 370, 370)));
 		static_cast<MenuItem *>(item.back().get())->setTexture(maps.begin()->imgFileName);
 		static_cast<MenuItem *>(item.back().get())->setTexture(true);
 		std::rotate(maps.begin(), maps.begin() + 1, maps.end());

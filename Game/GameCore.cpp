@@ -205,13 +205,13 @@ void    GameCore::init(parameters params)
 	unsigned int x = 0;
 	unsigned int y = 0;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
-	_nbPlayer = 0;
+	_nbPlayer = params.nbPlayers;
 	std::vector<std::vector<char>> map;
 	_params = params;
 	if (params.state == GameState::NEWGAME) {
 		std::cout << "Initializing new game" << std::endl;
 		generator.generateMap();
-		generator.generatePlayers(2, params.nbBots);
+		generator.generatePlayers(params.nbPlayers, params.nbBots);
 		generator.dispMap();
 		map = generator.getMap();
 		createEntities(map, x, y, params);
