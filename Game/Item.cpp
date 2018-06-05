@@ -37,7 +37,7 @@ Item::Item(float x, float y, unsigned int id, std::vector<eItem> &disp)
 
 void	Item::loadType(std::vector<eItem> &disp)
 {
-	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+	std::random_device re;
 	std::uniform_int_distribution<int> distrib{0, 99};
 	disp.push_back(eItem::SHIELD);
 	int idx = (int)(distrib(re) / 100.0f * (double)disp.size());
