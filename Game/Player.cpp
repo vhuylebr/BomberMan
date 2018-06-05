@@ -167,7 +167,7 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item, unsigned int &id, std::v
 		this->setKick(true);
 	else if (tmp == eItem::SHIELD) {
 		this->addShield(id);
-		addVec.push_back(std::unique_ptr<IEntity>(&_shields.back()));
+		addVec.push_back(std::unique_ptr<IEntity>(new Shield(_shields.back())));
 	}
 }
 
