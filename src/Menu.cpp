@@ -341,6 +341,7 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 	} else if (actions.buttonPressed == 28) {
 		if (_sizeMap < 100)
 			_sizeMap += 10;
+		_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
 		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
 		_changeState = true;
 	} else if (actions.buttonPressed == 30) {
