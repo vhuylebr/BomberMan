@@ -12,14 +12,13 @@
 # include <string>
 # include <map>
 # include <vector>
-# define NB_ITEMS 7 // Nombre d'items implémentés
+# define NB_ITEMS 6 // Nombre d'items implémentés
 
 enum eItem {
 	BOMB_UP,
 	POWER_UP,
 	SPEED,
 	SUPER_BOMB,
-	WALL_PASS,
 	KICK,
 	SHIELD,
 	NONE

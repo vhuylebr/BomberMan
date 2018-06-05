@@ -161,8 +161,8 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item, unsigned int &id, std::v
 		this->addSpeed();
 	else if (tmp == eItem::SUPER_BOMB)
 		this->setSuper(true);
-	else if (tmp == eItem::WALL_PASS)
-		return ;
+//	else if (tmp == eItem::WALL_PASS)
+//		return ;
 	else if (tmp == eItem::KICK)
 		this->setKick(true);
 	else if (tmp == eItem::SHIELD) {

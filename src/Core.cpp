@@ -34,7 +34,7 @@ static const t_bonus bonusButton[NB_ITEMS] {
 	{11, eItem::POWER_UP},
 	{13, eItem::SUPER_BOMB},
 	{15, eItem::SPEED},
-	{17, eItem::WALL_PASS},
+//	{17, eItem::WALL_PASS},
 	{19, eItem::KICK},
 	{44, eItem::SHIELD},
 };

@@ -791,7 +791,7 @@ std::map<eItem, std::string> myItem =
 	{POWER_UP, "POWER_UP"},
 	{SPEED, "SPEED"},
 	{SUPER_BOMB, "SUPER_BOMB"},
-	{WALL_PASS, "WALL_PASS"},
+//	{WALL_PASS, "WALL_PASS"},
 	{KICK, "KICK"},
 	{SHIELD, "SHIELD"}
 };
