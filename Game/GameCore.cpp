@@ -260,7 +260,7 @@ void    GameCore::init(parameters params)
 	unsigned int x = 0;
 	unsigned int y = 0;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
-	_nbPlayer = params.nbPlayers;
+	_nbPlayer = 0;
 	std::vector<std::vector<char>> map;
 	_params = params;
 	if (params.state == GameState::NEWGAME) {

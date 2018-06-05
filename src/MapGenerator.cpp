@@ -65,14 +65,13 @@ bool MapGenerator::checkCase(const int l, const int h)
 void MapGenerator::putWall(const int l, const int h)
 {
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-	std::uniform_int_distribution<int> distrib{0, 5};
+	std::uniform_int_distribution<int> distrib{0, 4};
 	char nb = distrib(re);
-
 
 	if (checkCase(l, h) && nb < 2 && _map[h][l] != ' ')
 		_map[h][l] = '0';
 	if (h == 1 || h == _y - 2 || l == 1 || l == _x - 2) {
-		std::uniform_int_distribution<int> distrib2{0, 8};
+		std::uniform_int_distribution<int> distrib2{0, 7};
 		if ((nb = distrib(re)) == 4)
 			_map[h][l] = ' ';
 	}
@@ -114,7 +113,6 @@ void MapGenerator::generateMap()
 {
 	generateEmptyMap();
 	fillMap();
-	// dispMap();
 }
 
 static void putOnMap(int x, int y, char c, std::vector<std::vector<char>> &map)
@@ -125,7 +123,7 @@ static void putOnMap(int x, int y, char c, std::vector<std::vector<char>> &map)
 static void putPlayers(char player, std::vector<std::vector<char>> &map, std::vector<t_coord> &coords)
 {
 	std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
-	std::uniform_int_distribution<int> distrib{0, static_cast<int>(coords.size())};
+	std::uniform_int_distribution<int> distrib{0, static_cast<int>(coords.size() - 1)};
 	int nb = distrib(re);
 	t_coord tmp;
 
