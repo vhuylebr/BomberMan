@@ -16,6 +16,7 @@ Shield::Shield(float x, float y, unsigned int id)
 	_type = Entity::SPHERE;
 	_texture = "./media/shield.jpg";
 	_subtype = SphereSubType::SUBSHIELD;
+	_scale = 0.15f;
 }
 
 Shield::~Shield()

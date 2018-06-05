@@ -23,6 +23,7 @@ Bomb::Bomb(float x, float y, unsigned int id, std::size_t owner)
 	_type = Entity::SPHERE;
 	_texture = "./media/bomb.png";
 	_subtype = SphereSubType::SUBBOMB;
+	_scale = 0.1f;
 }
 
 Bomb::~Bomb()
