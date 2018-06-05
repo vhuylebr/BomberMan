@@ -20,7 +20,7 @@ public:
 	~Core() = default;
 
 	int loop();
-	void getParametersFromMenu();
+	int getParametersFromMenu();
 protected:
 	int startMusic();
 	void menuManager(STATE &last);

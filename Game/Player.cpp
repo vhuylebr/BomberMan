@@ -8,8 +8,8 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id, int nb)
-	: _number(nb), _speed(0.0f), _bombs(2), _pow(3),
-	_superB(false), _kick(false)
+	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(2),
+	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false)
 {
 	_x = x;
 	_y = y;
@@ -32,6 +32,12 @@ void	Player::addBomb()
 	_bombs += 1;
 }
 
+void 	Player::setBombs(int bombs)
+{
+	_bombs = bombs;
+	_maxbombs = bombs;
+}
+
 bool	Player::hasShield() const
 {
 	return (_shields.size() > 0);
@@ -46,6 +52,7 @@ void	Player::addShield(unsigned int &id)
 {
 	if (_shields.size() < 2) {
 		_shields.push_back(Shield(_x, _y, id));
+		std::cout << "SHIELD: Created " << id << std::endl;
 		id += 1;
 	}
 }
@@ -55,6 +62,7 @@ int	Player::rmShield()
 	if (_shields.size()) {
 		unsigned int	tmp = _shields.back().getId();
 		_shields.pop_back();
+		std::cout << "SHIELD: Removing " << tmp << std::endl;
 		return (static_cast<int>(tmp));
 	}
 	return (-1);
@@ -63,6 +71,11 @@ int	Player::rmShield()
 float	Player::getSpeed() const
 {
 	return (_speed);
+}
+
+void 	Player::setSpeed(float speed)
+{
+	_speed = speed;
 }
 
 int	Player::getBombCount() const
@@ -90,6 +103,11 @@ pairUC	Player::getPos() const
 	return std::make_pair(_x, _y);
 }
 
+void 	Player::setPower(int pow)
+{
+	_pow = pow;
+}
+
 int	Player::getPower() const
 {
 	return _pow;
@@ -108,7 +126,7 @@ bool	Player::getSuper() const
 
 void	Player::setPos(float x, float y)
 {
-	std::cout << "asdasd" << std::endl;
+	//std::cout << "asdasd" << std::endl;
 	_x = x;
 	_y = y;
 	for (auto it : _shields)
@@ -134,8 +152,10 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item, unsigned int &id, std::v
 {
 	eItem	tmp = static_cast<Item *>(item.get())->getItemType();
 
-	if (tmp == eItem::BOMB_UP)
+	if (tmp == eItem::BOMB_UP) {
+		_maxbombs += 1;
 		this->addBomb();
+	}
 	else if (tmp == eItem::POWER_UP)
 		this->addPower();
 	else if (tmp == eItem::SPEED)
@@ -157,8 +177,9 @@ void Player::setRotation(float rotation)
 	_rotation = rotation;
 }
 
-void Player::ia()
+void	Player::setIa(std::pair<int, int> dir)
 {
+	_iaDir = dir;
 }
 
 int Player::getNumber() const

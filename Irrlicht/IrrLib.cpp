@@ -87,6 +87,7 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 		if (it->getID() == -1) {
 			it->setID(entity->getId());
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
+			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 			it->setVisible(true);
 			it->render();
 			return;
@@ -95,28 +96,30 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh(0.5f);
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
-	ball->setMaterialTexture(0, _driver->getTexture("./media/bomb.png"));
+	ball->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	ball->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
-	ball->setID(static_cast<Bomb*>(entity.get())->getId());
+	ball->setVisible(static_cast<ASphere*>(entity.get())->isAlive()); // You're important...
+	ball->setID(static_cast<ASphere*>(entity.get())->getId());
 	_spheres.push_back(ball);
-	_gamemusic.play(SOUND::TICTAC);
+	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+		_gamemusic.play(SOUND::TICTAC);
 }
 
 void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
-		if (it->getID() == static_cast<Bomb*>(entity.get())->getId()) {
+		if (it->getID() == static_cast<ASphere*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
-			it->setVisible(static_cast<Bomb*>(entity.get())->isAlive());
-			if (static_cast<Bomb*>(entity.get())->isAlive() == false) {
+			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
+			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
+			if (static_cast<ASphere*>(entity.get())->isAlive() == false) {
 				it->setID(-1);
 				_gamemusic.play(SOUND::BOOM);
 			}
 			return ;
 		}
 	}
-	std::cout << "here" << entity->getId() << std::endl;
+//	std::cout << "here" << entity->getId() << std::endl;
 	addSphere(entity);
 }
 
@@ -126,6 +129,7 @@ void IrrLib::removeSphere(int id)
 
 	for (auto &it : _spheres) {
 		if (id == it->getID()) {
+			std::cout << id << std::endl;
 			it->setID(-1);
 			it->setVisible(false);
 			it->removeAll();
@@ -407,7 +411,10 @@ std::wstring  IrrLib::getLabelText(std::unique_ptr<IEntity> &item)
 std::wstring	IrrLib::getListBoxChoice(std::unique_ptr<IEntity> &item)
 {
 	int toto = _listbox->getSelected();
-	return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
+	if (toto == -1)
+		return (L"");
+	else
+		return (static_cast<MenuItem*>(item.get())->getChoices()[toto]);
 }
 
 int IrrLib::getIdButtonPressed() const

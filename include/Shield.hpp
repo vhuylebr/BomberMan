@@ -8,18 +8,14 @@
 #ifndef SHIELD_HPP_
 # define SHIELD_HPP_
 
-#include "AEntity.hpp"
+#include "ASphere.hpp"
 
-class	Shield : public AEntity {
+class	Shield : public ASphere {
 public:
 	Shield(float x, float y, unsigned int id);
 	~Shield();
 
-	bool	isAlive() const;
 	void	setAlive(bool);
-
-private:
-	bool	_alive;
 };
 
 #endif /* SHIELD_HPP_ */

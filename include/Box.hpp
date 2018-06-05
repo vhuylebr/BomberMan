@@ -16,7 +16,6 @@ public:
     void insertInfo();
     IEntity::Entity getType();
 
-    private:
 };
 
 #endif /* BOX HPP */
