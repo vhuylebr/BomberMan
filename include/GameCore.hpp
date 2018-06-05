@@ -104,6 +104,7 @@ private:
 	void	displayAroundPlayer(void);
 	bool	haveBombed(Player);
 	bool	existBomb(float, float);
+	void	getMapFromFile(Map map, parameters params);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;

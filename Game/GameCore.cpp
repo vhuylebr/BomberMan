@@ -200,6 +200,63 @@ std::vector<std::vector<char>> GameCore::loadGame(std::wstring filename)
 	return (map);
 }
 
+void GameCore::getMapFromFile(Map map, parameters params)
+{
+	std::ifstream file(map.fileName);
+	std::string line;
+
+	std::cout << "Initializing new game" << std::endl;
+	_size.x = params.mapSize.first;
+	_size.y = params.mapSize.second;
+	unsigned int x1 = 0;
+	unsigned int y1 = 0;
+	if (!file.is_open()) {
+		std::cout << "Open has failed\n";
+	} else {
+		std::cout << "Open success\n";
+		while (getline(file, line)) {
+			x1 = 0;
+			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos> >());
+			for (unsigned int j = 0; line[j] != 0; ++j) {
+				if (line[j] == '0') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_id++;
+				} else if (line[j] == '1') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_id++;
+				} else if (line[j] == '2') {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					_id++;
+				} else if (line[j] == '3') {
+					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					_id++;
+				} else if (line[j] == '4') {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					if (static_cast<int>(_iaList.size()) < params.nbBots) {
+						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
+						_iaList.push_back(Player(static_cast<float>(x1), static_cast<float>(y1), _id));
+						_id++;
+					}
+				} else {
+					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+				}
+				x1 += 1;
+			}
+			y1 += 1;
+		}
+	}
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+	_size.x = x1;
+	_size.y = y1;
+}
+
 void    GameCore::init(parameters params)
 {
 	unsigned int x = 0;
@@ -210,11 +267,14 @@ void    GameCore::init(parameters params)
 	_params = params;
 	if (params.state == GameState::NEWGAME) {
 		std::cout << "Initializing new game" << std::endl;
-		generator.generateMap();
-		generator.generatePlayers(params.nbPlayers, params.nbBots);
-		generator.dispMap();
-		map = generator.getMap();
-		createEntities(map, x, y, params);
+		if (params.map.mapName == "Random") {
+			generator.generateMap();
+			generator.generatePlayers(params.nbPlayers, params.nbBots);
+			generator.dispMap();
+			map = generator.getMap();
+			createEntities(map, x, y, params);
+		} else
+			getMapFromFile(params.map, params);
 	}
 	if (params.state == GameState::LOADGAME) {
 		std::cout << "Loading game from save" << std::endl;
