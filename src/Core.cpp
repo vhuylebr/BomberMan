@@ -127,7 +127,6 @@ void	Core::gameManager(STATE &last)
 
 int		Core::startMusic()
 {
-	std::cout << "toto" <<  std::endl;
 	if (_coremusic.load(SOUND::MENU, "./media/Sound/MenuSelect.ogg") == false)
 		return -1;
 	if (_coremusic.load(SOUND::GAME, "./media/Sound/TitleScreen.ogg") == false)
