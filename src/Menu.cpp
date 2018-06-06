@@ -18,8 +18,6 @@ Menu::Menu()
 
 void	Menu::initMaps()
 {
-	// _maps.push_back({"media/img1.png", "Map 1", "map1.txt"});
-	// _maps.push_back({"media/img2.png", "Map 2", "map2.txt"});
 	_maps.push_back({"media/map-t.jpg", "Map T", "media/mapT.txt"});
 	_maps.push_back({"media/random.png", "Random", "empty"});
 	_maps.push_back({"media/map-x.jpg", "Map X", "media/mapX.txt"});
@@ -331,7 +329,7 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		_nbBots += 1;
 		static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots));
 		_changeState = true;
-	} else if (actions.buttonPressed == 25 && _nbBots > 0 && !(_randomMode == false && _nbPlayer == 1 && _nbBots <= 1)) {
+	} else if (actions.buttonPressed == 25 && _nbBots > 0 && !(_nbPlayer == 1 && _nbBots <= 1)) {
 		_nbBots -= 1;
 		static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots));
 		_changeState = true;

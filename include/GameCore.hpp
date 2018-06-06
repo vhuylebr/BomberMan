@@ -8,28 +8,6 @@
 #ifndef GAMECORE_HPP_
 # define GAMECORE_HPP_
 
-// #include <string>
-// #include <iostream>
-// #include <vector>
-// #include <fstream>
-// #include <memory>
-// #include <utility>
-// #include <algorithm>
-// #include <cmath>
-// #include "Item.hpp"
-// #include "Actions.hpp"
-// #include "IEntity.hpp"
-// #include "Wall.hpp"
-// #include "Crate.hpp"
-// #include "Player.hpp"
-// #include "State.hpp"
-// #include "BombFactory.hpp"
-// #include "MenuItem.hpp"
-// #include "Shield.hpp"
-// #include "Fire.hpp"
-// #include "EntityPos.hpp"
-// #include "Metrics.hpp"
-// #include "MapGenerator.hpp"
 # include <string>
 # include <iostream>
 # include <vector>
@@ -38,8 +16,8 @@
 # include <utility>
 # include <algorithm>
 # include <cmath>
-#include <random>
-#include <chrono>
+# include <random>
+# include <chrono>
 # include "Item.hpp"
 # include "Actions.hpp"
 # include "IEntity.hpp"
@@ -59,8 +37,6 @@ enum class GameState {
 	NEWGAME,
 	LOADGAME
 };
-
-
 
 struct  parameters
 {
@@ -106,10 +82,10 @@ public:
 	void	saveMap(std::ofstream &file);
 	void 	saveMobileEntities(std::ofstream &file);
 	void 	saveParameters(std::ofstream &file);
-	bool checkEnd(STATE &);
-	void handleEnd(Actions actions, STATE &state);
+	bool	checkEnd(STATE &);
+	void	handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
-	int		getEndId() const;
+	int	getEndId() const;
 	void	handleIA();
 	void	displayScore();
 	void 	loadEntities(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
@@ -129,7 +105,7 @@ private:
 	void	playerShield(Player &player);
 	bool	haveBombed(Player);
 	bool	existBomb(float, float);
-	void	getMapFromFile(Map map, parameters params);
+	void	getMapFromFile(Map map, parameters params);//, unsigned int &, unsigned int &);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
