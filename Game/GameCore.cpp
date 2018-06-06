@@ -604,13 +604,13 @@ void	GameCore::iaMoving(Player &player)
 		std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
 		std::uniform_int_distribution<int>	distrib{1, 4};
 		rand = distrib(re);
-		if (rand == 1)
+		if (rand == 1 && !existBomb(myPos.second + 1, myPos.first))
 			player.setIa(std::make_pair(0, 1));
-		else if (rand == 2)
+		else if (rand == 2 && !existBomb(myPos.second - 1, myPos.first))
 			player.setIa(std::make_pair(0, -1));
-		else if (rand == 3)
+		else if (rand == 3 && !existBomb(myPos.second, myPos.first + 1))
 			player.setIa(std::make_pair(1, 0));
-		else
+		else if (rand == 4 && !existBomb(myPos.second, myPos.first - 1))
 		        player.setIa(std::make_pair(-1, 0));
 	}
 }
