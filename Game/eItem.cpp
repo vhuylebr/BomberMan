@@ -23,6 +23,8 @@ std::string itemToStr(eItem item)
             return "WALL_PASS";
 	    case eItem::KICK:
             return "KICk";
+        case eItem::TP:
+            return "TP";
 	    case eItem::NONE:
             return "NONE";
     }

@@ -488,7 +488,7 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 	static_cast<Item *>(item.get())->getItemType() != eItem::TELEPORTER) {
 		player.pickupItem(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getEntity(), _id, _updateEntities);
 		_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getId(),
-		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType()));
+			_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType()));
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->removeFirstEntity();
 		player.setPos(from.first + (0.07 + player.getSpeed()) * dir.first, from.second + (0.07 + player.getSpeed()) * dir.second);
 	}
@@ -800,6 +800,7 @@ std::map<eItem, std::string> myItem =
 	{SPEED, "SPEED"},
 	{SUPER_BOMB, "SUPER_BOMB"},
 //	{WALL_PASS, "WALL_PASS"},
+	{TP, "TP"},
 	{KICK, "KICK"},
 	{SHIELD, "SHIELD"}
 };

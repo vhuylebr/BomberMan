@@ -31,6 +31,9 @@ Item::Item(float x, float y, unsigned int id, std::vector<eItem> &disp)
 	_getModel[SHIELD] = "./media/Fireball.obj";
 	_getTexture[SHIELD] = "./media/shield.jpg";
 	_getScale[SHIELD] = 1.0f;
+	_getModel[TP] = "./media/tp.obj";
+	_getTexture[TP] = "./media/tp.png";
+	_getScale[TP] = 10.0f;
 	loadType(disp);
 	_id = id;
 }
