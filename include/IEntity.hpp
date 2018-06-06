@@ -14,17 +14,17 @@
 typedef std::pair<float, float> pairUC;
 
 enum class Entity {
-    BOX,
-    BOMB,
-    PLAYER,
-    ITEM,
-    BUTTON,
-    CHECKBOX,
-    INPUT,
-    LABEL,
-    LISTBOX,
-    SPHERE,
-    CUBE
+	BOX,
+	BOMB,
+	PLAYER,
+	ITEM,
+	BUTTON,
+	CHECKBOX,
+	INPUT,
+	LABEL,
+	LISTBOX,
+	SPHERE,
+	CUBE
 };
 
 struct coords {
@@ -35,10 +35,10 @@ struct coords {
 
 class IEntity {
 public:
-    virtual ~IEntity() = default;
-    virtual int getId() const = 0;
-    virtual Entity getType() const = 0;
-    virtual pairUC getPos() const = 0;
+	virtual ~IEntity() = default;
+	virtual int getId() const = 0;
+	virtual Entity getType() const = 0;
+	virtual pairUC getPos() const = 0;
 };
 
 #endif /* !IENTITY_HPP_ */

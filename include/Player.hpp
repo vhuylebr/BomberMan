@@ -22,7 +22,7 @@ public:
 	bool	isAlive() const;
 	void	setAlive(bool);
 	pairUC	getPos() const;
-	int	getPower() const;
+	int		getPower() const;
 	float	getRotation() const {return _rotation;};
 	void	setRotation(float);
 	void	pickupItem(std::unique_ptr<IEntity> &, unsigned int &id, std::vector<std::unique_ptr<IEntity>> &);
@@ -39,7 +39,7 @@ public:
 	std::vector<Shield>	&getShields();
 	void	setPos(float x, float y);
 	void	addShield(unsigned int &);
-	int	rmShield();
+	int		rmShield();
 	void	addPow();
 	void	addBomb();
 	void	addSpeed();
@@ -50,8 +50,10 @@ public:
 	void	ia();
 	void	setNumber(int);
 	void	setKick(bool);
-	int	getNumber() const;
-	bool	isBot() const {return _isBot; };
+	int		getNumber() const;
+	bool	isBot() const { return _isBot; }
+	bool	isOnTp() const { return _onTp; }
+	void	onTp(bool value) { _onTp = value; }
 
 private:
 
@@ -66,6 +68,7 @@ private:
 	bool	_kick;
 	bool	_isBot;
 	std::vector<Shield>	_shields;
+	bool	_onTp;
 };
 
 #endif /* !PLAYER_HPP_ */
