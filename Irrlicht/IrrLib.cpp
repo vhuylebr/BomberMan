@@ -154,6 +154,7 @@ void IrrLib::removeSphere(int id)
 
 	for (auto &it : _spheres) {
 		if (id == it->getID()) {
+			it->setMaterialType(irr::video::EMT_SOLID);
 			it->setID(-1);
 			it->setVisible(false);
 			it->removeAll();

@@ -23,7 +23,7 @@ void 	playsMusic(std::pair<irrklang::ISoundEngine *, std::pair<std::string, bool
 void 	Music::play(SOUND id)
 {
 	std::thread tmp2(playsMusic, _sound[id]);
-	tmp2.join();
+	tmp2.detach();
 }
 
 bool 	Music::load(SOUND id, std::string pathname)
@@ -41,5 +41,5 @@ void 	Music::setLoop(SOUND id, bool state)
 
 void 	Music::stop(SOUND id)
 {
-	_sound[id].first->drop();
+	_sound[id].first->stopAllSounds();
 }
