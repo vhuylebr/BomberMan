@@ -80,9 +80,6 @@ private:
 	std::vector<eItem> _bonus;
 	int     _changeState;
 	bool 	_changed;
-	//menu1: titre, "start game", "join game", "quit"
-	//menu2: nb_p, pseudo, liste de bonus, quit
-	//menu3: pseudo, ip, quit
 };
 
 #endif /* !MENU_HPP_ */
