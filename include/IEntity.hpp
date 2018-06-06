@@ -14,6 +14,7 @@
 typedef std::pair<float, float> pairUC;
 
 enum class Entity {
+<<<<<<< Updated upstream
 	BOX,
 	BOMB,
 	PLAYER,
@@ -25,6 +26,20 @@ enum class Entity {
 	LISTBOX,
 	SPHERE,
 	CUBE
+=======
+    BOX,
+    BOMB,
+    PLAYER,
+    ITEM,
+    BUTTON,
+    CHECKBOX,
+    INPUT,
+    LABEL,
+    LISTBOX,
+    SPHERE,
+    CUBE,
+    TELEPORTER
+>>>>>>> Stashed changes
 };
 
 struct coords {

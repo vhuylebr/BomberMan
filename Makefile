@@ -35,7 +35,7 @@ SRCS	=	$(SRC)Menu.cpp			\
 
 CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -pthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lsfml-audio -lstdc++fs -lIrrKlang
 
-CXX	=	g++
+CXX	=	g++ -g3
 
 RM	=	rm -f
 

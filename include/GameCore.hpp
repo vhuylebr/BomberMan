@@ -83,6 +83,8 @@ struct	movement
 	unsigned char		player;
 };
 
+//# define TP _vectorTeleporter[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]]
+
 class GameCore {
 public:
 	GameCore();
@@ -118,6 +120,7 @@ public:
 	std::vector<std::vector<char>>	loadGame(std::wstring filename);	
 
 private:
+	std::vector<std::unique_ptr<Teleporter *> _vectorTeleporter;
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
 	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
