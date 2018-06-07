@@ -11,7 +11,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
-		16, false, false, false, &_eventReceiver);
+		16, true, true, true, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
@@ -78,7 +78,7 @@ IrrLib::~IrrLib()
 {
 }
 
-void IrrLib::createPlane(pairUC &size)
+void	IrrLib::createPlane(pairUC &size)
 {
 	irr::scene::IMesh* plane = _geomentryCreator->createPlaneMesh(irr::core::dimension2d<irr::f32>(15, 15),
 		irr::core::dimension2d<irr::u32>(15, 15));
@@ -88,7 +88,7 @@ void IrrLib::createPlane(pairUC &size)
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
-void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
+void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
 		if (it->getID() == -1) {
@@ -113,9 +113,9 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	irr::scene::IMesh* sphere = _geomentryCreator->createSphereMesh();
 	irr::scene::ISceneNode* ball = _smgr->addMeshSceneNode(sphere);
 	ball->setPosition(irr::core::vector3df(entity->getPos().first, 0, entity->getPos().second));
-	ball->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
+	ball->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str()));
 	ball->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
-	ball->setVisible(static_cast<ASphere*>(entity.get())->isAlive()); // You're important...
+	ball->setVisible(static_cast<ASphere*>(entity.get())->isAlive()); // No, You're important...
 	ball->setID(static_cast<ASphere*>(entity.get())->getId());
 	ball->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
 	ball->setMaterialType(irr::video::EMT_SOLID);
@@ -130,13 +130,13 @@ void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	_spheres.push_back(ball);
 }
 
-void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
+void	IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
 		if (it->getID() == static_cast<ASphere*>(entity.get())->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
-			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
+			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str()));
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
 			if (static_cast<ASphere*>(entity.get())->isAlive() == false) {
 				it->setID(-1);
@@ -148,7 +148,7 @@ void IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 	addSphere(entity);
 }
 
-void IrrLib::removeSphere(int id)
+void	IrrLib::removeSphere(int id)
 {
 	int i = 0;
 
@@ -164,7 +164,7 @@ void IrrLib::removeSphere(int id)
 	}
 }
 
-void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
+void	IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _cubes) {
 		if (it->getID() == -1) {
@@ -186,7 +186,7 @@ void IrrLib::addCube(std::unique_ptr<IEntity> &entity)
 	_cubes.push_back(cube);
 }
 
-void IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
+void	IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _cubes) {
 		if (it->getID() == static_cast<ACube*>(entity.get())->getId()) {

@@ -52,7 +52,6 @@ void	Player::addShield(unsigned int &id)
 {
 	if (_shields.size() < 2) {
 		_shields.push_back(Shield(_x, _y, id));
-		std::cout << "SHIELD: Created " << id << std::endl;
 		id += 1;
 	}
 }
@@ -62,7 +61,6 @@ int	Player::rmShield()
 	if (_shields.size()) {
 		unsigned int	tmp = _shields.back().getId();
 		_shields.pop_back();
-		std::cout << "SHIELD: Removing " << tmp << std::endl;
 		return (static_cast<int>(tmp));
 	}
 	return (-1);
