@@ -81,7 +81,8 @@ unsigned int &x, unsigned int &y, const parameters &params)
 void GameCore::loadMovingEntities(std::vector<std::vector<char>> &map,
 unsigned int &x, unsigned int &y, const parameters &params)
 {
-	std::ifstream fd(/*file);*/"save.txt");
+	std::string filename(_params.gameName.begin(), _params.gameName.end());
+	std::ifstream fd(filename);
 	std::string line;
 
 	y = 0;
@@ -91,13 +92,11 @@ unsigned int &x, unsigned int &y, const parameters &params)
 	std::getline(fd, line);
 	std::istringstream iss(line);
 	std::string tmp;
-	iss >> _params.nbPlayers;
-	iss >> _params.nbBots;
-	iss >> _params.split;
+	iss >> _params.nbPlayers >> _params.nbBots >> _params.split;
 	std::getline(fd, line);
-	std::string str;
-	while (iss >> str)
-		_params.bonuses.push_back(static_cast<eItem>((std::stoi(str))));
+	std::istringstream tss(line);
+	while (tss >> tmp)
+		_params.bonuses.push_back(static_cast<eItem>((std::stoi(tmp))));
 	while (std::getline(fd, line)) {
 		std::istringstream ss(line);
 		std::string tmpstr;
@@ -139,14 +138,9 @@ unsigned int &x, unsigned int &y, const parameters &params)
 			Bomb tmp(std::ceil(std::stoi(bombs[0]) - 0.5), std::ceil(std::stoi(bombs[1]) - 0.5), _id, std::stoi(bombs[4]));
 			tmp.setPower(std::stoi(bombs[2]));
 			tmp.setSuper(std::stoi(bombs[3]));
+			tmp.setAlive(true);
 			_bombs.push_back(tmp);
 			_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(std::stoi(bombs[0]) - 0.5), std::ceil(std::stoi(bombs[1]) - 0.5), _id, std::stoi(bombs[4])));
-		}
-		else if (tmpstr == "Item") {
-			std::array<std::string, 3> items;
-			ss >> items[0] >> items[1] >> items[2];
-			_vectorEntities[std::stoi(items[0])][std::stoi(items[1])]->addEntity(std::stof(items[0]), std::stof(items[1]), _id, _params.bonuses);
-			_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[std::stof(items[0])][std::stof(items[1])]->getEntity().get()));
 		}
 		_id++;
 	}
@@ -223,14 +217,14 @@ void GameCore::getMapFromFile(Map map, parameters params)
 		}
 	}
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
 	_size.x = x1;
 	_size.y = y1;
 }
 
-void    GameCore::init(parameters params)
+void    GameCore::init(parameters &params)
 {
 	unsigned int x = 0;
 	unsigned int y = 0;
@@ -255,6 +249,8 @@ void    GameCore::init(parameters params)
 		map = loadGame(params.gameName);
 		loadEntities(map, x, y, params);
 		loadMovingEntities(map, x, y, params);
+		params.split = _params.split;
+		params.gameName = _params.gameName;
 	}
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
@@ -318,6 +314,7 @@ void GameCore::playerDropBomb(Player &player)
 		player.dropBomb();
 		tmp.setPower(player.getPower());
 		tmp.setSuper(player.getSuper());
+		tmp.setAlive(true);
 		_bombs.push_back(tmp);
 		_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(pos.first - 0.5), std::ceil(pos.second - 0.5), _id, player.getId()));
 		_id++;
@@ -775,16 +772,6 @@ void 	GameCore::saveMobileEntities(std::ofstream &file)
 		file << "Bomb " << i.getX() << " " << i.getY() << " " << i.getPower() << " " << i.getSuper() << " " << i.getOwner() << "\n";
 	for (auto &i :_iaList)
 		file << "IA " << i.getX() << " " << i.getY() << " " << i.getPower() << " " << i.getSuper() << "\n";
-	for (unsigned int idx = 0; idx != _vectorEntities.size(); idx++) {
-		for (unsigned int y = 0; y != _vectorEntities[idx].size(); y++) {
-			if (_vectorEntities[idx][y]->isEmpty() == false &&
-				_vectorEntities[idx][y]->getType() == Entity::ITEM) {
-				auto pos = _vectorEntities[idx][y]->getEntity()->getPos();
-				file << "Item " << pos.first << " " << pos.second << " " <<
-				static_cast<Item *>(_vectorEntities[idx][y]->getEntity().get())->getItemType() << "\n";
-			}
-		}
-	}
 }
 
 void GameCore::handlePause(Actions actions, STATE &state)
@@ -792,7 +779,10 @@ void GameCore::handlePause(Actions actions, STATE &state)
 	if (actions.buttonPressed == PAUSE_ID)
 		state = STATE::GAME;
 	if (actions.buttonPressed == PAUSE_ID + 1) {
-		std::ofstream file("save.txt");
+		std::string filename(_params.gameName.begin(), _params.gameName.end());
+		if (_params.state == GameState::NEWGAME)
+			filename = SAVE_DIR + filename + ".txt";
+		std::ofstream file(filename);
 		saveMap(file);
 		file << "separateur\n";
 		saveParameters(file);

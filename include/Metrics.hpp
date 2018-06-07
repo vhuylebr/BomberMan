@@ -20,6 +20,6 @@
 # define WIN_P1_ID 2000002
 # define PLAY_AGAIN_ID 2000003
 # define QUIT_END_ID 2000004
-
+# define SAVE_DIR "./media/maps/"
 
 #endif /* !METRICS_HPP_ */
