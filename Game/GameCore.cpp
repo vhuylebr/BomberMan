@@ -692,15 +692,16 @@ void GameCore::displayAroundPlayer(void)
 
 void GameCore::displayScore()
 {
-	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 0, "Speed: " + std::to_string(_player1.getSpeed()), 0, 0, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 0, "Speed: " + std::to_string(static_cast<int>(100 * _player1.getSpeed())), 0, 0, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 1, "Bombs: " + std::to_string(_player1.getBombCount()), 0, 100, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 2, "Power: " + std::to_string(_player1.getPower()), 0, 200, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 3, "Super: " + std::string(_player1.getSuper() ? "On" : "Off"), 0, 300, 300, 100));
 	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 4, "Kick: " + std::string(_player1.hasKick() ? "On" : "Off"), 0, 400, 300, 100));
-	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "Shields: " + std::to_string(_player1.getShields().size()), 0, 500, 300, 100));
-	int tmp = std::count_if(_iaList.begin(), _iaList.end(), [](const Player &i){ return i.isAlive(); });
-	if (tmp)
-		_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "IAs left: " + std::to_string(tmp), 0, 600, 300, 100));
+	_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 5, "Shields: " + std::to_string(_player1.getShields().size()) + "/2", 0, 500, 300, 100));
+	if (_iaList.size()) {
+		int tmp = std::count_if(_iaList.begin(), _iaList.end(), [](const Player &i){ return i.isAlive(); });
+		_updateEntities.push_back(std::make_unique<MenuItem>(Entity::LABEL, 6, "IAs : " + std::to_string(tmp) + "/" + std::to_string(_iaList.size()), 0, 600, 300, 100));
+	}
 
 }
 
