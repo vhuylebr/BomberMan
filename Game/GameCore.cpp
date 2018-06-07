@@ -46,7 +46,8 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 					_iaList.push_back(Player(static_cast<float>(x), static_cast<float>(y), _id));
 					_id++;
 					_nbPlayer++;
-				} else if ()
+				}
+//				} else if () // mettre les teleporters ou non dans _vectorTeleporter
 			} else
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
 			x += 1;
@@ -484,21 +485,20 @@ void	GameCore::movePlayer(std::pair<float, float> from, std::pair<int, int> dir,
 				}
 			}
 		}
-	} else if (_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType() == Entity::ITEM && 
-	static_cast<Item *>(item.get())->getItemType() != eItem::TELEPORTER) {
+	} else if (_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType() == Entity::ITEM) {
 		player.pickupItem(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getEntity(), _id, _updateEntities);
 		_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getId(),
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->getType()));
 		_vectorEntities[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]->removeFirstEntity();
 		player.setPos(from.first + (0.07 + player.getSpeed()) * dir.first, from.second + (0.07 + player.getSpeed()) * dir.second);
 	}
-	if (_vectorTeleporter[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]]->getType() == Entity::TELEPORTER) {
+/*	if (_vectorTeleporter[std::round(from.second + 0.5 * dir.second)][std::round(from.first + 0.5 * dir.first)]]->getType() == Entity::TELEPORTER) {
 		player.setPos(TP.link().first, TP.link().second);
 		_vectorTeleporter[TP.link().first][TP.link().second].putPlayer(player.getNumber());
 		player.onTp(true);
 	} else if (_player.isOnTp()) {
 //		removePlayerFromTp(player, _vectorTeleporter); trouver le tp dans lequel on était, enlever le player du tp et setle playerOnTp a false.
-	}
+	}*/
 	player.setRotation(rotation);
 }
 
