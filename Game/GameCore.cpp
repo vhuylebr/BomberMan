@@ -55,7 +55,6 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 	}
 }
 
-
 void GameCore::loadEntities(std::vector<std::vector<char>> &map,
 unsigned int &x, unsigned int &y, const parameters &params)
 {
@@ -104,74 +103,50 @@ unsigned int &x, unsigned int &y, const parameters &params)
 		std::string tmpstr;
 		ss >> tmpstr;
 		if (tmpstr == "Player1" || tmpstr == "Player2" || tmpstr == "IA") {
-			int power;
-			bool super;
-			float xplayer;
-			float yplayer;
-			ss >> xplayer;
-			ss >> yplayer;
-			ss >> power;
-			ss >> super;
+			std::array<std::string, 4> player; // xplayer, yplayer, power, super in this order
+			ss >> player[0] >> player[1] >> player[2] >> player[3];
 			if (tmpstr == "Player1") {
-				int bombcount;
-				float speed;
-				bool kick;
-				ss >> bombcount;
-				ss >> speed;
-				ss >> kick;
-				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
-				_mobileEntities.push_back(std::make_unique<Player>(xplayer, yplayer, _id, 0));
-				_player1 = Player(xplayer, yplayer, _id);
-				_player1.setPower(power);
-				_player1.setSuper(super);
-				_player1.setBombs(bombcount);
-				_player1.setSpeed(speed);
-				_player1.setKick(kick);
+				std::array<std::string, 3> stats; // bombscount, speed, kick in this order
+				ss >> stats[0] >> stats[1] >> stats[2];
+				_vectorEntities[std::stoi(player[1])].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(std::stoi(player[0]), std::stoi(player[1]), _id, 0));
+				_player1 = Player(std::stoi(player[0]), std::stoi(player[1]), _id);
+				_player1.setPower(std::stoi(player[2]));
+				_player1.setSuper(std::stoi(player[3]));
+				_player1.setBombs(std::stoi(stats[0]));
+				_player1.setSpeed(std::stoi(stats[1]));
+				_player1.setKick(std::stoi(stats[2]));
 				_nbPlayer++;
 			} else if (tmpstr == "Player2") {
-				int bombcount;
-				float speed;
-				bool kick;
-				ss >> bombcount;
-				ss >> speed;
-				ss >> kick;
-				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
-				_mobileEntities.push_back(std::make_unique<Player>(xplayer, yplayer, _id, 1));
-				_player2 = Player(xplayer, yplayer, _id);
-				_player2.setPower(power);
-				_player2.setSuper(super);
-				_player2.setBombs(bombcount);
-				_player2.setSpeed(speed);
-				_player2.setKick(kick);
+				std::array<std::string, 3> stats; // bombscount, speed, kick in this order
+				ss >> stats[0] >> stats[1] >> stats[2];
+				_vectorEntities[std::stoi(player[1])].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(std::stoi(player[0]), std::stoi(player[1]), _id, 1));
+				_player2 = Player(std::stoi(player[0]), std::stoi(player[1]), _id);
+				_player2.setPower(std::stoi(player[2]));
+				_player2.setSuper(std::stoi(player[3]));
+				_player2.setBombs(std::stoi(stats[0]));
+				_player2.setSpeed(std::stoi(stats[1]));
+				_player2.setKick(std::stoi(stats[2]));
 			} else if (tmpstr == "IA") {
-				_vectorEntities[std::round(yplayer)].push_back(std::make_unique<EntityPos>());
-				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(xplayer), static_cast<float>(yplayer), _id));
-				_iaList.push_back(Player(static_cast<float>(xplayer), static_cast<float>(yplayer), _id));
+				_vectorEntities[std::round(std::stoi(player[1]))].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(std::stof(player[0])), static_cast<float>(std::stof(player[1])), _id));
+				_iaList.push_back(Player(static_cast<float>(std::stof(player[0])), static_cast<float>(std::stof(player[1])), _id));
 			}
 		} else if (tmpstr == "Bomb") {
-			int ix;
-			int iy;
-			int power;
-			int super;
-			int playerid;
-			ss >> ix;
-			ss >> iy;
-			ss >> power;
-			ss >> super;
-			ss >> playerid;
-			Bomb tmp(std::ceil(ix - 0.5), std::ceil(iy - 0.5), _id, playerid);
-			tmp.setPower(power);
-			tmp.setSuper(super);
+			std::array<std::string, 5> bombs;
+			ss >> bombs[0] >> bombs[1] >> bombs[2] >> bombs[3] >> bombs[4];
+			Bomb tmp(std::ceil(std::stoi(bombs[0]) - 0.5), std::ceil(std::stoi(bombs[1]) - 0.5), _id, std::stoi(bombs[4]));
+			tmp.setPower(std::stoi(bombs[2]));
+			tmp.setSuper(std::stoi(bombs[3]));
 			_bombs.push_back(tmp);
-			_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(ix - 0.5), std::ceil(iy - 0.5), _id, playerid));
+			_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(std::stoi(bombs[0]) - 0.5), std::ceil(std::stoi(bombs[1]) - 0.5), _id, std::stoi(bombs[4])));
 		}
 		else if (tmpstr == "Item") {
-			int ix;
-			int iy;
-			int type;
-			ss >> ix;
-			ss >> iy;
-			ss >> type;
+			std::array<std::string, 3> items;
+			ss >> items[0] >> items[1] >> items[2];
+			_vectorEntities[std::stoi(items[0])][std::stoi(items[1])]->addEntity(std::stof(items[0]), std::stof(items[1]), _id, _params.bonuses);
+			_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[std::stof(items[0])][std::stof(items[1])]->getEntity().get()));
 		}
 		_id++;
 	}
@@ -288,29 +263,6 @@ void    GameCore::init(parameters params)
 	_size.x = x;
 	_size.y = y;
 }
-
-// void    GameCore::init(parameters params)
-// {
-// 	unsigned int x = 0;
-// 	unsigned int y = 0;
-// 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
-// 	_nbPlayer = 0;
-// 	_i = 0;
-
-// 	std::cout << "Initializing new game" << std::endl;
-// 	_params = params;
-// 	generator.generateMap();
-// 	generator.generatePlayers(2, params.nbBots);
-// 	generator.dispMap();
-// 	std::vector<std::vector<char>> map = generator.getMap();
-// 	createEntities(map, x, y, params);
-// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
-// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
-// 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
-// 	_size.x = x;
-// 	_size.y = y;
-// }
 
 GameCore::~GameCore()
 {
