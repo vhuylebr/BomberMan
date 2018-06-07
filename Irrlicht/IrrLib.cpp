@@ -8,7 +8,7 @@
 #include "IrrLib.hpp"
 
 IrrLib::IrrLib(Actions &KeyIsDown)
-	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0)
+	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0), _altitude(10)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
 		16, true, true, true, &_eventReceiver);
@@ -504,9 +504,13 @@ void IrrLib::drawGame()
 		_smgr->drawAll();
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
-	if (!_splitScreen) {
+	if (_splitScreen == false) {
+		if (_eventReceiver.IsKeyDown(irr::KEY_KEY_U))
+			_altitude++;
+		if (_eventReceiver.IsKeyDown(irr::KEY_KEY_J))
+			_altitude--;
 		irr::core::vector3df camPos = _players[0]->getPosition();
-		_camera->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
+		_camera->setPosition(irr::core::vector3df(camPos.X, _altitude, camPos.Z - 0.1));
 		_camera->setTarget(camPos);
 		_smgr->setActiveCamera(_camera);
 		_smgr->drawAll();
