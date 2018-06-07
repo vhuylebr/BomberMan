@@ -90,7 +90,7 @@ public:
 	std::vector<std::unique_ptr<IEntity>>	&calc(Actions, STATE &);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void	init(pairUC);
-	void	init(parameters);
+	void	init(parameters &);
 	void	init(const std::string &);
 	pairUC	getSize() const;
 	void 	handlePause(Actions actions, STATE &state);

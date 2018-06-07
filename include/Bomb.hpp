@@ -26,6 +26,7 @@ public:
     Bomb(float x, float y, unsigned int id, std::size_t);
     ~Bomb();
     bool   isAlive() const;
+    void    setAlive(bool state);
     bool   isOutFire() const;
     void   tick(unsigned int &, std::vector<std::vector<std::unique_ptr<EntityPos>>> &,
         std::vector<std::pair<int, Entity>> &, std::vector<eItem>, std::vector<std::unique_ptr<IEntity>> &);

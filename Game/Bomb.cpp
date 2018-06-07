@@ -139,3 +139,8 @@ std::size_t	Bomb::getOwner()
 {
 	return (_owner);
 }
+
+void 	Bomb::setAlive(bool state)
+{
+	_alive = state;
+}
