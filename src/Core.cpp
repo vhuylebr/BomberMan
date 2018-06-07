@@ -91,7 +91,7 @@ void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
 		_game.init(_param);
-		_lib.setSplitScreen(_param.split);
+		_lib.setSplitScreen(_game.getSplitState());
 		_lib.initGame(_game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
