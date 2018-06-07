@@ -142,22 +142,6 @@ unsigned int &x, unsigned int &y, const parameters &params)
 			_bombs.push_back(tmp);
 			_updateEntities.push_back(std::make_unique<Bomb>(std::ceil(std::stoi(bombs[0]) - 0.5), std::ceil(std::stoi(bombs[1]) - 0.5), _id, std::stoi(bombs[4])));
 		}
-		// else if (tmpstr == "Item") {
-		// 	std::cout << "a" << std::endl;
-		// 	std::array<std::string, 3> items;
-		// 	std::cout << "b" << std::endl;
-		// 	ss >> items[0] >> items[1] >> items[2];
-		// 	std::cout << "c" << std::endl;
-		// 	std::cout << params.bonuses[0] << std::endl;
-		// 	std::cout << "d" << std::endl;
-		// 	std::cout << items[0] << std::endl;
-		// 	std::cout << items[1] << std::endl;
-		// 	std::cout << _id << std::endl;
-		// 	_vectorEntities[std::stoi(items[0])][std::stoi(items[1])]->addEntity(std::stof(items[0]), std::stof(items[1]), _id, _params.bonuses);
-		// 	std::cout << "e" << std::endl;
-		// 	_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[std::stof(items[0])][std::stof(items[1])]->getEntity().get()));
-		// 	std::cout << "f" << std::endl;
-		// }
 		_id++;
 	}
 }
@@ -233,7 +217,7 @@ void GameCore::getMapFromFile(Map map, parameters params)
 		}
 	}
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
+	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
 	_size.x = x1;
