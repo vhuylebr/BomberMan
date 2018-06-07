@@ -72,7 +72,7 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 							map[tmp.second][tmp.first]->removeFirstEntity();
 							std::random_device re;
 							std::uniform_int_distribution<int> distrib{1, 100};
-							if (distrib(re) < 60) {
+							if (distrib(re) < 50) {
 								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id, params);
 								_updateEntities.push_back(std::unique_ptr<IEntity>(map[tmp.second][tmp.first]->getEntity().get()));
 							}

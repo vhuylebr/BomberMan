@@ -8,6 +8,7 @@
 #include <random>
 #include <chrono>
 #include <iostream>
+#include <algorithm>
 #include "Item.hpp"
 
 Item::Item(float x, float y, unsigned int id, std::vector<eItem> &disp)
@@ -39,7 +40,12 @@ void	Item::loadType(std::vector<eItem> &disp)
 {
 	std::random_device re;
 	std::uniform_int_distribution<int> distrib{0, 99};
-	disp.push_back(eItem::SHIELD);
+	if (std::find(disp.begin(), disp.end(), eItem::BOMB_UP) != disp.end())
+		disp.push_back(eItem::BOMB_UP);
+	if (std::find(disp.begin(), disp.end(), eItem::SPEED) != disp.end())
+		disp.push_back(eItem::SPEED);
+	if (std::find(disp.begin(), disp.end(), eItem::POWER_UP) != disp.end())
+		disp.push_back(eItem::POWER_UP);
 	int idx = (int)(distrib(re) / 100.0f * (double)disp.size());
 	_bonusType = disp[idx];
 	//_bonusType = eItem::SHIELD;
