@@ -259,6 +259,7 @@ void    GameCore::init(parameters params)
 {
 	unsigned int x = 0;
 	unsigned int y = 0;
+	_i = 0;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
 	std::vector<std::vector<char>> map;
