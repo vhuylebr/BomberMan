@@ -398,7 +398,8 @@ void GameCore::bombManager(Actions &act)
 				_player2.addBomb();
 			break;
 		} else if (a.isAlive() && a.isPushed()) {
-			if (_vectorEntities[a.getNextPos().second][a.getNextPos().first]->isEmpty() == true || ) {
+			if (_vectorEntities[a.getNextPos().second][a.getNextPos().first]->isEmpty() == true || 
+				_vectorEntities[a.getNextPos().second][a.getNextPos().first]->getEntity()->getType() == Entity::ITEM) {
 				if (thereIsBomb(a.getNextPos().first, a.getNextPos().second)) {
 					for (auto &it : _bombs) {
 						if (it.getPos().first == a.getNextPos().first && it.getPos().second == a.getNextPos().second)
