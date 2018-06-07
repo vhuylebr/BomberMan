@@ -240,6 +240,8 @@ void GameCore::getMapFromFile(Map map, parameters params)
 						_iaList.push_back(Player(static_cast<float>(x1), static_cast<float>(y1), _id));
 						_id++;
 					}
+//				} else if (line[j] == '5') {
+
 				} else {
 					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
 				}
