@@ -38,11 +38,14 @@ public:
     int     getPower() const { return _pow; }
     void	detonate();
     void    setSuper(bool);
+    void	collide(Bomb &);
     bool    getSuper() const { return _superB; }
     bool	isPushed() const;
     void	move();
     pairUC	getNextPos();
     void	takeDir(pairUC dir, float pow);
+    pairUC  getDir() const;
+    float   getMomentum() const;
     SphereSubType getSubType() const { return (_subtype); }
 
 private:

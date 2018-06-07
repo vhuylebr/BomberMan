@@ -9,7 +9,7 @@
 
 Player::Player(float x, float y, unsigned int id, int nb)
 	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(2),
-	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false), _dmg(false)
+	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false), _dmg(false), _picked(false)
 {
 	_x = x;
 	_y = y;
@@ -142,6 +142,15 @@ void	Player::setPos(float x, float y)
 		it.setPos(x, y);
 }
 
+bool	Player::hasPickedUp()
+{
+	if (_picked) {
+		_picked = false;
+		return (true);
+	}
+	return (false);
+}
+
 void	Player::addPower()
 {
 	_pow += 1;
@@ -179,6 +188,7 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item, unsigned int &id, std::v
 		this->addShield(id);
 		addVec.push_back(std::unique_ptr<IEntity>(new Shield(_shields.back())));
 	}
+	_picked = true;
 }
 
 void Player::setRotation(float rotation)

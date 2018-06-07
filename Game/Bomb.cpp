@@ -130,6 +130,14 @@ bool	Bomb::isOutFire() const
 	return (_counter == _flametime * -1);
 }
 
+void	Bomb::collide(Bomb &oth)
+{
+	if (oth.getMomentum() == 0) {
+		oth.takeDir(getDir(), getMomentum());
+	}
+	takeDir({0, 0}, 0);
+}
+
 bool	Bomb::isOver() const
 {
 	return (_counter < _flametime * -1);
@@ -138,6 +146,16 @@ bool	Bomb::isOver() const
 std::size_t	Bomb::getOwner()
 {
 	return (_owner);
+}
+
+pairUC	Bomb::getDir() const
+{
+	return (std::make_pair(_direction.x, _direction.y));
+}
+
+float	Bomb::getMomentum() const
+{
+	return (_momentum);
 }
 
 void 	Bomb::setAlive(bool state)

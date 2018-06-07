@@ -53,6 +53,7 @@ public:
 	int	getNumber() const;
 	bool	isBot() const {return _isBot; };
 	bool	wasDamaged();
+	bool	hasPickedUp();
 
 private:
 
@@ -67,7 +68,8 @@ private:
 	bool	_kick;
 	bool	_isBot;
 	std::vector<Shield>	_shields;
-	bool	_dmg;
+	bool			_dmg;
+	bool			_picked;
 };
 
 #endif /* !PLAYER_HPP_ */
