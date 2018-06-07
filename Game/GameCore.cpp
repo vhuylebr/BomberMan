@@ -104,14 +104,15 @@ unsigned int &x, unsigned int &y, const parameters &params)
 		std::string tmpstr;
 		ss >> tmpstr;
 		if (tmpstr == "Player1" || tmpstr == "Player2" || tmpstr == "IA") {
-			int power;
-			bool super;
-			float xplayer;
-			float yplayer;
-			ss >> xplayer;
-			ss >> yplayer;
-			ss >> power;
-			ss >> super;
+			// int power;
+			// bool super;
+			// float xplayer;
+			// float yplayer;
+			std::array<std::string, 4> player;
+//			ss >> xplayer >> yplayer >> power >> super;
+//			std::cout << xplayer << yplayer << power << super;
+			ss >> player[0] >> player[1] >> player[2] >> player[3] >> player[4];
+//			std::cout << " " << player[0] << " " << player[1] << " " << player[2] << " " << player[3] << std::endl;
 			if (tmpstr == "Player1") {
 				int bombcount;
 				float speed;
@@ -119,11 +120,11 @@ unsigned int &x, unsigned int &y, const parameters &params)
 				ss >> bombcount;
 				ss >> speed;
 				ss >> kick;
-				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
-				_mobileEntities.push_back(std::make_unique<Player>(xplayer, yplayer, _id, 0));
-				_player1 = Player(xplayer, yplayer, _id);
-				_player1.setPower(power);
-				_player1.setSuper(super);
+				_vectorEntities[std::stoi(player[1])].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(std::stoi(player[0]), std::stoi(player[1]), _id, 0));
+				_player1 = Player(std::stoi(player[0]), std::stoi(player[1]), _id);
+				_player1.setPower(std::stoi(player[2]));
+				_player1.setSuper(std::stoi(player[3]));
 				_player1.setBombs(bombcount);
 				_player1.setSpeed(speed);
 				_player1.setKick(kick);
@@ -135,18 +136,18 @@ unsigned int &x, unsigned int &y, const parameters &params)
 				ss >> bombcount;
 				ss >> speed;
 				ss >> kick;
-				_vectorEntities[yplayer].push_back(std::make_unique<EntityPos>());
-				_mobileEntities.push_back(std::make_unique<Player>(xplayer, yplayer, _id, 1));
-				_player2 = Player(xplayer, yplayer, _id);
-				_player2.setPower(power);
-				_player2.setSuper(super);
+				_vectorEntities[std::stoi(player[1])].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(std::stoi(player[0]), std::stoi(player[1]), _id, 1));
+				_player2 = Player(std::stoi(player[0]), std::stoi(player[1]), _id);
+				_player2.setPower(std::stoi(player[2]));
+				_player2.setSuper(std::stoi(player[3]));
 				_player2.setBombs(bombcount);
 				_player2.setSpeed(speed);
 				_player2.setKick(kick);
 			} else if (tmpstr == "IA") {
-				_vectorEntities[std::round(yplayer)].push_back(std::make_unique<EntityPos>());
-				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(xplayer), static_cast<float>(yplayer), _id));
-				_iaList.push_back(Player(static_cast<float>(xplayer), static_cast<float>(yplayer), _id));
+				_vectorEntities[std::round(std::stoi(player[1]))].push_back(std::make_unique<EntityPos>());
+				_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(std::stof(player[0])), static_cast<float>(std::stof(player[1])), _id));
+				_iaList.push_back(Player(static_cast<float>(std::stof(player[0])), static_cast<float>(std::stof(player[1])), _id));
 			}
 		} else if (tmpstr == "Bomb") {
 			int ix;
