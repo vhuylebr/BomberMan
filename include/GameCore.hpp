@@ -109,6 +109,8 @@ private:
 	bool	haveBombed(Player);
 	bool	existBomb(float, float);
 	void	getMapFromFile(Map map, parameters params);
+	bool	thereIsBomb(int x, int y);
+	void	initEndScreen();
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
@@ -117,8 +119,6 @@ private:
 	Player				_player1;
 	Player				_player2;
 	std::vector<Bomb>		_bombs;
-	bool	thereIsBomb(int x, int y);
-	void	initEndScreen();
 	std::vector<std::vector<std::unique_ptr<EntityPos> > > _vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>	_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>	_mobileEntities;
