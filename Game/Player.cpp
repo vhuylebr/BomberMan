@@ -9,7 +9,7 @@
 
 Player::Player(float x, float y, unsigned int id, int nb)
 	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(2),
-	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false)
+	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false), _dmg(false)
 {
 	_x = x;
 	_y = y;
@@ -61,6 +61,7 @@ int	Player::rmShield()
 	if (_shields.size()) {
 		unsigned int	tmp = _shields.back().getId();
 		_shields.pop_back();
+		_dmg = 1;
 		return (static_cast<int>(tmp));
 	}
 	return (-1);
@@ -89,6 +90,8 @@ bool 	Player::isAlive() const
 void 	Player::setAlive(bool alive)
 {
 	_alive = alive;
+	if (!alive)
+		_dmg = 1;
 }
 
 bool	Player::hasKick() const
@@ -109,6 +112,15 @@ void 	Player::setPower(int pow)
 int	Player::getPower() const
 {
 	return _pow;
+}
+
+bool	Player::wasDamaged()
+{
+	if (_dmg) {
+		_dmg = false;
+		return (true);
+	}
+	return (false);
 }
 
 void	Player::addSpeed()
