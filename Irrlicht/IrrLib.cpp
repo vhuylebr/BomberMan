@@ -86,7 +86,7 @@ void	IrrLib::createPlane(pairUC &size)
 		irr::core::dimension2d<irr::u32>(15, 15));
 	_ground = _smgr->addMeshSceneNode(plane);
 	_ground->setPosition(irr::core::vector3df(0, 0, 0));
-	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
+	_ground->setMaterialTexture(0, _driver->getTexture("./media/sand.png"));
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
@@ -644,7 +644,11 @@ void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobil
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
 	for (auto &it : gameEntities) {
+		std::cout << "before\n";
+		it->getType();
+		std::cout << "afte1r\n";
 		_factoryUpdate[it->getType()](it);
+		std::cout << "after2\n";
 	}
 }
 
