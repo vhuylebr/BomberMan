@@ -19,6 +19,7 @@ enum class SOUND {
 	TICTAC,
 	BOOM,
 	LOSE,
+	DMG,
 	WIN
 };
 

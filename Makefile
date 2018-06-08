@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-SRC		= 	src/
+SRC	= 	src/
 
 GAME	=	Game/
 
