@@ -60,9 +60,10 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
-	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplose.wav");
-	// _gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplosion.wav");
+	_gamemusic.setVol(SOUND::TICTAC, 0.3);
+	_gamemusic.load(SOUND::BOOM, "./media/Sound/explosion.wav");
 	_gamemusic.load(SOUND::POWERUP, "./media/Sound/powerup.wav");
+	_gamemusic.setVol(SOUND::POWERUP, 0.1);
 	_gamemusic.load(SOUND::LOSE, "./media/Sound/lose.wav");
 	_gamemusic.load(SOUND::WIN, "./media/Sound/lose.wav");
 	_gamemusic.load(SOUND::DMG, "./media/Sound/damage.ogg");

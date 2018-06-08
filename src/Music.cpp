@@ -43,3 +43,8 @@ void 	Music::stop(SOUND id)
 {
 	_sound[id].first->stopAllSounds();
 }
+
+void	Music::setVol(SOUND id, float volume)
+{
+	_sound[id].first->setSoundVolume(volume);
+}
