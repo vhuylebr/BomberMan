@@ -31,8 +31,10 @@ class Music {
 		bool load(SOUND id, std::string pathname);
 		void setLoop(SOUND id, bool state);
 		void stop(SOUND id);
+		void setVol(SOUND id, float _volume);
 
 	private:
 		std::map<SOUND, std::pair<irrklang::ISoundEngine *, std::pair<std::string, bool>>> _sound;
+		float _volume;
 };
 #endif /* !MUSIC_HPP_ */
