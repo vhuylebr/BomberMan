@@ -8,8 +8,8 @@
 #include "Player.hpp"
 
 Player::Player(float x, float y, unsigned int id, int nb)
-	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(2),
-	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false)
+	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(1),
+	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false), _dmg(false), _picked(false)
 {
 	_x = x;
 	_y = y;
@@ -61,6 +61,7 @@ int	Player::rmShield()
 	if (_shields.size()) {
 		unsigned int	tmp = _shields.back().getId();
 		_shields.pop_back();
+		_dmg = 1;
 		return (static_cast<int>(tmp));
 	}
 	return (-1);
@@ -89,6 +90,8 @@ bool 	Player::isAlive() const
 void 	Player::setAlive(bool alive)
 {
 	_alive = alive;
+	if (!alive)
+		_dmg = 1;
 }
 
 bool	Player::hasKick() const
@@ -111,6 +114,15 @@ int	Player::getPower() const
 	return _pow;
 }
 
+bool	Player::wasDamaged()
+{
+	if (_dmg) {
+		_dmg = false;
+		return (true);
+	}
+	return (false);
+}
+
 void	Player::addSpeed()
 {
 	if (_speed < 0.1)
@@ -128,6 +140,15 @@ void	Player::setPos(float x, float y)
 	_y = y;
 	for (auto it : _shields)
 		it.setPos(x, y);
+}
+
+bool	Player::hasPickedUp()
+{
+	if (_picked) {
+		_picked = false;
+		return (true);
+	}
+	return (false);
 }
 
 void	Player::addPower()
@@ -167,6 +188,7 @@ void	Player::pickupItem(std::unique_ptr<IEntity> &item, unsigned int &id, std::v
 		this->addShield(id);
 		addVec.push_back(std::unique_ptr<IEntity>(new Shield(_shields.back())));
 	}
+	_picked = true;
 }
 
 void Player::setRotation(float rotation)

@@ -60,18 +60,20 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	_camTarget = irr::core::vector3df(10, 0, 10);
 	_camera->setPosition(irr::core::vector3df(0, 0, 0));
 	_gamemusic.load(SOUND::TICTAC, "./media/Sound/bombwait.wav");
-	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplose.wav");
-//	_gamemusic.load(SOUND::BOOM, "./media/Sound/bombexplosion.wav");
+	_gamemusic.setVol(SOUND::TICTAC, 0.3);
+	_gamemusic.load(SOUND::BOOM, "./media/Sound/explosion.wav");
 	_gamemusic.load(SOUND::POWERUP, "./media/Sound/powerup.wav");
+	_gamemusic.setVol(SOUND::POWERUP, 0.1);
 	_gamemusic.load(SOUND::LOSE, "./media/Sound/lose.wav");
 	_gamemusic.load(SOUND::WIN, "./media/Sound/lose.wav");
+	_gamemusic.load(SOUND::DMG, "./media/Sound/damage.ogg");
 	
 	irr::core::array<irr::SJoystickInfo> joystickInfo;
-    if (_device->activateJoysticks(joystickInfo)) {
-        std::cout << "Joystick support is enabled" << std::endl;
-    } else {
-        std::cout << "Joystick support is not enabled." << std::endl;
-    }
+	if (_device->activateJoysticks(joystickInfo)) {
+		std::cout << "Joystick support is enabled" << std::endl;
+	} else {
+		std::cout << "Joystick support is not enabled." << std::endl;
+	}
 }
 
 IrrLib::~IrrLib()
@@ -138,9 +140,12 @@ void	IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str()));
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
-			if (static_cast<ASphere*>(entity.get())->isAlive() == false) {
-				it->setID(-1);
-				_gamemusic.play(SOUND::BOOM);
+			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
+				if (static_cast<Bomb*>(entity.get())->isExplode() == true) {
+					it->setID(-1);
+					_gamemusic.play(SOUND::BOOM);
+					std::cout << "BOOM" << std::endl;
+				}
 			}
 			return ;
 		}
@@ -504,10 +509,10 @@ void IrrLib::drawGame()
 		_cameras[1]->setPosition(irr::core::vector3df(camPos.X, 10, camPos.Z - 0.1));
 		_cameras[1]->setTarget(_players[1]->getPosition());
 		_smgr->setActiveCamera(_cameras[0]);
-    	_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX / 2, _screenSizeY / 2));
+		_driver->setViewPort(irr::core::rect<irr::s32>(0,0,_screenSizeX / 2, _screenSizeY / 2));
 		_smgr->drawAll();
 		_smgr->setActiveCamera(_cameras[1]);
-    	_driver->setViewPort(irr::core::rect<irr::s32>(_screenSizeX / 2, _screenSizeY / 2, _screenSizeX, _screenSizeY));
+		_driver->setViewPort(irr::core::rect<irr::s32>(_screenSizeX / 2, _screenSizeY / 2, _screenSizeX, _screenSizeY));
 		_smgr->drawAll();
 	}
 	_driver->setViewPort(irr::core::rect<irr::s32>(0, 0, _screenSizeX, _screenSizeY));
@@ -527,13 +532,13 @@ void IrrLib::drawGame()
 	
 	int fps = _driver->getFPS();
 	if (_lastFps != fps) {
-            irr::core::stringw tmp(L"BomberMan [");
-            tmp += _driver->getName();
-            tmp += L"] fps: ";
-            tmp += fps;
-            _device->setWindowCaption(tmp.c_str());
-            _lastFps = fps;
-    }
+			irr::core::stringw tmp(L"BomberMan [");
+			tmp += _driver->getName();
+			tmp += L"] fps: ";
+			tmp += fps;
+			_device->setWindowCaption(tmp.c_str());
+			_lastFps = fps;
+	}
 }
 
 void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
@@ -543,6 +548,10 @@ void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 			it->setRotation(irr::core::vector3df(0, static_cast<Player*>(entity.get())->getRotation(), 0));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<Player*>(entity.get())->isAlive());
+			if (static_cast<Player*>(entity.get())->wasDamaged() == true)
+				_gamemusic.play(SOUND::DMG);
+			if (static_cast<Player*>(entity.get())->hasPickedUp() == true)
+				_gamemusic.play(SOUND::POWERUP);
 		}
 	}
 }

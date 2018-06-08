@@ -178,7 +178,6 @@ void Menu::changeMenu()
 			break;
 		case 2:
 			makeModeMenu();
-//			makeOptionMenu();
 			break;
 		case 3:
 			makeJoinMenu();
@@ -194,13 +193,7 @@ void Menu::changeMenu()
 
 void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
-/*	std::cout << "space : " << actions.space << std::endl;
-	std::cout << "enter : " << actions.enter << std::endl;
-	std::cout << "button : " << actions.buttonPressed << std::endl;
-*/
-	std::cout << "je suis dans le premier menu" << std::endl;
-	if (/*actions.space || actions.enter ||*/ actions.buttonPressed != -1) {
-		std::cout << "vilain petit canard " << actions.buttonPressed << std::endl;
+	if (actions.buttonPressed != -1) {
 		if (actions.buttonPressed > 0)
 			_step = actions.buttonPressed;
 		if (_step == 3)
@@ -212,6 +205,7 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 		}
 		if (_step == 1) {
 			_step = 2;
+			actions.buttonPressed = 0;
 			_changed = true;
 			actions.buttonPressed = 0;
 		}
@@ -323,7 +317,6 @@ void 	Menu::handleMapMenu(Actions &actions, STATE &state)
 		_changed = true;
 		actions.escape = false;
 	}
-//	actions.buttonPressed = 0;
 }
 
 void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
@@ -361,8 +354,6 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
 		_changeState = true;
 	}
-//	if (_changeState == false)
-//		actions.buttonPressed = 0;
 }
 
 std::vector<int>	Menu::getIdToUpdate(const Actions &actions)
