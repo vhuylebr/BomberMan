@@ -115,8 +115,8 @@ void	Core::gameManager(STATE &last)
 			_state = STATE::PAUSE;
 		}
 		_lib.affGameEntities(_game.calc(actions, _state));
-		_lib.removeEntities(_game.getEntitiesToRemove());
 		_lib.drawGame();
+		_lib.removeEntities(_game.getEntitiesToRemove());
 		if (_state == STATE::END) {
 			_lib.newMenuItems(_game.createEndScreen());
 			setEndVisible(_lib, true, _game.getEndId());
