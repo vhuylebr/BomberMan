@@ -644,11 +644,7 @@ void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobil
 void IrrLib::affGameEntities(std::vector<std::unique_ptr<IEntity>> &gameEntities)
 {
 	for (auto &it : gameEntities) {
-		std::cout << "before\n";
-		it->getType();
-		std::cout << "afte1r\n";
 		_factoryUpdate[it->getType()](it);
-		std::cout << "after2\n";
 	}
 }
 
