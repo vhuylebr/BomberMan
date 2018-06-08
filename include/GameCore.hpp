@@ -95,6 +95,7 @@ public:
 	void 	loadParameters(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
 	std::vector<std::vector<char>>	loadGame(std::wstring filename);	
 	bool 	getSplitState() const { return _params.split; }
+	std::vector<std::unique_ptr<IEntity>>	&getAllMap();
 
 private:
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);

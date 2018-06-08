@@ -729,8 +729,10 @@ void GameCore::removeAll()
 	_endItem.clear();
 	_pauseitem.clear();
 	_entitiesToRemove.clear();
+	for (auto &it : _updateEntities)
+		it.release();
+	_updateEntities.clear();
 	_entities.clear();
-	// _updateEntities.clear();
 	_iaList.clear();
 	_id = 0;
 }
@@ -838,4 +840,19 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::createPause()
 std::vector<std::unique_ptr<IEntity>> &GameCore::createEndScreen()
 {
 	return _endItem;
+}
+
+std::vector<std::unique_ptr<IEntity>>	&GameCore::getAllMap()
+{
+	for (auto &line : _vectorEntities) {
+		for (auto &ref : line) {
+			if (!ref->isEmpty() && ref->getType() == Entity::CUBE) {
+				ACube	*tmp = static_cast<ACube*>(ref->getEntity().get());
+				_updateEntities.push_back(std::make_unique<ACube>(tmp->getPos().first, tmp->getPos().second, tmp->getTexture(), tmp->getId()));
+			}
+				
+		}
+	}
+	std::cout << "toto" << std::endl;
+	return (_updateEntities);
 }
