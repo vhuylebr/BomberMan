@@ -633,7 +633,7 @@ void	GameCore::iaMoving(Player &player)
 			iaAction(_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)], player, {-1, 0}, 180.0f);
 	}
 	else if (dir == std::make_pair(0, 0)) {
-		std::default_random_engine re(std::chrono::system_clock::now().time_since_epoch().count());
+		std::random_device re;
 		std::uniform_int_distribution<int>	distrib{1, 4};
 		rand = distrib(re);
 		if (rand == 1 && !existBomb(myPos.second + 1, myPos.first))
