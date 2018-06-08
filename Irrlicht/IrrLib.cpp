@@ -39,6 +39,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 		std::placeholders::_1)));
 	_factory.insert(std::make_pair(Entity::ITEM, std::bind(&IrrLib::addItem, this,
 		std::placeholders::_1)));
+	_factory.insert(std::make_pair(Entity::INTERACTIVDECOR, std::bind(&IrrLib::addInteractivDecor, this,
+		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::PLAYER, std::bind(&IrrLib::updatePlayer, this,
 		std::placeholders::_1)));
 	_factoryUpdate.insert(std::make_pair(Entity::SPHERE, std::bind(&IrrLib::updateSphere, this,
@@ -86,6 +88,37 @@ void IrrLib::createPlane(pairUC &size)
 	_ground->setPosition(irr::core::vector3df(0, 0, 0));
 	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
+}
+
+void IrrLib::addInteractivDecor(std::unique_ptr<IEntity> &entity)
+{
+	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh(static_cast<Item*>(entity.get())->getModel().c_str());
+	for (auto &it : _items) {
+		if (it->getID() == -1) {
+			it->setMesh(mesh);
+			it->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+			it->setMD2Animation(irr::scene::EMAT_STAND);
+			it->setVisible(true);
+			it->setMaterialTexture( 0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
+			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+			it->setID(static_cast<Item*>(entity.get())->getId());
+			return;
+		}
+	}
+	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
+	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,1,0));
+	node->addAnimator(ani);
+	ani->drop();
+	if (node) {
+		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+		node->setMD2Animation(irr::scene::EMAT_STAND);
+		node->setMaterialTexture(0, _driver->getTexture(static_cast<Item*>(entity.get())->getTexture().c_str()));
+		node->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
+		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
+		node->setID(static_cast<Item*>(entity.get())->getId());
+		_items.push_back(node);
+	}
 }
 
 void IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
@@ -609,7 +642,7 @@ void IrrLib::removeItem(int id)
 	}
 }
 
-void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobileEntities)
+void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> > &mobileEntities)
 {
 	drop();
 	createPlane(size);

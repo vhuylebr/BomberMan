@@ -14,6 +14,9 @@ struct Map {
 	std::string imgFileName;
 	std::string mapName;
 	std::string fileName;
+	unsigned int length;
+	unsigned int height;
+	unsigned int nbBotsMax;
 };
 
 #endif /* !MAP_HPP_ */

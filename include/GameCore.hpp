@@ -85,10 +85,10 @@ public:
 	void	saveMap(std::ofstream &file);
 	void 	saveMobileEntities(std::ofstream &file);
 	void 	saveParameters(std::ofstream &file);
-	bool checkEnd(STATE &);
-	void handleEnd(Actions actions, STATE &state);
+	bool	checkEnd(STATE &);
+	void	handleEnd(Actions actions, STATE &state);
 	std::vector<std::unique_ptr<IEntity>> &createEndScreen();
-	int		getEndId() const;
+	int	getEndId() const;
 	void	handleIA();
 	void	displayScore();
 	void 	loadEntities(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y, const parameters &params);
@@ -97,7 +97,7 @@ public:
 	std::vector<std::vector<char>>	loadGame(std::wstring filename);	
 
 private:
-	std::vector<std::unique_ptr<Teleporter *>> _vectorTeleporter;
+	std::vector<std::unique_ptr<InteractivDecor>> _vectorTeleporter;
 	void	getFirstPlayer(std::vector<std::vector<char>> &map, unsigned int &x, unsigned int &y);
 	void	createEntities(std::vector<std::vector<char>> &map, unsigned int &x1, unsigned int &y1, const parameters &params);
 	void	bombManager(Actions &act);
@@ -109,7 +109,7 @@ private:
 	void	playerShield(Player &player);
 	bool	haveBombed(Player);
 	bool	existBomb(float, float);
-	void	getMapFromFile(Map map, parameters params);
+	void	getMapFromFile(Map map, parameters params);//, unsigned int &, unsigned int &);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;

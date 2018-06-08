@@ -25,7 +25,7 @@ enum class Entity {
     LISTBOX,
     SPHERE,
     CUBE,
-    TELEPORTER
+    INTERACTIVDECOR
 };
 
 struct coords {
