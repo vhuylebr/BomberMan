@@ -18,10 +18,6 @@ Player::Player(float x, float y, unsigned int id, int nb)
 	_type = Entity::PLAYER;
 }
 
-void 	Player::poke()
-{
-}
-
 void	Player::dropBomb()
 {
 	_bombs -= 1;

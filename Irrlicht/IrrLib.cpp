@@ -626,12 +626,6 @@ void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobil
 {
 	drop();
 	createPlane(size);
-	// for (auto &it : gameEntities) {
-	// 	for (auto &it2 : it) {
-	// 		if (!it2->isEmpty())
-	// 				_factory[it2->getType()](it2->getEntity());
-	// 	}
-	// }
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}
@@ -676,10 +670,6 @@ void IrrLib::drop()
 	for (auto &it : _inputs) {
 		it->remove();
 	}
-	// _smgr = _device->getSceneManager();
-	// _labels.clear();
-	// _checkboxes.clear();
-	// _inputs.clear();
 	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
 	_buttons.clear();
 	_spheres.clear();
@@ -687,17 +677,6 @@ void IrrLib::drop()
 	_cubes.clear();
 	_items.clear();
 	_labels.clear();
-	// _smgr->clear();
-	// _guienv->clear();
-}
-
-void IrrLib::dropAll()
-{
-	// _guienv->drop();
-	// _smgr->drop();
-	// _driver->drop();
-	// _device->closeDevice();
-	// _device->drop();
 }
 
 void IrrLib::setVisible(bool state, int id)
@@ -705,14 +684,6 @@ void IrrLib::setVisible(bool state, int id)
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
 		if ((*it)->getID() == id)
 			(*it)->setVisible(state);
-		// if ((*it)->getID() == PAUSE_ID)
-		// 	(*it)->setVisible(state);
-		// else if ((*it)->getID() == PAUSE_ID + 1)
-		// 	(*it)->setVisible(state);
-		// else if ((*it)->getID() == PAUSE_ID + 2)
-		// 	(*it)->setVisible(state);
-		// else if ((*it)->getID() == PAUSE_ID + 3)
-		// 	(*it)->setVisible(state);
 	}
 }
 

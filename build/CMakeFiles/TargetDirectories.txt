@@ -1,3 +1,0 @@
-/home/captkas/projects/cpp/BomberMan/build/CMakeFiles/rebuild_cache.dir
-/home/captkas/projects/cpp/BomberMan/build/CMakeFiles/bomberman.dir
-/home/captkas/projects/cpp/BomberMan/build/CMakeFiles/edit_cache.dir

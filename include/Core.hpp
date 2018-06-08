@@ -19,23 +19,24 @@ public:
 	Core();
 	~Core() = default;
 
-	int loop();
-	int getParametersFromMenu();
+	int 		loop();
+	int 		getParametersFromMenu();
+	
 protected:
-	int startMusic();
-	void menuManager(STATE &last);
-	void gameManager(STATE &last);
+	int 		startMusic();
+	void 		menuManager(STATE &last);
+	void 		gameManager(STATE &last);
 
 private:
-	parameters _param;
-	STATE   _state;
+	parameters	_param;
+	STATE   	_state;
 	GameCore    _game;
-	Menu    _menu;
-	IrrLib  _lib;
-	char    _host;
-	Music 	_coremusic;
-	// Lobby   _lobby;
-	Actions _act;
+	Menu    	_menu;
+	IrrLib  	_lib;
+	char    	_host;
+	Music 		_coremusic;
+	// Lobby   	_lobby;
+	Actions 	_act;
 };
 
 #endif /* CORE_HPP_ */

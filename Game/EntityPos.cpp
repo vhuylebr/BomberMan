@@ -14,7 +14,6 @@ EntityPos::EntityPos(ItemStatic item, float x, float y, int id)
     _functionMap[ItemStatic::CRATE] = addItem<Crate>;
     _functionMap[ItemStatic::WALL] = addItem<Wall>;
     _functionMap[ItemStatic::PLAYER] = addItem<Player>;
-    //_functionMap[ItemStatic::ITEM] = addItem<Item>;
     _entities.push_back(_functionMap[item](x, y, id));
 }
 
@@ -23,7 +22,6 @@ EntityPos::EntityPos()
     _functionMap[ItemStatic::CRATE] = addItem<Crate>;
     _functionMap[ItemStatic::WALL] = addItem<Wall>;
     _functionMap[ItemStatic::PLAYER] = addItem<Player>;
-    //_functionMap[ItemStatic::ITEM] = addItem<Item>;
 }
 
 Entity EntityPos::getType() const

@@ -13,7 +13,3 @@ Crate::Crate(float x, float y, int id)
 {
 	_isAlive = true;
 }
-
-void 	Crate::poke()
-{
-}

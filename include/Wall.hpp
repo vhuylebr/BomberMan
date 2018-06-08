@@ -14,6 +14,7 @@ class Wall : public ACube {
 public:
 	Wall(float, float, int);
 	~Wall() {};
+	
 	void 	poke();
 };
 
