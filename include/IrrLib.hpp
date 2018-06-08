@@ -124,6 +124,7 @@ class IrrLib {
 		int _screenSizeY;
 		bool _splitScreen;
 		int _lastFps;
+		int _altitude;
 };
 
 #endif /* !IRRLIB_HPP_ */
