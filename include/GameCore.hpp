@@ -110,7 +110,7 @@ private:
 	bool	existBomb(float, float);
 	void	getMapFromFile(Map map, parameters params);
 	bool	thereIsBomb(int x, int y);
-	void	initEndScreen();
+	void	initEndScreen(STATE &, char);
 
 	std::vector<Player>			_iaList;
 	std::vector<std::unique_ptr<IEntity>>	_entities;
