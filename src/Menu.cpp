@@ -42,7 +42,7 @@ void 	Menu::makeJoinMenu()
 	std::string path = "./media/maps/";
 	try {
 	    for (auto &p : std::experimental::filesystem::directory_iterator(path)) {
-			std::string file = p.path();
+			std::string file = p.path().string();
 			std::wstring ws;
 			ws.assign(file.begin(), file.end());
 			toto.push_back(ws);
@@ -194,27 +194,34 @@ void Menu::changeMenu()
 
 void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
-	if (actions.space || actions.enter || actions.buttonPressed != -1) {
-		if (actions.buttonPressed != -1)
+/*	std::cout << "space : " << actions.space << std::endl;
+	std::cout << "enter : " << actions.enter << std::endl;
+	std::cout << "button : " << actions.buttonPressed << std::endl;
+*/
+	std::cout << "je suis dans le premier menu" << std::endl;
+	if (/*actions.space || actions.enter ||*/ actions.buttonPressed != -1) {
+		std::cout << "vilain petit canard " << actions.buttonPressed << std::endl;
+		if (actions.buttonPressed > 0)
 			_step = actions.buttonPressed;
 		if (_step == 3)
 			state = STATE::EXIT;
 		if (_step == 2) {
 			_step = 3;
 			_changed = true;
+			actions.buttonPressed = 0;
 		}
 		if (_step == 1) {
 			_step = 2;
 			_changed = true;
+			actions.buttonPressed = 0;
 		}
 		_change_menu = true;
-		actions.buttonPressed = 0;
 	}
-
 }
 
 void 	Menu::handleModeMenu(Actions &actions, STATE &state)
 {
+	std::cout << "mode" << std::endl;
 	if (actions.escape == true) {
 		_change_menu = true;
 		_step = 1;
@@ -316,7 +323,7 @@ void 	Menu::handleMapMenu(Actions &actions, STATE &state)
 		_changed = true;
 		actions.escape = false;
 	}
-	actions.buttonPressed = 0;
+//	actions.buttonPressed = 0;
 }
 
 void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
@@ -354,8 +361,8 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
 		_changeState = true;
 	}
-	if (_changeState == false)
-		actions.buttonPressed = 0;
+//	if (_changeState == false)
+//		actions.buttonPressed = 0;
 }
 
 std::vector<int>	Menu::getIdToUpdate(const Actions &actions)
@@ -380,7 +387,9 @@ std::vector<int>	Menu::getIdToUpdate(const Actions &actions)
 
 bool 	Menu::stepChanged(STATE &state)
 {
+//	std::cout << "stp" << std::endl;
 	if (_changed == true) {
+		std::cout << "ALLEZ CHANGE DE STATE ENCULAY" << std::endl;
 		_changed = false;
 		state = STATE::INIT;
 		return true;
@@ -390,8 +399,7 @@ bool 	Menu::stepChanged(STATE &state)
 
 static bool keyPressed(Actions &actions, bool changeState)
 {
-	return (actions.buttonPressed != -1 || actions.enter || actions.space
-	|| actions.up || actions.down || actions.escape || changeState == true);
+	return (actions.buttonPressed != -1	|| actions.escape || changeState == true);
 }
 
 bool 	Menu::getState(Actions &actions, STATE &state)
@@ -427,8 +435,10 @@ std::vector<std::unique_ptr<IEntity>> &Menu::getMenuItems()
 
 void Menu::getMenu(Actions &actions, STATE &state)
 {
+//	std::cout << "button pressed" <<actions.buttonPressed << std::endl;
 	if (_change_menu == true)
 		changeMenu();
+//	std::cout << "step is " << _step << std::endl;
 	switch (_step) {
 		case 1:
 			handleFirstMenu(actions, state);

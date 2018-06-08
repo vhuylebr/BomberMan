@@ -25,13 +25,28 @@ set(SRCS
   src/MapGenerator.cpp
   )
 
-ADD_EXECUTABLE(bomberman ${SRCS})
+if (UNIX)
+  ADD_EXECUTABLE(bomberman ${SRCS})
 
-include_directories(inc /usr/include/irrlicht)
-include_directories(inc include)
+  include_directories(inc /usr/include/irrlicht)
+  include_directories(inc include)
+  include_directories(inc irrlicht)
 
-target_link_libraries(bomberman -lIrrlicht)
-target_link_libraries(bomberman -lIrrKlang)
-target_link_libraries(bomberman -lpthread)
-target_link_libraries(bomberman -pthread)
-target_link_libraries(bomberman -lstdc++fs)
+  target_link_libraries(bomberman -lIrrlicht)
+  target_link_libraries(bomberman -lirrKlang)
+  target_link_libraries(bomberman -lpthread)
+  target_link_libraries(bomberman -pthread)
+  target_link_libraries(bomberman -lstdc++fs)
+endif()
+
+if (WIN32)
+  message("toto")
+  ADD_EXECUTABLE(bomberman ${SRCS})
+  include_directories(inc /usr/include/irrlicht)
+  include_directories(inc include)
+  include_directories(inc irrlicht)
+  target_link_libraries(bomberman "C:\\Program Files\\Irrlicht.lib")
+  target_link_libraries(bomberman "C:\\Program Files\\irrKlang.lib")
+endif()
+
+# cmake -G "Visual Studio 15 2017 Win64" ..

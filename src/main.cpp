@@ -10,6 +10,6 @@
 int         main(int ac, char **av)
 {
     Core    bomberman;
-
+    std::cout << "hello" << std::endl;
     return (bomberman.loop());
 }

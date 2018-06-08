@@ -11,7 +11,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0), _altitude(10)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
-		16, true, true, true, &_eventReceiver);
+		16, false, true, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
@@ -234,6 +234,8 @@ Actions	IrrLib::getActions()
 	_actions.D = false;
 	_actions.W = false;
 	_actions.buttonPressed = getIdButtonPressed();
+	if (_actions.buttonPressed != -1)
+		std::cout << "lol : " << _actions.buttonPressed << std::endl;
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT) || moveHorizontal < -0.8f)
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT) || moveHorizontal > 0.8f)
@@ -369,6 +371,7 @@ void IrrLib::displayBackground()
 
 void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
+	std::cout << "init Menu" << std::endl;
 	_guienv->clear();
 	_inputs.clear();
 	_labels.clear();
@@ -393,6 +396,7 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);
 	}
+	std::cout << "end init Menu" << std::endl;
 }
 
 void IrrLib::updateLabel(std::unique_ptr<IEntity> &entity)
@@ -456,6 +460,7 @@ int IrrLib::getIdButtonPressed() const
 
 void IrrLib::drawMenu()
 {
+//	std::cout << "draw Menu" << std::endl;
 	_eventReceiver.resetIdButtonPressed();
 	if (_device->isWindowActive()) {
 		_driver->beginScene(true, true);
@@ -463,6 +468,7 @@ void IrrLib::drawMenu()
 		_guienv->drawAll();
 		_driver->endScene();
 	}
+//	std::cout << "end draw Menu" << std::endl;
 }
 
 void IrrLib::cleanMenu()
@@ -481,6 +487,7 @@ void IrrLib::cleanMenu()
 	_buttons.clear();
 	_skybox->remove();
 	_guienv->clear();
+	std::cout << "i'm in clean menu" << std::endl;
 }
 
 void IrrLib::drawGame()

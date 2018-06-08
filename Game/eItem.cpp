@@ -19,8 +19,6 @@ std::string itemToStr(eItem item)
             return "SUPER_BOMB";
 	    case eItem::SPEED:
             return "SPEED";
-	    case eItem::WALL_PASS:
-            return "WALL_PASS";
 	    case eItem::KICK:
             return "KICk";
 	    case eItem::NONE:

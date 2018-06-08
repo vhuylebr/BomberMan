@@ -38,8 +38,10 @@
 # include <utility>
 # include <algorithm>
 # include <cmath>
-#include <random>
-#include <chrono>
+# include <random>
+# include <chrono>
+# include <sstream>
+# include <array>
 # include "Item.hpp"
 # include "Actions.hpp"
 # include "IEntity.hpp"
