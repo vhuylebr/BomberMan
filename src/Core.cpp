@@ -133,8 +133,8 @@ int		Core::startMusic()
 		return -1;
 	_coremusic.setLoop(SOUND::MENU, true);
 	_coremusic.play(SOUND::MENU);
-	_coremusic.setVol(SOUND::MENU, 1);
-	_coremusic.setVol(SOUND::GAME, 0.7);
+	_coremusic.setVol(SOUND::MENU, 0.8);
+	_coremusic.setVol(SOUND::GAME, 0.3);
 	return 0;
 }
 
