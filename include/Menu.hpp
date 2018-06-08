@@ -57,7 +57,6 @@ private:
 	void initMaps();
 	void makeParamsMenu();
 	void makeMainMenu();
-	void makeOptionMenu();
 	void makeJoinMenu();
 	void makeMapMenu();
 
