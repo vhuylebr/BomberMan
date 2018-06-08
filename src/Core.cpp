@@ -164,6 +164,5 @@ int	Core::loop()
 		|| _state == STATE::END)
 			gameManager(lstate);
 	}
-	_lib.dropAll();
 	return 0;
 }
