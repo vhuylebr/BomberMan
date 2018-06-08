@@ -45,7 +45,7 @@ void GameCore::createEntities(std::vector<std::vector<char>> &map,
 					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
 					_iaList.push_back(Player(static_cast<float>(x), static_cast<float>(y), _id));
 					_id++;
-					_nbPlayer++;
+//					_nbPlayer++;
 				}
 			} else
 				_vectorEntities[y].push_back(std::make_unique<EntityPos>());
@@ -479,13 +479,58 @@ bool 	GameCore::playerMovement(Actions act)
 	return (changed);
 }
 
+void GameCore::initEndScreen(STATE &state, char whoAlive)
+{
+	switch (whoAlive) {
+		case 1:
+			_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID,
+			"Player 1 won", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+			break;
+		case 2:
+			_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P2_ID,
+			"Player 2 won !", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+			break;
+		case 3:
+			_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID,
+			"IA Won !", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+			break;
+		case 4:
+			_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID,
+			"Draw !", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+			break;
+		case 5:
+			_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID,
+			"You won !", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
+			break;
+	}
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PLAY_AGAIN_ID, "Play again", (SCREEN_WIDTH / 2) - 200, 400, 400, 100)));
+	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, QUIT_END_ID, "Quit", (SCREEN_WIDTH / 2) - 200, 600, 400, 100)));
+	state = STATE::END;
+}
+
 bool GameCore::checkEnd(STATE &state)
 {
-	if (!_player1.isAlive() || !_player2.isAlive()) {
-		state = STATE::END;
-		initEndScreen();
+	int nbIaAlive = std::count_if(_iaList.begin(), _iaList.end(), [](Player i){return i.isAlive() == true;});
+
+	if (_nbPlayer == 2 && _player1.isAlive() == true &&
+	_player2.isAlive() == false && nbIaAlive == 0) {
+		initEndScreen(state, 1); // p1 win
+	}else if (_nbPlayer == 2 && _player1.isAlive() == false &&
+	_player2.isAlive() == true && nbIaAlive == 0) {
+		initEndScreen(state, 2); // P2 win
+	} else if (_player1.isAlive() == true && _nbPlayer == 1 && nbIaAlive == 0) {
+		initEndScreen(state, 5); // P1 win alone
+	} else if (_player1.isAlive() == false && _nbPlayer == 1 && nbIaAlive > 0) {
+		initEndScreen(state, 3); // IA Win
+	} else if (_nbPlayer == 2 && !_player1.isAlive() && !_player2.isAlive()) {
+		initEndScreen(state, 4); // DRAW
+	} else if (_nbPlayer == 2 && _player1.isAlive() == false &&
+	_player2.isAlive() == false && nbIaAlive > 0) {
+		initEndScreen(state, 3); // IA Win	
+	} else if (_player1.isAlive() == false && _nbPlayer == 1 && nbIaAlive == 0)
+		initEndScreen(state, 3); // IA Win
+	if (state == STATE::END)
 		return true;
-	}
 	return false;
 }
 
@@ -705,19 +750,6 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 	return (_updateEntities);
 }
 
-void GameCore::initEndScreen()
-{
-	if (!_player1.isAlive() && !_player2.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	else if (!_player1.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P2_ID, "Player 2 won", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	else if (!_player2.isAlive())
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, WIN_P1_ID, "Player 1 won", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	else
-		_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, LOSE_ID, "You lose", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PLAY_AGAIN_ID, "Play again", (SCREEN_WIDTH / 2) - 200, 400, 400, 100)));
-	_endItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, QUIT_END_ID, "Quit", (SCREEN_WIDTH / 2) - 200, 600, 400, 100)));
-}
 
 void GameCore::removeAll()
 {
