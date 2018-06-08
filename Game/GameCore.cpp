@@ -671,21 +671,27 @@ void	GameCore::handleIA()
 void GameCore::displayAroundPlayer(void)
 {
 	// set updateEnties around the player
-	for (int y = _player1.getPos().second - 14; y < _player1.getPos().second + 14; ++y) {
+	for (int y = _player1.getPos().second - 10; y < _player1.getPos().second + 10; ++y) {
 		if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-			for (int x = _player1.getPos().first - 14; x < _player1.getPos().first + 14; ++x) {
+			for (int x = _player1.getPos().first - 10; x < _player1.getPos().first + 10; ++x) {
 				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
-					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
+					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM) {
 					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
+					_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[y][x]->getId(),
+							_vectorEntities[y][x]->getType()));
+					}
 			}
 	}
 	if (_params.nbPlayers > 1)
-		for (int y = _player2.getPos().second - 14; y < _player2.getPos().second + 14; ++y) {
+		for (int y = _player2.getPos().second - 10; y < _player2.getPos().second + 10; ++y) {
 			if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-				for (int x = _player2.getPos().first - 14; x < _player2.getPos().first + 14; ++x) {
+				for (int x = _player2.getPos().first - 10; x < _player2.getPos().first + 10; ++x) {
 					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
-						&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM)
+						&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM) {
 						_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
+						_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[y][x]->getId(),
+							_vectorEntities[y][x]->getType()));
+						}
 				}
 		}
 	// end
@@ -738,11 +744,8 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 			_updateEntities.push_back(std::unique_ptr<IEntity>(&_player2));
 		else
 			displayScore();
-		displayAroundPlayer();
-	} else if (_i == 0) {
-		displayAroundPlayer();
-		++_i;
 	}
+	displayAroundPlayer();
 	shieldManager();
 	return (_updateEntities);
 }
