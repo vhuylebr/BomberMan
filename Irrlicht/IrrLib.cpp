@@ -74,6 +74,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	} else {
 		std::cout << "Joystick support is not enabled." << std::endl;
 	}
+	_anim = _smgr->createRotationAnimator(irr::core::vector3df(1,0,0));
+	_noAnim = _smgr->createRotationAnimator(irr::core::vector3df(0,0,0));
 }
 
 IrrLib::~IrrLib()
@@ -100,13 +102,12 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 			it->setVisible(true);
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
+			it->removeAnimators();
 			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 				_gamemusic.play(SOUND::TICTAC);
 				it->setName("Bomb");
 			} else {
-				irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(0,1,0));
-				it->addAnimator(ani);
-				ani->drop();
+				it->addAnimator(_anim);
 				it->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
 				it->setName("Shield");
 			}
@@ -123,13 +124,12 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setID(static_cast<ASphere*>(entity.get())->getId());
 	ball->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
 	ball->setMaterialType(irr::video::EMT_SOLID);
+	ball->removeAnimators();
 	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 		_gamemusic.play(SOUND::TICTAC);
 		ball->setName("Bomb");
 	} else {
-		irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,0,0));
-		ball->addAnimator(ani);
-		ani->drop();
+		ball->addAnimator(_anim);
 		ball->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
 		ball->setName("Shield");
 	}
@@ -160,6 +160,7 @@ void	IrrLib::removeSphere(int id)
 			if (!std::string("Bomb").compare(it->getName()))
 			    _gamemusic.play(SOUND::BOOM);
 			it->setID(-1);
+			it->addAnimator(_noAnim);
 			it->setVisible(false);
 			it->removeAll();
 			break;

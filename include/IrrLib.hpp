@@ -87,6 +87,8 @@ class IrrLib {
 		irr::scene::ISceneManager											*_smgr;
 		irr::gui::IGUIEnvironment											*_guienv;
 		const irr::scene::IGeometryCreator 									*_geomentryCreator;
+		irr::scene::ISceneNodeAnimator										*_anim;
+		irr::scene::ISceneNodeAnimator										*_noAnim;
 	
 		Actions 															_actions;
 		MyEventReceiver														_eventReceiver;

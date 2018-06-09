@@ -119,11 +119,12 @@ void	Core::gameManager(STATE &last)
 			return ;
 		}
 		_lib.drawGame();
-		_lib.removeEntities(_game.getEntitiesToRemove());
 		if (_state == STATE::END) {
 			_lib.newMenuItems(_game.createEndScreen());
 			setEndVisible(_lib, true, _game.getEndId());
+			return;
 		}
+		_lib.removeEntities(_game.getEntitiesToRemove());
 	}
 	last = STATE::GAME;
 }
