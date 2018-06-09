@@ -733,8 +733,6 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 	_entitiesToRemove.clear();
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
-	if (checkEnd(state) == true)
-		return _updateEntities;
 	changed = playerMovement(act);
 	handleIA();
 	bombManager(act);
@@ -747,6 +745,8 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 	}
 	displayAroundPlayer();
 	shieldManager();
+	if (checkEnd(state) == true)
+		return _updateEntities;
 	return (_updateEntities);
 }
 
