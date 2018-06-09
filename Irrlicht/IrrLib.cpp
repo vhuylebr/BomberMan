@@ -205,8 +205,8 @@ void	IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::removeCube(int id)
 {
-	int i = 0;
-
+	if (id < 0)
+		return;
 	for (auto &it : _cubes) {
 		if (id == it->getID()) {
 			it->setID(-1);
@@ -214,7 +214,6 @@ void IrrLib::removeCube(int id)
 			it->removeAll();
 			break;
 		}
-		++i;
 	}
 }
 
@@ -589,13 +588,12 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setID(static_cast<Item*>(entity.get())->getId());
+			it->addAnimator(_anim);
 			return;
 		}
 	}
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
-	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,1,0));
-	node->addAnimator(ani);
-	ani->drop();
+	node->addAnimator(_anim);
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
@@ -609,8 +607,8 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::removeItem(int id)
 {
-	int i = 0;
-
+	if (id < 0)
+		return;
 	for (auto &it : _items) {
 		if (id == it->getID()) {
 			it->setID(-1);

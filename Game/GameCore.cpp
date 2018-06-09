@@ -339,7 +339,7 @@ void GameCore::bombManager(Actions &act)
 	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive())
 		playerDropBomb(_player2);
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses, _updateEntities);
+		a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {
@@ -667,11 +667,10 @@ void	GameCore::handleIA()
 void GameCore::displayAroundPlayer(void)
 {
 	// set updateEnties around the player
-	for (int y = _player1.getPos().second - 10; y < _player1.getPos().second + 10; ++y) {
+	for (int y = _player1.getPos().second - 8; y < _player1.getPos().second + 8; ++y) {
 		if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-			for (int x = _player1.getPos().first - 14; x < _player1.getPos().first + 14; ++x) {
-				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
-					&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM) {
+			for (int x = _player1.getPos().first - 13; x < _player1.getPos().first + 13; ++x) {
+				if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false) {
 					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
 					_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[y][x]->getId(),
 							_vectorEntities[y][x]->getType()));
@@ -679,11 +678,10 @@ void GameCore::displayAroundPlayer(void)
 			}
 	}
 	if (_params.nbPlayers > 1)
-		for (int y = _player2.getPos().second - 10; y < _player2.getPos().second + 10; ++y) {
+		for (int y = _player2.getPos().second - 8; y < _player2.getPos().second + 8; ++y) {
 			if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
-				for (int x = _player2.getPos().first - 14; x < _player2.getPos().first + 14; ++x) {
-					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false
-						&& _vectorEntities[y][x]->getEntity()->getType() != Entity::ITEM) {
+				for (int x = _player2.getPos().first - 13; x < _player2.getPos().first + 13; ++x) {
+					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false) {
 						_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
 						_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[y][x]->getId(),
 							_vectorEntities[y][x]->getType()));
