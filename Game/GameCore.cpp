@@ -378,17 +378,6 @@ void GameCore::bombManager(Actions &act)
 					&& c.getPos().second == b.getPos().second)
 						c.detonate();
 				}
-				for (auto &it : _iaList) {
-					if (std::round(it.getPos().first) == b.getPos().first &&
-						std::round(it.getPos().second) == b.getPos().second) {
-						if (it.hasShield()) {
-							int tmp = it.rmShield();
-							_entitiesToRemove.push_back(std::pair<int, Entity>(tmp, Entity::SPHERE));
-						} else
-							it.setAlive(false);
-						_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
-					}
-				}
 			}
 			//_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
 			_entitiesToRemove.push_back(std::pair<int, Entity>(a.getId(), Entity::SPHERE));
