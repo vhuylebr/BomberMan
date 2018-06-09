@@ -100,13 +100,15 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 			it->setVisible(true);
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
-			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 				_gamemusic.play(SOUND::TICTAC);
-			else {
+				it->setName("Bomb");
+			} else {
 				irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(0,1,0));
 				it->addAnimator(ani);
 				ani->drop();
 				it->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+				it->setName("Shield");
 			}
 			it->render();
 			return;
@@ -121,13 +123,15 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setID(static_cast<ASphere*>(entity.get())->getId());
 	ball->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
 	ball->setMaterialType(irr::video::EMT_SOLID);
-	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 		_gamemusic.play(SOUND::TICTAC);
-	else {
+		ball->setName("Bomb");
+	} else {
 		irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,0,0));
 		ball->addAnimator(ani);
 		ani->drop();
 		ball->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+		ball->setName("Shield");
 	}
 	_spheres.push_back(ball);
 }
@@ -135,18 +139,11 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 void	IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
-		if (it->getID() == static_cast<ASphere*>(entity.get())->getId()) {
+		if (it->getID() == entity->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str()));
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
-			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
-				if (static_cast<Bomb*>(entity.get())->isExplode() == true) {
-					it->setID(-1);
-					_gamemusic.play(SOUND::BOOM);
-					std::cout << "BOOM" << std::endl;
-				}
-			}
 			return ;
 		}
 	}
@@ -160,6 +157,8 @@ void	IrrLib::removeSphere(int id)
 	for (auto &it : _spheres) {
 		if (id == it->getID()) {
 			it->setMaterialType(irr::video::EMT_SOLID);
+			if (!std::string("Bomb").compare(it->getName()))
+			    _gamemusic.play(SOUND::BOOM);
 			it->setID(-1);
 			it->setVisible(false);
 			it->removeAll();
