@@ -53,6 +53,8 @@ public:
 	bool				isBot() const {return _isBot; };
 	bool				wasDamaged();
 	bool				hasPickedUp();
+	int				getForceIa() const {return _forceIa;};
+	void				incForceIa();
 
 private:
 
@@ -60,13 +62,14 @@ private:
 	float 				_rotation;
 	float				_speed;
 	int 				_maxbombs;
-	int					_bombs;
-	int					_pow;
+	int				_bombs;
+	int				_pow;
 	bool				_superB;
-	std::pair<int, int>	_iaDir;
+	std::pair<int, int>		_iaDir;
+	int				_forceIa;
 	bool				_kick;
 	bool				_isBot;
-	std::vector<Shield>	_shields;
+	std::vector<Shield>		_shields;
 	bool				_dmg;
 	bool				_picked;
 };

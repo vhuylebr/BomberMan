@@ -9,13 +9,20 @@
 
 Player::Player(float x, float y, unsigned int id, int nb)
 	: _number(nb), _speed(0.0f), _maxbombs(2), _bombs(1),
-	_pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _kick(false), _dmg(false), _picked(false)
+	  _pow(3), _superB(false), _iaDir(std::make_pair(0, 0)), _forceIa(0), _kick(false), _dmg(false), _picked(false)
 {
 	_x = x;
 	_y = y;
 	_id = id;
 	_alive = true;
 	_type = Entity::PLAYER;
+}
+
+void	Player::incForceIa()
+{
+	_forceIa += 1;
+	if (_forceIa >= 40)
+		_forceIa = 0;
 }
 
 void	Player::dropBomb()
