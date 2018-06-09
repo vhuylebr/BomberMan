@@ -66,7 +66,7 @@ public:
 	GameCore();
 	~GameCore();
 
-	std::vector<std::unique_ptr<IEntity>>					&calc(Actions, STATE &);
+	std::vector<std::unique_ptr<IEntity>>					&calc(Actions, STATE &, parameters &);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void													init(pairUC);
 	void													init(parameters &);

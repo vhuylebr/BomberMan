@@ -111,7 +111,7 @@ void	Core::gameManager(STATE &last)
 		}
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();
-		_lib.affGameEntities(_game.calc(actions, _state));
+		_lib.affGameEntities(_game.calc(actions, _state, _param));
 		if (actions.escape == true) {
 			_lib.newMenuItems(_game.createPause());
 			setPauseVisible(_lib, true);
@@ -119,6 +119,8 @@ void	Core::gameManager(STATE &last)
 			return ;
 		}
 		_lib.drawGame();
+		_lib.setSplitScreen(_param.split);
+
 		if (_state == STATE::END) {
 			_lib.newMenuItems(_game.createEndScreen());
 			setEndVisible(_lib, true, _game.getEndId());

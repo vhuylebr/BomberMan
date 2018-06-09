@@ -169,59 +169,54 @@ std::vector<std::vector<char>> GameCore::loadGame(std::wstring filename)
 
 void GameCore::getMapFromFile(Map map, parameters params)
 {
-	std::ifstream file(map.fileName);
+		std::ifstream file(map.fileName);
+	unsigned int x = 0;
+	unsigned int y = 0;
 	std::string line;
 
-	std::cout << "Initializing new game" << std::endl;
-	_size.x = params.mapSize.first;
-	_size.y = params.mapSize.second;
-	unsigned int x1 = 0;
-	unsigned int y1 = 0;
+	_nbPlayer = 0;
+	_iaList.clear();
 	if (!file.is_open()) {
 		std::cout << "Open has failed\n";
 	} else {
 		std::cout << "Open success\n";
 		while (getline(file, line)) {
-			x1 = 0;
-			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos> >());
-			for (unsigned int j = 0; line[j] != 0; ++j) {
+			x = 0;
+			_vectorEntities.push_back(std::vector<std::unique_ptr<EntityPos>>());
+		 	for (unsigned int j = 0; line[j] != 0; ++j) {
 				if (line[j] == '0') {
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x1), static_cast<float>(y1), _id));
+					_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::WALL, static_cast<float>(x), static_cast<float>(y), _id));
 					_id++;
 				} else if (line[j] == '1') {
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x1), static_cast<float>(y1), _id));
-					_id++;
-				} else if (line[j] == '2') {
-					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
-					_player1 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
-					_id++;
-				} else if (line[j] == '3') {
-					_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
-					_player2 = Player(static_cast<float>(x1), static_cast<float>(y1), _id);
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
+					_vectorEntities[y].push_back(std::make_unique<EntityPos>(ItemStatic::CRATE, static_cast<float>(x), static_cast<float>(y), _id));
 					_id++;
 				} else if (line[j] == '4') {
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
-					if (static_cast<int>(_iaList.size()) < params.nbBots) {
-						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x1), static_cast<float>(y1), _id));
-						_iaList.push_back(Player(static_cast<float>(x1), static_cast<float>(y1), _id));
+					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+					if (_nbPlayer == 0) {
+						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 0));
+						_player1 = Player(static_cast<float>(x), static_cast<float>(y), _id);
 						_id++;
+						_nbPlayer++;
+					} else if (_nbPlayer == 1 && params.nbPlayers > 1) {
+						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id, 1));
+						_player2 = Player(static_cast<float>(x), static_cast<float>(y), _id);
+						_nbPlayer++;
+						_id++;
+					} else if (static_cast<int>(_iaList.size()) < params.nbBots) {
+						_mobileEntities.push_back(std::make_unique<Player>(static_cast<float>(x), static_cast<float>(y), _id));
+						_iaList.push_back(Player(static_cast<float>(x), static_cast<float>(y), _id));
+						_id++;
+			//			_nbPlayer++;
 					}
-				} else {
-					_vectorEntities[y1].push_back(std::make_unique<EntityPos>());
-				}
-				x1 += 1;
+				} else
+					_vectorEntities[y].push_back(std::make_unique<EntityPos>());
+				x += 1;
 			}
-			y1 += 1;
+			y += 1;
 		}
 	}
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID, "Resume", (SCREEN_WIDTH / 2) - 200, 200, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
-	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
-	_size.x = x1;
-	_size.y = y1;
+	_size.x = x;
+	_size.y = y;
 }
 
 void    GameCore::init(parameters &params)
@@ -503,25 +498,26 @@ bool GameCore::checkEnd(STATE &state)
 {
 	int nbIaAlive = std::count_if(_iaList.begin(), _iaList.end(), [](Player i){return i.isAlive() == true;});
 
+//	std::cout << "nbPlayer :" << _nbPlayer << ", nb IA alive : " << nbIaAlive << std::endl;
+//	std::cout << "Player 1 is " << (_player1.isAlive() ? "true" : "false") << ", player 2 is " << (_player2.isAlive() ? "true" : "false") << std::endl;
 	if (_nbPlayer == 2 && _player1.isAlive() == true &&
 	_player2.isAlive() == false && nbIaAlive == 0) {
 		initEndScreen(state, 1); // p1 win
-	}else if (_nbPlayer == 2 && _player1.isAlive() == false &&
+	} else if (_nbPlayer == 2 && _player1.isAlive() == false &&
 	_player2.isAlive() == true && nbIaAlive == 0) {
 		initEndScreen(state, 2); // P2 win
-	} else if (_player1.isAlive() == true && _nbPlayer == 1 && nbIaAlive == 0) {
+	} else if (_player1.isAlive() == true && _nbPlayer == 1 && nbIaAlive <= 0) {
 		initEndScreen(state, 5); // P1 win alone
-	} else if (_player1.isAlive() == false && _nbPlayer == 1 && nbIaAlive > 0) {
+	} else if (_nbPlayer == 2 && _player1.isAlive() == false
+	&& _player2.isAlive() == false) {
 		initEndScreen(state, 3); // IA Win
-	} else if (_nbPlayer == 2 && !_player1.isAlive() && !_player2.isAlive()) {
-		initEndScreen(state, 4); // DRAW
-	} else if (_nbPlayer == 2 && _player1.isAlive() == false &&
-	_player2.isAlive() == false && nbIaAlive > 0) {
-		initEndScreen(state, 3); // IA Win	
-	} else if (_player1.isAlive() == false && _nbPlayer == 1 && nbIaAlive == 0)
+	} else if (_player1.isAlive() == false && _nbPlayer == 1)
 		initEndScreen(state, 3); // IA Win
-	if (state == STATE::END)
+	if (state == STATE::END) {
+		if (_nbPlayer == 2)
+			_params.split = true;
 		return true;
+	}
 	return false;
 }
 
@@ -709,7 +705,7 @@ void GameCore::displayScore()
 
 }
 
-std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
+std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state, parameters &param)
 {
 	bool changed;
 
@@ -719,6 +715,8 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 	changed = playerMovement(act);
 	handleIA();
 	bombManager(act);
+	if (_nbPlayer == 2 && _player1.isAlive() && !_player2.isAlive())
+		param.split = false;
 	if (changed) {
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		if (_params.nbPlayers > 1)
