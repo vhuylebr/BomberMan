@@ -339,7 +339,10 @@ void GameCore::bombManager(Actions &act)
 	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive())
 		playerDropBomb(_player2);
 	for (auto &a : _bombs) {
-		a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses, _player1.getPos());
+		if (a.getOwner() == static_cast<unsigned int>(_player1.getId()) && _params.nbPlayers == 1)
+			a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses, _player1.getPos());
+		else
+			a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses);
 		if (a.isExplode()) {
 			std::vector<Fire> &vec = a.getFlames();
 			for (auto &b : vec) {
