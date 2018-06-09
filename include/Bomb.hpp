@@ -30,7 +30,7 @@ public:
     void                setAlive(bool state);
     bool                isOutFire() const;
     void                tick(unsigned int &, std::vector<std::vector<std::unique_ptr<EntityPos>>> &,
-        std::vector<std::pair<int, Entity>> &, std::vector<eItem>);
+        std::vector<std::pair<int, Entity>> &, std::vector<eItem>, std::pair<float, float>);
     bool                isOver() const;
     std::size_t         getOwner();
     bool                isExplode() const;
