@@ -712,20 +712,6 @@ void GameCore::displayScore()
 
 }
 
-void	GameCore::playerShield(Player &player)
-{
-}
-
-
-void	GameCore::shieldManager()
-{
-	playerShield(_player1);
-	playerShield(_player2);
-	for (auto &ref : _iaList) {
-		playerShield(ref);
-	}
-}
-
 std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 {
 	bool changed;
@@ -744,7 +730,6 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state)
 			displayScore();
 	}
 	displayAroundPlayer();
-	shieldManager();
 	if (checkEnd(state) == true)
 		return _updateEntities;
 	return (_updateEntities);
