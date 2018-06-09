@@ -21,7 +21,7 @@ Player::Player(float x, float y, unsigned int id, int nb)
 void	Player::incForceIa()
 {
 	_forceIa += 1;
-	if (_forceIa >= 40)
+	if (_forceIa >= 15)
 		_forceIa = 0;
 }
 
