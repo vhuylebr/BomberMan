@@ -616,7 +616,6 @@ void IrrLib::removeItem(int id)
 			it->removeAll();
 			break;
 		}
-		++i;
 	}
 }
 
