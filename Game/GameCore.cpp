@@ -329,14 +329,14 @@ void GameCore::bombManager(Actions &act)
 				_entitiesToRemove.push_back(std::make_pair<int, Entity>(b.getId(),
 							b.getType()));
 		}	
-	} // Plus tard les deux boucles seront assemblables
+	}
 	_bombs.erase(std::remove_if(_bombs.begin(), _bombs.end(), [](const Bomb &x) {
 			     return x.isOver();
 		     }),
 		     _bombs.end());
 	if (act.space == true && _player1.getBombCount() > 0 && _player1.isAlive())
 		playerDropBomb(_player1);
-	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive()) // remplacer 0 par player2.
+	if (act.W == true && _player2.getBombCount() > 0 && _player2.isAlive())
 		playerDropBomb(_player2);
 	for (auto &a : _bombs) {
 		a.tick(_id, _vectorEntities, _entitiesToRemove, _params.bonuses);
@@ -378,19 +378,7 @@ void GameCore::bombManager(Actions &act)
 					&& c.getPos().second == b.getPos().second)
 						c.detonate();
 				}
-				for (auto &it : _iaList) {
-					if (std::round(it.getPos().first) == b.getPos().first &&
-						std::round(it.getPos().second) == b.getPos().second) {
-						if (it.hasShield()) {
-							int tmp = it.rmShield();
-							_entitiesToRemove.push_back(std::pair<int, Entity>(tmp, Entity::SPHERE));
-						} else
-							it.setAlive(false);
-						_updateEntities.push_back(std::unique_ptr<IEntity>(&it));
-					}
-				}
 			}
-			//_updateEntities.push_back(std::unique_ptr<IEntity>(&a));
 			_entitiesToRemove.push_back(std::pair<int, Entity>(a.getId(), Entity::SPHERE));
 			if (a.getOwner() == static_cast<unsigned int>(_player1.getId()))
 				_player1.addBomb();
