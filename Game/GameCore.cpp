@@ -573,6 +573,7 @@ void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std:
 	else if (entity->getSubType() == ItemStatic::CRATE && !haveBombed(player)) {
 	        playerDropBomb(player);
 		player.setIa(std::make_pair((pos.first == 0) ? 0 : pos.first * -1, (pos.second == 0) ? 0 : pos.second * -1));
+		player.incForceIa();
 	}
 	else
 		player.setIa(std::make_pair(0, 0));
@@ -645,10 +646,17 @@ void	GameCore::handleIA()
 		if (it.isAlive() == false)
 			continue ;
 		myPos = it.getPos();
-	        for (auto &i : _bombs) {
-			bombPos = i.getPos();
-			if (bombPos.second == std::round(myPos.second) || bombPos.first == std::round(myPos.first))
-				dodging = dodgeBomb(bombPos, myPos, it);
+		if (it.getForceIa() > 0) {
+			movePlayer(myPos, it.getIa(), it, 0.0f);
+			it.incForceIa();
+			dodging = 1;
+		}
+		else {
+			for (auto &i : _bombs) {
+				bombPos = i.getPos();
+				if (bombPos.second == std::round(myPos.second) || bombPos.first == std::round(myPos.first))
+					dodging = dodgeBomb(bombPos, myPos, it);
+			}
 		}
 		if (dodging == 0)
 			iaMoving(it);
