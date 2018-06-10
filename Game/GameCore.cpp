@@ -717,8 +717,6 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state,
 	changed = playerMovement(act);
 	handleIA();
 	bombManager(act);
-	if (_nbPlayer == 2 && _player1.isAlive() && !_player2.isAlive())
-		param.split = false;
 	if (changed) {
 		_updateEntities.push_back(std::unique_ptr<IEntity>(&_player1));
 		if (_params.nbPlayers > 1)
