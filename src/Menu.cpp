@@ -20,6 +20,10 @@ void	Menu::initMaps()
 {
 	// _maps.push_back({"media/img1.png", "Map 1", "map1.txt"});
 	// _maps.push_back({"media/img2.png", "Map 2", "map2.txt"});
+	_maps.push_back({"media/maps.1/lvl1.jpg", "Lvl 1", "media/maps.1/lvl1.txt"});
+	_maps.push_back({"media/maps.1/lvl2.jpg", "Lvl 2", "media/maps.1/lvl2.txt"});
+	_maps.push_back({"media/maps.1/lvl3.jpg", "Lvl 3", "media/maps.1/lvl3.txt"});
+	_maps.push_back({"media/maps.1/lvl4.jpg", "Lvl 4", "media/maps.1/lvl4.txt"});
 	_maps.push_back({"media/map-t.jpg", "Map T", "media/mapT.txt"});
 	_maps.push_back({"media/random.png", "Random", "empty"});
 	_maps.push_back({"media/map-x.jpg", "Map X", "media/mapX.txt"});
