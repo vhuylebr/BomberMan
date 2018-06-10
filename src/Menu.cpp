@@ -28,7 +28,7 @@ void	Menu::initMaps()
 	_maps.push_back({"media/random.png", "Random", "empty"});
 	_maps.push_back({"media/map-x.jpg", "Map X", "media/mapX.txt"});
 	_maps.push_back({"media/map-m.png", "Map M", "media/mapM.txt"});
-	_maps.push_back({"media/map-m.png", "Map Giaga", "media/mapGiga.txt"});
+	_maps.push_back({"media/maps.1/megamap.jpg", "MegaMap", "media/mapGiga.txt"});
 	_sizeMap = 10;
 }
 
