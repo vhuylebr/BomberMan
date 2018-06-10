@@ -673,18 +673,20 @@ void GameCore::displayAroundPlayer(void)
 					_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
 					_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[y][x]->getId(),
 							_vectorEntities[y][x]->getType()));
-					}
+				}
 			}
 	}
 	if (_params.nbPlayers > 1)
 		for (int y = _player2.getPos().second - 8; y < _player2.getPos().second + 8; ++y) {
 			if (y >= 0 && y < static_cast<int>(_vectorEntities.size()))
 				for (int x = _player2.getPos().first - 13; x < _player2.getPos().first + 13; ++x) {
-					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false) {
+					if (x >= 0 && x < static_cast<int>(_vectorEntities[y].size()) && _vectorEntities[y][x]->isEmpty() == false &&
+						_updateEntities.end() == find(_updateEntities.begin(), _updateEntities.end(),
+								_vectorEntities[y][x]->getEntity())) {
 						_updateEntities.push_back(std::unique_ptr<IEntity>(_vectorEntities[y][x]->getEntity().get()));
 						_entitiesToRemove.push_back(std::make_pair<int, Entity>(_vectorEntities[y][x]->getId(),
 							_vectorEntities[y][x]->getType()));
-						}
+					}
 				}
 		}
 	// end
