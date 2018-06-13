@@ -588,12 +588,10 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setID(static_cast<Item*>(entity.get())->getId());
-			it->addAnimator(_anim);
 			return;
 		}
 	}
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
-	node->addAnimator(_anim);
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
