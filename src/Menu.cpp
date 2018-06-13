@@ -400,7 +400,7 @@ void Menu::handleIntroMenu(Actions &actions)
 
 	duration = ( std::clock() - _start ) / (double) CLOCKS_PER_SEC;
 	if (duration > 0 && duration < 1)
-		actions.escape = true;
+		actions.down = true;
 	if (duration >= 1 && duration < 1.5) {
 		_changeState = true;
 		_changed = true;
@@ -428,7 +428,7 @@ void Menu::handleIntroMenu(Actions &actions)
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 780, 600, 100)));
 	}
-	if (duration > 3) {
+	if (duration > 3 || actions.escape) {
 		_step = 1;
 		_change_menu = true;
 	}
