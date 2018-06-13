@@ -788,7 +788,7 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state,
 		releaseUpdateEntities();
 	if (_bubgCounter > 0)
 		_bubgCounter -= 1;
-	else if (_bubgCounter == 0) {
+	else if (_bubgCounter == 0 && _params.bubg) {
 		bubgFindNextPos();
 		_bubgCounter = 50;
 	}
