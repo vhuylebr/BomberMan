@@ -145,6 +145,8 @@ int		Core::startMusic()
 	return 0;
 }
 
+using namespace std::chrono;
+
 int	Core::loop()
 {
 	STATE   lstate = STATE::INIT;
