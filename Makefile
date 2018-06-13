@@ -13,8 +13,12 @@ default_target: all
 #=============================================================================
 # Special targets provided by cmake.
 
+<<<<<<< HEAD
 # Disable implicit rules so canonical targets will work.
 .SUFFIXES:
+=======
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -pthread -lstdc++fs -lIrrKlang -Wfatal-errors
+>>>>>>> 8014bcd1977f805ea5b0a582508ca9b9f0fe41d6
 
 
 # Remove some rules from gmake that .SUFFIXES does not remove.

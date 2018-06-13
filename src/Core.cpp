@@ -2,6 +2,7 @@
 #include "Core.hpp"
 #include "Music.hpp"
 #include <chrono>
+#include <thread>
 
 Core::Core()
 	:_state(STATE::MENU), _game(), _menu(), _lib(_act), _host(-1)
@@ -88,12 +89,52 @@ static void setEndVisible(IrrLib &lib, bool state, char player)
 	lib.setVisible(state, QUIT_END_ID);
 }
 
+static void introScreen(IrrLib &lib)
+{
+	std::clock_t start;
+	double duration;
+
+	start = std::clock();
+	/* Your algorithm here */
+	lib.setVisible(false, INTRO1_ID);
+	lib.setVisible(false, INTRO2_ID);
+	lib.setVisible(false, INTRO3_ID);
+	lib.drawGame();
+	while ((duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC) < 3) {
+		if (duration < 1)
+			lib.setVisible(true, INTRO3_ID);
+		else if (duration > 1 && duration < 2) {
+			lib.setVisible(false, INTRO3_ID);
+			lib.setVisible(true, INTRO2_ID);
+		} else if (duration > 2) {
+			lib.setVisible(false, INTRO2_ID);
+			lib.setVisible(true, INTRO1_ID);
+		}
+		lib.drawGame();
+	}
+	lib.setVisible(false, INTRO1_ID);
+	lib.setVisible(false, INTRO2_ID);
+	lib.setVisible(false, INTRO3_ID);
+}
+
 void	Core::gameManager(STATE &last)
 {
 	if (last == STATE::MENU) {
 		_game.init(_param);
 		_lib.setSplitScreen(_game.getSplitState());
 		_lib.initGame(_game.getSize(), _game.getMobileEntities());
+		auto actions = _lib.getActions();
+		_lib.affGameEntities(_game.calc(actions, _state, _param));
+		if (actions.escape == true) {
+			_lib.newMenuItems(_game.createPause());
+			setPauseVisible(_lib, true);
+			_state = STATE::PAUSE;
+			return ;
+		}
+		_lib.drawGame();
+		_lib.setSplitScreen(_param.split);
+		_lib.newMenuItems(_game.createLoadScreen());
+		introScreen(_lib);
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
 		 if (_state == STATE::MENU)
@@ -121,7 +162,6 @@ void	Core::gameManager(STATE &last)
 		}
 		_lib.drawGame();
 		_lib.setSplitScreen(_param.split);
-
 		if (_state == STATE::END) {
 			_lib.newMenuItems(_game.createEndScreen());
 			setEndVisible(_lib, true, _game.getEndId());
@@ -171,8 +211,7 @@ int	Core::loop()
 		|| _state == STATE::END)
 			gameManager(lstate);
 	__int64 later = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	std::cout << "elapsed time : " << later - _now << std::endl;
-	std::cout << "elapsed time : " << _now - later << std::endl;
+	std::this_thread::sleep_for(std::chrono::milliseconds(later - _now));
 	}
 	return 0;
 }

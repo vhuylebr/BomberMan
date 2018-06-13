@@ -1,13 +1,13 @@
 #ifndef CORE_HPP_
 # define CORE_HPP_
 
+# include <ctime>
 # include "State.hpp"
 # include "Actions.hpp"
 # include "IrrLib.hpp"
 # include "GameCore.hpp"
 # include "Menu.hpp"
 # include "Item.hpp"
-
 
 struct t_bonus {
 	int id;

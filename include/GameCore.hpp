@@ -66,6 +66,7 @@ public:
 	GameCore();
 	~GameCore();
 
+	std::vector<std::unique_ptr<IEntity>> &createLoadScreen();
 	std::vector<std::unique_ptr<IEntity>>					&calc(Actions, STATE &, parameters &);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void													init(pairUC);
@@ -123,7 +124,8 @@ private:
 	std::vector<std::unique_ptr<IEntity>>					_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>					_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>					_pauseitem;
-	std::vector<std::unique_ptr<IEntity>>					_endItem;
+	std::vector<std::unique_ptr<IEntity>>	_endItem;
+	std::vector<std::unique_ptr<IEntity>>	_loadScreenItem;
 	std::vector<std::pair<int, Entity>>						_entitiesToRemove;
 	int 													_nbPlayer;
 	parameters												_params;
