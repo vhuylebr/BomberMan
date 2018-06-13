@@ -37,6 +37,7 @@ private:
 	Music 		_coremusic;
 	// Lobby   	_lobby;
 	Actions 	_act;
+	__int64 	_now;
 };
 
 #endif /* CORE_HPP_ */

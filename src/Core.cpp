@@ -1,6 +1,7 @@
 //#include <unistd.h>
 #include "Core.hpp"
 #include "Music.hpp"
+#include <chrono>
 
 Core::Core()
 	:_state(STATE::MENU), _game(), _menu(), _lib(_act), _host(-1)
@@ -151,6 +152,7 @@ int	Core::loop()
 	if (startMusic() == -1)
 		return -1;
 	while (_state != STATE::EXIT && _lib.getRun()) {
+		_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		if (_state == STATE::MENU) {
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
@@ -166,6 +168,9 @@ int	Core::loop()
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE
 		|| _state == STATE::END)
 			gameManager(lstate);
+	__int64 later = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	std::cout << "elapsed time : " << later - _now << std::endl;
+	std::cout << "elapsed time : " << _now - later << std::endl;
 	}
 	return 0;
 }
