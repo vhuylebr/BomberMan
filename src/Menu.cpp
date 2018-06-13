@@ -47,7 +47,7 @@ void 	Menu::makeJoinMenu()
 	std::string path = "./media/maps/";
 	try {
 	    for (auto &p : std::experimental::filesystem::directory_iterator(path)) {
-			std::string file = p.path();
+			std::string file = p.path().string();
 			std::wstring ws;
 			ws.assign(file.begin(), file.end());
 			toto.push_back(ws);
@@ -162,7 +162,7 @@ void Menu::changeMenu()
 
 void Menu::handleFirstMenu(Actions &actions, STATE &state)
 {
-	if (actions.space || actions.enter || actions.buttonPressed != -1) {
+	if (actions.buttonPressed != -1) {
 		if (actions.buttonPressed > 0)
 			_step = actions.buttonPressed;
 		if (_step == 3)
@@ -176,6 +176,7 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 			_step = 2;
 			actions.buttonPressed = 0;
 			_changed = true;
+			actions.buttonPressed = 0;
 		}
 		_change_menu = true;
 	}
@@ -358,8 +359,7 @@ bool 	Menu::stepChanged(STATE &state)
 
 static bool keyPressed(Actions &actions, bool changeState)
 {
-	return (actions.buttonPressed != -1 || actions.enter || actions.space
-	|| actions.up || actions.down || actions.escape || changeState == true);
+	return (actions.buttonPressed != -1	|| actions.escape || changeState == true);
 }
 
 bool 	Menu::getState(Actions &actions, STATE &state)

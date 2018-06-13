@@ -6,7 +6,6 @@
 */
 
 #include "GameCore.hpp"
-#include <sstream>
 
 GameCore::GameCore()
 	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0),
