@@ -1,13 +1,13 @@
 #ifndef CORE_HPP_
 # define CORE_HPP_
 
+# include <ctime>
 # include "State.hpp"
 # include "Actions.hpp"
 # include "IrrLib.hpp"
 # include "GameCore.hpp"
 # include "Menu.hpp"
 # include "Item.hpp"
-
 
 struct t_bonus {
 	int id;
@@ -25,7 +25,7 @@ public:
 protected:
 	int 		startMusic();
 	void 		menuManager(STATE &last);
-	void 		gameManager(STATE &last);
+	void 		gameManager(STATE &last, bool &);
 
 private:
 	parameters	_param;

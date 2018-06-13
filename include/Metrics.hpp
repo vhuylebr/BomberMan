@@ -22,4 +22,9 @@
 # define QUIT_END_ID 2000004
 # define SAVE_DIR "./media/maps/"
 
+# define INTRO1_ID 200091
+# define INTRO2_ID 200092
+# define INTRO3_ID 200093
+
+
 #endif /* !METRICS_HPP_ */

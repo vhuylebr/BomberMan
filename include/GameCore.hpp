@@ -64,6 +64,7 @@ public:
 	GameCore();
 	~GameCore();
 
+	std::vector<std::unique_ptr<IEntity>> &createLoadScreen();
 	std::vector<std::unique_ptr<IEntity>>					&calc(Actions, STATE &, parameters &);
 	std::vector<std::vector<std::unique_ptr<EntityPos> > >	&getEntities();
 	void													init(pairUC);
@@ -112,6 +113,7 @@ private:
 	pairUC	turnLeft(pairUC tmp);
 	bool	isThereFreeTile();
 	void									bubgFindNextPos();
+	void									bubgKillPlayer();
 
 	std::vector<Player>										_iaList;
 	std::vector<std::unique_ptr<IEntity>>					_entities;
@@ -124,14 +126,16 @@ private:
 	std::vector<std::unique_ptr<IEntity>>					_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>					_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>					_pauseitem;
-	std::vector<std::unique_ptr<IEntity>>					_endItem;
 	std::vector<std::pair<int, Entity>>					_entitiesToRemove;
+		parameters												_params;
 	int 									_nbPlayer;
-	parameters								_params;
-	int 									_i;
+	int 													_i;
 	int									_bubgCounter;
 	pairUC									_bubgPos;
 	pairUC									_bubgDir;
+	bool	_mapClosing;
+	std::vector<std::unique_ptr<IEntity>>	_endItem;
+	std::vector<std::unique_ptr<IEntity>>	_loadScreenItem;
 };
 
 #endif /* !GAMECORE_HPP_ */
