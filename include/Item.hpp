@@ -21,6 +21,7 @@ enum eItem {
 	SUPER_BOMB,
 	KICK,
 	SHIELD,
+	BUBG,
 	NONE
 };
 

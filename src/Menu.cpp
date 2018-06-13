@@ -106,10 +106,13 @@ void	Menu::makeParamsMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", SCREEN_WIDTH - 350, 500, 250, 50)));
 //	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 17, "", SCREEN_WIDTH - 400, 600, 50, 50)));
 //	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", SCREEN_WIDTH - 350, 600, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 19, "", SCREEN_WIDTH - 400, 700, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", SCREEN_WIDTH - 350, 700, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 44, "", SCREEN_WIDTH - 400, 800, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 45, "Shield", SCREEN_WIDTH - 350, 800, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 19, "", SCREEN_WIDTH - 400, 600, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", SCREEN_WIDTH - 350, 600, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 44, "", SCREEN_WIDTH - 400, 700, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 45, "Shield", SCREEN_WIDTH - 350, 700, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 46, "", SCREEN_WIDTH - 400, 800, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 47, "BUBG", SCREEN_WIDTH - 350, 800, 250, 50)));
+
 
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 21, "Name 1st player :", 100, 120, 400, 70)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Superman", 100, 190, 400, 70)));
