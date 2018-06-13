@@ -19,6 +19,7 @@ class MenuItem : public IEntity {
 public:
 	MenuItem(std::string text = std::string());
 	MenuItem(Entity type, int id, std::string text, ui x, ui y, ui lenght, ui height);
+	MenuItem(Entity type, int id, std::string text, ui x, ui y, ui lenght, ui height, std::string texture, bool textureState);
 	~MenuItem() {}
 
 	void 						setText(const std::string &text) { _text = text; }

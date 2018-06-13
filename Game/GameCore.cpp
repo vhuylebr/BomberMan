@@ -251,6 +251,10 @@ void    GameCore::init(parameters &params)
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
+
+	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO3_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/three.png", true)));
+	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO2_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/two.png", true)));
+	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO1_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/one.png", true)));
 	_size.x = x;
 	_size.y = y;
 }
@@ -852,6 +856,11 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::createPause()
 std::vector<std::unique_ptr<IEntity>> &GameCore::createEndScreen()
 {
 	return _endItem;
+}
+
+std::vector<std::unique_ptr<IEntity>> &GameCore::createLoadScreen()
+{
+	return _loadScreenItem;
 }
 
 std::vector<std::unique_ptr<IEntity>>	&GameCore::getAllMap()

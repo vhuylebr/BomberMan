@@ -33,7 +33,7 @@ SRCS	=	$(SRC)Menu.cpp			\
 
 		#$(GAME)eItem.cpp
 
-CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -pthread -lstdc++fs -lIrrKlang
+CPPFLAGS	+= -I./include -Wall -std=gnu++1z -I/usr/include/irrlicht/ -lIrrlicht -lpthread -pthread -lstdc++fs -lIrrKlang -Wfatal-errors
 
 CXX	=	g++
 
