@@ -10,7 +10,7 @@
 #include <experimental/filesystem>
 
 Menu::Menu()
-	: _step(1), _nbPlayer(1), _nbBots(4), _mapH(50), _mapW(50), _change_menu(true), _changeState(true), _changed(false)
+	: _start(0), _step(0), _nbPlayer(1), _nbBots(4), _mapH(50), _mapW(50), _change_menu(true), _changeState(true), _changed(false)
 {
 	makeMainMenu();
 	initMaps();
@@ -73,9 +73,10 @@ void    Menu::makeModeMenu()
 void    Menu::makeMainMenu()
 {
 	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 280, 600, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 430, 600, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 580, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 780, 600, 100)));
 }
 
 void	Menu::makeParamsMenu()
@@ -105,10 +106,13 @@ void	Menu::makeParamsMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", SCREEN_WIDTH - 350, 500, 250, 50)));
 //	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 17, "", SCREEN_WIDTH - 400, 600, 50, 50)));
 //	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", SCREEN_WIDTH - 350, 600, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 19, "", SCREEN_WIDTH - 400, 700, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", SCREEN_WIDTH - 350, 700, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 44, "", SCREEN_WIDTH - 400, 800, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 45, "Shield", SCREEN_WIDTH - 350, 800, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 19, "", SCREEN_WIDTH - 400, 600, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", SCREEN_WIDTH - 350, 600, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 44, "", SCREEN_WIDTH - 400, 700, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 45, "Shield", SCREEN_WIDTH - 350, 700, 250, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 46, "", SCREEN_WIDTH - 400, 800, 50, 50)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 47, "BUBG", SCREEN_WIDTH - 350, 800, 250, 50)));
+
 
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 21, "Name 1st player :", 100, 120, 400, 70)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Superman", 100, 190, 400, 70)));
@@ -117,7 +121,7 @@ void	Menu::makeParamsMenu()
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Batman", 100, 400, 400, 70)));
 	}
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 23, "+", 400, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(_nbBotsMax), 250, 640, 100, 100)));
+	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(_nbBots), 250, 640, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 25, "-", 100, 640, 100, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 26, "Number of Bots :", 100, 540, 400, 90)));
 	// Map height
@@ -128,13 +132,16 @@ void	Menu::makeParamsMenu()
 	}
 	// afficher les tailles qui sont dans Map
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 29,
-	std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap), 930, 400, 100, 100)));
+	std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap), 930, 400, 120, 100)));
 }
 
 void Menu::changeMenu()
 {
 	_change_menu = false;
 	switch (_step) {
+		case 0:
+			makeIntroMenu();
+			break;
 		case 1:
 			makeMainMenu();
 			break;
@@ -293,7 +300,7 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 			_nbBots += 1;
 		static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots));
 		_changeState = true;
-	} else if (actions.buttonPressed == 25) {
+	} else if (actions.buttonPressed == 25 && !(_nbPlayer == 1 && _nbBots == 1)) {
 		if (_nbBots > 0)
 			_nbBots -= 1;
 		static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBots));
@@ -302,16 +309,19 @@ void 	Menu::handleParamsMenu(Actions &actions, STATE &state)
 		if (_sizeMap < 100)
 			_sizeMap += 10;
 		_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
-		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
+		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap));
 		_changeState = true;
 	} else if (actions.buttonPressed == 30) {
 		if (_sizeMap > 10)
 			_sizeMap -= 10;
 		if (_nbBotsMax > (_sizeMap - (2 * (_sizeMap / 10)) - 2)) {
 			_nbBotsMax = (_sizeMap - (2 * (_sizeMap / 10)) - 2);
-			static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBotsMax)); // ne s'update pas sur l'écran..
+			if (_nbBots > _nbBotsMax) {
+				_nbBots = _nbBotsMax;
+				static_cast<MenuItem*>(getItemByID(24).get())->setText(std::to_string(_nbBotsMax)); // ne s'update pas sur l'écran..
+			}
 		}
-		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap));
+		static_cast<MenuItem*>(getItemByID(29).get())->setText(std::to_string(_sizeMap) + "x" + std::to_string(_sizeMap));
 		_changeState = true;
 	}
 }
@@ -354,6 +364,8 @@ static bool keyPressed(Actions &actions, bool changeState)
 
 bool 	Menu::getState(Actions &actions, STATE &state)
 {
+	if (_step == 0 && ((std::clock() - _start ) / (double) CLOCKS_PER_SEC) > 0.5)
+		return true;
  	if (_step == 2 && actions.buttonPressed == 7) {
 		state = STATE::GAME;
  		return false;
@@ -383,11 +395,62 @@ std::vector<std::unique_ptr<IEntity>> &Menu::getMenuItems()
 	return _item;
 }
 
+void Menu::handleIntroMenu(Actions &actions)
+{
+	if (_start == 0)
+		_start = std::clock();
+	double duration;
+
+	duration = ( std::clock() - _start ) / (double) CLOCKS_PER_SEC;
+	if (duration > 0 && duration < 0.5)
+//		actions.buttonPressed = 2;
+		actions.escape = true;
+	if (duration >= 0.5 && duration < 1) {
+		_changeState = true;
+		_changed = true;
+		_item.clear();
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+	} else if (duration >= 1 && duration < 1.5) {
+		_changeState = true;
+		_changed = true;
+		_item.clear();
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
+	} else if (duration >= 1.5 && duration < 2) {
+		_changeState = true;
+		_changed = true;
+		_item.clear();
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
+	} else if (duration > 2) {
+		_changeState = true;
+		_changed = true;
+		_item.clear();
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 780, 600, 100)));
+	}
+	if (duration > 2.5 || (duration > 0.5 && actions.escape)) {
+		_step = 1;
+		_change_menu = true;
+	}
+}
+
+void Menu::makeIntroMenu()
+{
+	_item.clear();
+}
+
 void Menu::getMenu(Actions &actions, STATE &state)
 {
 	if (_change_menu == true)
 		changeMenu();
 	switch (_step) {
+		case 0:
+			handleIntroMenu(actions);
+			break;
 		case 1:
 			handleFirstMenu(actions, state);
 			break;

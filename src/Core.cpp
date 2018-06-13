@@ -32,14 +32,14 @@ void 	Core::menuManager(STATE &last)
 	_lib.drawMenu();
 }
 
-static const t_bonus bonusButton[NB_ITEMS] {
+static const t_bonus bonusButton[NB_ITEMS + 1] {
 	{9, eItem::BOMB_UP},
 	{11, eItem::POWER_UP},
 	{13, eItem::SUPER_BOMB},
 	{15, eItem::SPEED},
-//	{17, eItem::WALL_PASS},
 	{19, eItem::KICK},
 	{44, eItem::SHIELD},
+	{46, eItem::BUBG},
 };
 
 int 	Core::getParametersFromMenu()
@@ -57,6 +57,9 @@ int 	Core::getParametersFromMenu()
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
+		_param.bubg = _lib.getCheckboxState(_menu.getItemByID(bonusButton[6].id));
+		std::cout << "BUBG : " << _param.bubg << std::endl;
+		
 	} else if (_menu.getStep() == 3) {
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));

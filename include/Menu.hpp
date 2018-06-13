@@ -46,8 +46,9 @@ public:
 	int 									getMapSize() const { return _sizeMap; }
 
 private:
+	std::clock_t _start;
 	void makeIntroMenu();
-	void handleIntroMenu();
+	void handleIntroMenu(Actions &);
 	void 									rotateMaps(bool left);
 	void 									handleModeMenu(Actions &actions, STATE &state);
 	void 									firstMenuKey(Actions &actions, STATE &state);
