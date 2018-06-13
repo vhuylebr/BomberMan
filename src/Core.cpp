@@ -201,7 +201,7 @@ int	Core::loop()
 	if (startMusic() == -1)
 		return -1;
 	while (_state != STATE::EXIT && _lib.getRun()) {
-		_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		//_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		if (_state == STATE::MENU) {
 			initialization = false;
 			menuManager(lstate);
@@ -217,8 +217,8 @@ int	Core::loop()
 			}
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE
 		|| _state == STATE::END)
-	__int64 later = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	std::this_thread::sleep_for(std::chrono::milliseconds(later - _now));
+//	__int64_t later = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+//	std::this_thread::sleep_for(std::chrono::milliseconds(later - _now));
     gameManager(lstate, initialization);
 	}
 	return 0;
