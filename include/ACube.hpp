@@ -15,17 +15,17 @@ class ACube: public IEntity {
 	public:
 		ACube(float, float, std::string, int);
 		~ACube();
-		Entity getType() const;
-		pairUC getPos() const;
-		std::string getTexture() const;
-		int getId() const { return _id; }
-		bool isAlive() const;
-		void setAlive(bool);
+		Entity 		getType() const;
+		pairUC 		getPos() const;
+		std::string	getTexture() const;
+		int 		getId() const { return _id; }
+		bool 		isAlive() const;
+		void 		setAlive(bool);
 	protected:
-		coords _pos;
+		coords 		_pos;
 		std::string _texture;
-		int _id;
-		bool _isAlive;
+		int 		_id;
+		bool		_isAlive;
 };
 
 #endif /* !ACUBE_HPP_ */

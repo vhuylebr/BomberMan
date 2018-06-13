@@ -95,6 +95,8 @@ void	Core::gameManager(STATE &last)
 		_lib.initGame(_game.getSize(), _game.getMobileEntities());
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
+		 if (_state == STATE::MENU)
+		 	_lib.affGameEntities(_game.getAllMap());
 		_lib.drawGame();
 		if (_state == STATE::GAME)
 			setPauseVisible(_lib, false);
@@ -109,18 +111,22 @@ void	Core::gameManager(STATE &last)
 		}
 	} else if (_host || true) { // Forcing true for now
 		auto actions = _lib.getActions();
+		_lib.affGameEntities(_game.calc(actions, _state, _param));
 		if (actions.escape == true) {
 			_lib.newMenuItems(_game.createPause());
 			setPauseVisible(_lib, true);
 			_state = STATE::PAUSE;
+			return ;
 		}
-		_lib.affGameEntities(_game.calc(actions, _state));
-		_lib.removeEntities(_game.getEntitiesToRemove());
 		_lib.drawGame();
+		_lib.setSplitScreen(_param.split);
+
 		if (_state == STATE::END) {
 			_lib.newMenuItems(_game.createEndScreen());
 			setEndVisible(_lib, true, _game.getEndId());
+			return;
 		}
+		_lib.removeEntities(_game.getEntitiesToRemove());
 	}
 	last = STATE::GAME;
 }
@@ -161,6 +167,5 @@ int	Core::loop()
 		|| _state == STATE::END)
 			gameManager(lstate);
 	}
-	_lib.dropAll();
 	return 0;
 }

@@ -14,7 +14,6 @@ class Crate : public ACube {
 public:
 	Crate(float, float, int);
 	~Crate() {};
-	void 	poke();
 };
 
 #endif /* !CRATE_HPP_ */

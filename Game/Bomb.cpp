@@ -51,8 +51,51 @@ void	Bomb::detonate()
 }
 
 void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map,
-			std::vector<std::pair<int, Entity> > &entitiesToRemove, std::vector<eItem> params,
-			std::vector<std::unique_ptr<IEntity>> &_updateEntities)
+			std::vector<std::pair<int, Entity> > &entitiesToRemove, std::vector<eItem> params, std::pair<float, float> posPlayer)
+{
+	_counter -= 1;
+	if (_counter == 0) {
+		for (auto &a : _dirs) {
+			for (auto i = 1 ; i < _pow ; i += 1) {
+				std::pair<std::size_t, std::size_t> tmp(std::ceil(_x) + a.first * i, std::ceil(_y) + a.second * i);
+				if (tmp.first > 0 && tmp.second > 0 && tmp.second < map.size() && tmp.first < map[tmp.second].size()) {
+					if (map[tmp.second][tmp.first]->isEmpty() || (map[tmp.second][tmp.first]->getType() == Entity::CUBE &&
+							map[tmp.second][tmp.first]->getSubType() == ItemStatic::CRATE)) {
+						if (tmp.first > posPlayer.first - 14 && tmp.first < posPlayer.first + 14 &&
+								tmp.second > posPlayer.second - 14 && tmp.second < posPlayer.second + 14) {
+							Fire	add(tmp.first, tmp.second, id);
+							add.setAlive(true);
+							_flames.push_back(add);
+							id += 1;
+						}
+						if (!map[tmp.second][tmp.first]->isEmpty()) {
+							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
+							map[tmp.second][tmp.first]->getType()));
+							map[tmp.second][tmp.first]->removeFirstEntity();
+							std::random_device re;
+							std::uniform_int_distribution<int> distrib{1, 100};
+							if (distrib(re) < 50)
+								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id, params);
+							if (!_superB)
+								break;
+						}
+					} else if (!map[tmp.second][tmp.first]->isEmpty() && map[tmp.second][tmp.first]->getEntity()->getType() == Entity::CUBE)
+						break;
+				}
+			}
+		}
+		Fire	add(ceil(_x), ceil(_y), _id);
+		_flames.push_back(add);
+	} else if (_counter == _flametime * -1) {
+		for (auto &a : _flames)
+			entitiesToRemove.push_back(std::make_pair<int, Entity>(a.getId(), Entity::CUBE));
+		_flames.clear();
+	}
+}
+
+
+void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<EntityPos>>> &map,
+			std::vector<std::pair<int, Entity> > &entitiesToRemove, std::vector<eItem> params)
 {
 	_counter -= 1;
 	if (_counter == 0) {
@@ -63,19 +106,17 @@ void	Bomb::tick(unsigned int &id, std::vector<std::vector<std::unique_ptr<Entity
 					if (map[tmp.second][tmp.first]->isEmpty() || (map[tmp.second][tmp.first]->getType() == Entity::CUBE &&
 							map[tmp.second][tmp.first]->getSubType() == ItemStatic::CRATE)) {
 						Fire	add(tmp.first, tmp.second, id);
-						id += 1;
 						add.setAlive(true);
 						_flames.push_back(add);
+						id += 1;
 						if (!map[tmp.second][tmp.first]->isEmpty()) {
 							entitiesToRemove.push_back(std::make_pair<int, Entity>(map[tmp.second][tmp.first]->getId(),
 							map[tmp.second][tmp.first]->getType()));
 							map[tmp.second][tmp.first]->removeFirstEntity();
 							std::random_device re;
 							std::uniform_int_distribution<int> distrib{1, 100};
-							if (distrib(re) < 50) {
+							if (distrib(re) < 50)
 								map[tmp.second][tmp.first]->addEntity(static_cast<float>(tmp.first), static_cast<float>(tmp.second), id, params);
-								_updateEntities.push_back(std::unique_ptr<IEntity>(map[tmp.second][tmp.first]->getEntity().get()));
-							}
 							if (!_superB)
 								break;
 						}

@@ -74,6 +74,8 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	} else {
 		std::cout << "Joystick support is not enabled." << std::endl;
 	}
+	_anim = _smgr->createRotationAnimator(irr::core::vector3df(1,0,0));
+	_noAnim = _smgr->createRotationAnimator(irr::core::vector3df(0,0,0));
 }
 
 IrrLib::~IrrLib()
@@ -86,7 +88,7 @@ void	IrrLib::createPlane(pairUC &size)
 		irr::core::dimension2d<irr::u32>(15, 15));
 	_ground = _smgr->addMeshSceneNode(plane);
 	_ground->setPosition(irr::core::vector3df(0, 0, 0));
-	_ground->setMaterialTexture(0, _driver->getTexture("./media/grass.bmp"));
+	_ground->setMaterialTexture(0, _driver->getTexture("./media/sand.png"));
 	_ground->setMaterialFlag(irr::video::EMF_LIGHTING, false);    //This is important
 }
 
@@ -100,13 +102,14 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str())); //"./media/bomb.png"
 			it->setVisible(true);
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
-			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+			it->removeAnimators();
+			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 				_gamemusic.play(SOUND::TICTAC);
-			else {
-				irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(0,1,0));
-				it->addAnimator(ani);
-				ani->drop();
+				it->setName("Bomb");
+			} else {
+				it->addAnimator(_anim);
 				it->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+				it->setName("Shield");
 			}
 			it->render();
 			return;
@@ -121,13 +124,14 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 	ball->setID(static_cast<ASphere*>(entity.get())->getId());
 	ball->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
 	ball->setMaterialType(irr::video::EMT_SOLID);
-	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB)
+	ball->removeAnimators();
+	if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
 		_gamemusic.play(SOUND::TICTAC);
-	else {
-		irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,0,0));
-		ball->addAnimator(ani);
-		ani->drop();
+		ball->setName("Bomb");
+	} else {
+		ball->addAnimator(_anim);
 		ball->setMaterialType(irr::video::EMT_TRANSPARENT_ADD_COLOR);
+		ball->setName("Shield");
 	}
 	_spheres.push_back(ball);
 }
@@ -135,18 +139,11 @@ void	IrrLib::addSphere(std::unique_ptr<IEntity> &entity)
 void	IrrLib::updateSphere(std::unique_ptr<IEntity> &entity)
 {
 	for (auto &it : _spheres) {
-		if (it->getID() == static_cast<ASphere*>(entity.get())->getId()) {
+		if (it->getID() == entity->getId()) {
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setVisible(static_cast<ASphere*>(entity.get())->isAlive());
 			it->setMaterialTexture(0, _driver->getTexture(static_cast<ASphere*>(entity.get())->getTexture().c_str()));
 			it->setScale({static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale(),static_cast<ASphere*>(entity.get())->getScale()});
-			if (static_cast<ASphere*>(entity.get())->getSubType() == SphereSubType::SUBBOMB) {
-				if (static_cast<Bomb*>(entity.get())->isExplode() == true) {
-					it->setID(-1);
-					_gamemusic.play(SOUND::BOOM);
-					std::cout << "BOOM" << std::endl;
-				}
-			}
 			return ;
 		}
 	}
@@ -160,7 +157,10 @@ void	IrrLib::removeSphere(int id)
 	for (auto &it : _spheres) {
 		if (id == it->getID()) {
 			it->setMaterialType(irr::video::EMT_SOLID);
+			if (!std::string("Bomb").compare(it->getName()))
+			    _gamemusic.play(SOUND::BOOM);
 			it->setID(-1);
+			it->addAnimator(_noAnim);
 			it->setVisible(false);
 			it->removeAll();
 			break;
@@ -205,8 +205,8 @@ void	IrrLib::updateCube(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::removeCube(int id)
 {
-	int i = 0;
-
+	if (id < 0)
+		return;
 	for (auto &it : _cubes) {
 		if (id == it->getID()) {
 			it->setID(-1);
@@ -214,7 +214,6 @@ void IrrLib::removeCube(int id)
 			it->removeAll();
 			break;
 		}
-		++i;
 	}
 }
 
@@ -239,8 +238,6 @@ Actions	IrrLib::getActions()
 	_actions.D = false;
 	_actions.W = false;
 	_actions.buttonPressed = getIdButtonPressed();
-	if (_actions.buttonPressed != -1)
-		std::cout << "lol : " << _actions.buttonPressed << std::endl;
 	if (_eventReceiver.IsKeyDown(irr::KEY_LEFT) || moveHorizontal < -0.8f)
 		_actions.left = true;
 	if (_eventReceiver.IsKeyDown(irr::KEY_RIGHT) || moveHorizontal > 0.8f)
@@ -376,7 +373,6 @@ void IrrLib::displayBackground()
 
 void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 {
-	std::cout << "init Menu" << std::endl;
 	_guienv->clear();
 	_inputs.clear();
 	_labels.clear();
@@ -401,7 +397,6 @@ void IrrLib::initMenu(std::vector<std::unique_ptr<IEntity>> &menuItems)
 	for (auto &it : menuItems) {
 		_factory[it->getType()](it);
 	}
-	std::cout << "end init Menu" << std::endl;
 }
 
 void IrrLib::updateLabel(std::unique_ptr<IEntity> &entity)
@@ -465,7 +460,6 @@ int IrrLib::getIdButtonPressed() const
 
 void IrrLib::drawMenu()
 {
-//	std::cout << "draw Menu" << std::endl;
 	_eventReceiver.resetIdButtonPressed();
 	if (_device->isWindowActive()) {
 		_driver->beginScene(true, true);
@@ -473,7 +467,6 @@ void IrrLib::drawMenu()
 		_guienv->drawAll();
 		_driver->endScene();
 	}
-//	std::cout << "end draw Menu" << std::endl;
 }
 
 void IrrLib::cleanMenu()
@@ -492,7 +485,6 @@ void IrrLib::cleanMenu()
 	_buttons.clear();
 	_skybox->remove();
 	_guienv->clear();
-	std::cout << "i'm in clean menu" << std::endl;
 }
 
 void IrrLib::drawGame()
@@ -558,13 +550,13 @@ void IrrLib::updatePlayer(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::addPlayer(std::unique_ptr<IEntity> &entity)
 {
-	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh("./media/Shadow.md2");
+	irr::scene::IAnimatedMesh* mesh = _smgr->getMesh("./media/EGGM.md2");
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
-		node->setMaterialTexture( 0, _driver->getTexture("./media/SHADOW.png") );
-		node->setScale(irr::core::vector3df(0.02f, 0.02f, 0.02f));
+		node->setMaterialTexture( 0, _driver->getTexture("./media/EGGM.PNG"));
+		node->setScale(irr::core::vector3df(0.01f, 0.01f, 0.01f));
 		node->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 		node->setID(static_cast<Player*>(entity.get())->getId());
 		_players.push_back(node);
@@ -596,13 +588,12 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 			it->setScale(irr::core::vector3df(static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale(), static_cast<Item*>(entity.get())->getScale()));
 			it->setPosition(irr::core::vector3df(entity->getPos().first, 0.5, entity->getPos().second));
 			it->setID(static_cast<Item*>(entity.get())->getId());
+			it->addAnimator(_anim);
 			return;
 		}
 	}
 	irr::scene::IAnimatedMeshSceneNode* node = _smgr->addAnimatedMeshSceneNode(mesh);
-	irr::scene::ISceneNodeAnimator* ani = _smgr->createRotationAnimator(irr::core::vector3df(1,1,0));
-	node->addAnimator(ani);
-	ani->drop();
+	node->addAnimator(_anim);
 	if (node) {
 		node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 		node->setMD2Animation(irr::scene::EMAT_STAND);
@@ -616,8 +607,8 @@ void IrrLib::addItem(std::unique_ptr<IEntity> &entity)
 
 void IrrLib::removeItem(int id)
 {
-	int i = 0;
-
+	if (id < 0)
+		return;
 	for (auto &it : _items) {
 		if (id == it->getID()) {
 			it->setID(-1);
@@ -625,7 +616,6 @@ void IrrLib::removeItem(int id)
 			it->removeAll();
 			break;
 		}
-		++i;
 	}
 }
 
@@ -633,12 +623,6 @@ void IrrLib::initGame(pairUC size, std::vector<std::unique_ptr<IEntity> >	&mobil
 {
 	drop();
 	createPlane(size);
-	// for (auto &it : gameEntities) {
-	// 	for (auto &it2 : it) {
-	// 		if (!it2->isEmpty())
-	// 				_factory[it2->getType()](it2->getEntity());
-	// 	}
-	// }
 	for (auto &it3: mobileEntities) {
 		_factory[it3->getType()](it3);
 	}
@@ -683,10 +667,6 @@ void IrrLib::drop()
 	for (auto &it : _inputs) {
 		it->remove();
 	}
-	// _smgr = _device->getSceneManager();
-	// _labels.clear();
-	// _checkboxes.clear();
-	// _inputs.clear();
 	_skybox = NULL;//->remove() doesn't work because already deleted after menu clean;
 	_buttons.clear();
 	_spheres.clear();
@@ -694,17 +674,6 @@ void IrrLib::drop()
 	_cubes.clear();
 	_items.clear();
 	_labels.clear();
-	// _smgr->clear();
-	// _guienv->clear();
-}
-
-void IrrLib::dropAll()
-{
-	// _guienv->drop();
-	// _smgr->drop();
-	// _driver->drop();
-	// _device->closeDevice();
-	// _device->drop();
 }
 
 void IrrLib::setVisible(bool state, int id)
@@ -712,14 +681,6 @@ void IrrLib::setVisible(bool state, int id)
 	for (auto it = _buttons.begin(); it != _buttons.end(); it++) {
 		if ((*it)->getID() == id)
 			(*it)->setVisible(state);
-		// if ((*it)->getID() == PAUSE_ID)
-		// 	(*it)->setVisible(state);
-		// else if ((*it)->getID() == PAUSE_ID + 1)
-		// 	(*it)->setVisible(state);
-		// else if ((*it)->getID() == PAUSE_ID + 2)
-		// 	(*it)->setVisible(state);
-		// else if ((*it)->getID() == PAUSE_ID + 3)
-		// 	(*it)->setVisible(state);
 	}
 }
 

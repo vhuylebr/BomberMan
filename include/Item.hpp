@@ -30,7 +30,7 @@ public:
 	~Item();
 
 	eItem		getItemType() const;
-	int		getId() const { return _id; }
+	int			getId() const { return _id; }
 	void		setPos(float x, float y) { _x = x; _y = y; }
 	pairUC		getPos() const { return {_x, _y};}
 	bool		isAlive() const { return (_alive);};
@@ -43,14 +43,14 @@ private:
 
 	void	loadType(std::vector<eItem> &);
 
-	eItem		_bonusType;
-	float		_x;
-	float		_y;
-	size_t		_id;
-	bool		_alive;
+	eItem							_bonusType;
+	float							_x;
+	float							_y;
+	size_t							_id;
+	bool							_alive;
 	std::map<eItem, std::string>	_getModel;
 	std::map<eItem, std::string>	_getTexture;
-	std::map<eItem, float>		_getScale;
+	std::map<eItem, float>			_getScale;
 };
 
 #endif /* !ITEM_HPP_ */

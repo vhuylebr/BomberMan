@@ -36,9 +36,10 @@ struct coords {
 class IEntity {
 public:
     virtual ~IEntity() = default;
-    virtual int getId() const = 0;
-    virtual Entity getType() const = 0;
-    virtual pairUC getPos() const = 0;
+    
+    virtual int     getId() const = 0;
+    virtual Entity  getType() const = 0;
+    virtual pairUC  getPos() const = 0;
 };
 
 #endif /* !IENTITY_HPP_ */

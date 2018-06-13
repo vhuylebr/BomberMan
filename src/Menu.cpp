@@ -20,10 +20,15 @@ void	Menu::initMaps()
 {
 	// _maps.push_back({"media/img1.png", "Map 1", "map1.txt"});
 	// _maps.push_back({"media/img2.png", "Map 2", "map2.txt"});
+	_maps.push_back({"media/maps.1/lvl1.jpg", "Lvl 1", "media/maps.1/lvl1.txt"});
+	_maps.push_back({"media/maps.1/lvl2.jpg", "Lvl 2", "media/maps.1/lvl2.txt"});
+	_maps.push_back({"media/maps.1/lvl3.jpg", "Lvl 3", "media/maps.1/lvl3.txt"});
+	_maps.push_back({"media/maps.1/lvl4.jpg", "Lvl 4", "media/maps.1/lvl4.txt"});
 	_maps.push_back({"media/map-t.jpg", "Map T", "media/mapT.txt"});
 	_maps.push_back({"media/random.png", "Random", "empty"});
 	_maps.push_back({"media/map-x.jpg", "Map X", "media/mapX.txt"});
 	_maps.push_back({"media/map-m.png", "Map M", "media/mapM.txt"});
+	_maps.push_back({"media/maps.1/megamap.jpg", "MegaMap", "media/mapGiga.txt"});
 	_sizeMap = 10;
 }
 
@@ -57,49 +62,6 @@ void 	Menu::makeJoinMenu()
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 2, "Select Game to load : ", (SCREEN_WIDTH / 2) - 300, 150, 600, 100)));
 	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Connect", (SCREEN_WIDTH / 2) - 300, 700, 600, 100)));
 }
-
-void    Menu::makeOptionMenu()
-{
-	_item.clear();
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 1, "Number of Players :", 100, 300, 400, 90)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "+", 400, 400, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 3, std::to_string(_nbPlayer), 250, 400, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 4, "-", 100, 400, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 5, "Game name :", 780, 120, 400, 70)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 6, "Game1" , 780, 190, 400, 70)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 7, "Start Game", 780, 800, 400, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 8, "", SCREEN_WIDTH - 450, 0, 820, 1000)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 9, "", SCREEN_WIDTH - 400, 200, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 10, "Bomb Up", SCREEN_WIDTH - 350, 200, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 11, "", SCREEN_WIDTH - 400, 300, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 12, "Power Up", SCREEN_WIDTH - 350, 300, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 13, "", SCREEN_WIDTH - 400, 400, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 14, "Penetration", SCREEN_WIDTH - 350, 400, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 15, "", SCREEN_WIDTH - 400, 500, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 16, "Speed", SCREEN_WIDTH - 350, 500, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 17, "", SCREEN_WIDTH - 400, 600, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 18, "Wall Pass", SCREEN_WIDTH - 350, 600, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::CHECKBOX, 19, "", SCREEN_WIDTH - 400, 700, 50, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 20, "Kick", SCREEN_WIDTH - 350, 700, 250, 50)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 21, "Your name :", 100, 120, 400, 70)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::INPUT, 22, "Toto", 100, 190, 400, 70)));
-	// Number of Bots
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 23, "+", 400, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 24, std::to_string(_nbBots), 250, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 25, "-", 100, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 26, "Number of Bots :", 100, 540, 400, 90)));
-	// Map height
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 27, "Map Height :", 780, 300, 400, 90)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 28, "+", 1080, 400, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 29, std::to_string(_mapH), 930, 400, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 30, "-", 780, 400, 100, 100)));
-	// Map width
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 31, "Map Width :", 780, 540, 400, 90)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 32, "+", 1080, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::LABEL, 33, std::to_string(_mapW), 930, 640, 100, 100)));
-	_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 34, "-", 780, 640, 100, 100)));
-}
-
 
 void    Menu::makeModeMenu()
 {
@@ -215,7 +177,6 @@ void Menu::handleFirstMenu(Actions &actions, STATE &state)
 
 void 	Menu::handleModeMenu(Actions &actions, STATE &state)
 {
-	std::cout << "mode" << std::endl;
 	if (actions.escape == true) {
 		_change_menu = true;
 		_step = 1;
@@ -378,9 +339,7 @@ std::vector<int>	Menu::getIdToUpdate(const Actions &actions)
 
 bool 	Menu::stepChanged(STATE &state)
 {
-//	std::cout << "stp" << std::endl;
 	if (_changed == true) {
-		std::cout << "ALLEZ CHANGE DE STATE ENCULAY" << std::endl;
 		_changed = false;
 		state = STATE::INIT;
 		return true;
@@ -426,10 +385,8 @@ std::vector<std::unique_ptr<IEntity>> &Menu::getMenuItems()
 
 void Menu::getMenu(Actions &actions, STATE &state)
 {
-//	std::cout << "button pressed" <<actions.buttonPressed << std::endl;
 	if (_change_menu == true)
 		changeMenu();
-//	std::cout << "step is " << _step << std::endl;
 	switch (_step) {
 		case 1:
 			handleFirstMenu(actions, state);
