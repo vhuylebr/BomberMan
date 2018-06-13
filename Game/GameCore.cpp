@@ -530,7 +530,7 @@ int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float>
 		else if (_vectorEntities[std::round(myPos.second - 1)][std::round(myPos.first)]->isEmpty())
 			movePlayer(myPos, {0, -1}, player, 90.0f);
 		else {
-			if (bombPos.second > myPos.second)
+			if (bombPos.first > myPos.first)
 				movePlayer(myPos, {-1, 0}, player, 0.0f);
 			else
 				movePlayer(myPos, {1, 0}, player, 180.0f);
@@ -542,7 +542,7 @@ int	GameCore::dodgeBomb(std::pair<float, float> bombPos, std::pair<float, float>
 		else if (_vectorEntities[std::round(myPos.second)][std::round(myPos.first - 1)]->isEmpty())
 			movePlayer(myPos, {-1, 0}, player, 180.0f);
 		else {
-			if (bombPos.first > myPos.first)
+			if (bombPos.second > myPos.second)
 				movePlayer(myPos, {0, -1}, player, 90.0f);
 			else
 				movePlayer(myPos, {0, 1}, player, -90.0f);
