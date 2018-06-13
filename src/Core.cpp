@@ -9,13 +9,8 @@ Core::Core()
 
 void 	Core::menuManager(STATE &last)
 {
-//	std::cout << "changed : " << _menu.stepChanged(last) << std::endl;
-//	std::cout << "1" << std::endl;
 	_act = _lib.getActions();
-//	std::cout << "2" << std::endl;
 	_lib.displayBackground();
-//	std::cout << "3" << std::endl;
-//	std::cout << "changed : " << _menu.stepChanged(last) << std::endl;
 	if (_menu.getState(_act, _state) == true) {
 		_menu.getMenu(_act, _state);
 		if (_menu.isLabelToUpdate()) {
@@ -24,23 +19,16 @@ void 	Core::menuManager(STATE &last)
 				_lib.updateLabel(_menu.getItemByID(id));
 		}
 	}
-//	std::cout << "changed : " << _menu.stepChanged(last) << std::endl;
-//	std::cout << "4" << std::endl;
 	if (_menu.stepChanged(last) == true) {
-		std::cout << "i go here" << std::endl;
 		_menu.getMenu(_act, _state);
-		std::cout << "then here" << std::endl;
 		_lib.cleanMenu();
-		std::cout << "and finally here" << std::endl;
 	}
-//	std::cout << "5" << std::endl;
 	if (last == STATE::GAME || last == STATE::INIT) {
 		_lib.initMenu(_menu.getMenuItems());
 		_menu.getMenu(_act, _state);
 		_state = STATE::MENU;
 		last = STATE::MENU;
 	}
-//	std::cout << "6" << std::endl;
 	_lib.drawMenu();
 }
 
@@ -157,26 +145,17 @@ int	Core::loop()
 	if (startMusic() == -1)
 		return -1;
 	while (_state != STATE::EXIT && _lib.getRun()) {
-//		std::cout << "toto" << std::endl;
 		if (_state == STATE::MENU) {
-//			std::cout << "menu on" << std::endl; 
 			menuManager(lstate);
-//			std::cout << "menu off" << std::endl; 
 			if (_state == STATE::GAME) {
-				std::cout << "switch on" << std::endl;
 				_coremusic.stop(SOUND::MENU);
 				_coremusic.setLoop(SOUND::GAME, true);
 				_coremusic.play(SOUND::GAME);
-				std::cout << "switch ongoing" << std::endl;
 				if (getParametersFromMenu() == -1) {
 					_state = STATE::MENU;
 					continue;
-				std::cout << "switch off" << std::endl;
 				}
-				std::cout << "clean on" << std::endl;
 				_lib.cleanMenu();
-				std::cout << "clean off" << std::endl;
-				while(1);
 			}
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE
 		|| _state == STATE::END)
