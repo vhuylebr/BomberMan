@@ -8,8 +8,12 @@
 #include "GameCore.hpp"
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0), _i(0)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0),
+	_i(0), _bubgCounter(3000), _mapClosing(false)
 {
+	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO3_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/three.png", true)));
+	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO2_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/two.png", true)));
+	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO1_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/one.png", true)));
 }
 
 void GameCore::createEntities(std::vector<std::vector<char>> &map,
@@ -223,6 +227,7 @@ void    GameCore::init(parameters &params)
 	unsigned int x = 0;
 	unsigned int y = 0;
 	_i = 0;
+	_bubgCounter = 1000;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
 	std::vector<std::vector<char>> map;
@@ -250,12 +255,11 @@ void    GameCore::init(parameters &params)
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 1, "Save and Quit", (SCREEN_WIDTH / 2) - 200, 350, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 2, "Main Menu", (SCREEN_WIDTH / 2) - 200, 500, 400, 100)));
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
-
-	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO3_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/three.png", true)));
-	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO2_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/two.png", true)));
-	_loadScreenItem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, INTRO1_ID, "", (SCREEN_WIDTH / 2) - 200, 300, 600, 600, "./media/one.png", true)));
 	_size.x = x;
 	_size.y = y;
+	_bubgDir = {1, 0};
+	_bubgPos = {1, 1};
+	_mapClosing = false;
 }
 
 GameCore::~GameCore()
@@ -566,6 +570,70 @@ bool	GameCore::haveBombed(Player player)
 	return (posed == 1) ? true : false;
 }
 
+bool	GameCore::isThereFreeTile()
+{
+	pairUC	dir = turnLeft(_bubgDir);
+	pairUC	pos = _bubgPos;
+	pairUC	size = {_vectorEntities[0].size(), _vectorEntities.size()};
+
+	while (pos.first >= 0 && pos.second >= 0 && pos.first < size.first && pos.second < size.second) {
+		if (_vectorEntities[pos.second][pos.first]->isEmpty() || _vectorEntities[pos.second][pos.first]->getEntity()->getType() != Entity::CUBE ||
+			!static_cast<ACube*>(_vectorEntities[pos.second][pos.first]->getEntity().get())->isDestructible()) {
+			return (true);
+		}
+		pos.first += dir.first;
+		pos.second += dir.second;
+	}
+	return (false);
+}
+
+pairUC	GameCore::turnLeft(pairUC tmp)
+{
+	pairUC	dir;
+
+	if (tmp.first == 1)
+		dir = {0, 1};
+	else if (tmp.second == -1)
+		dir = {1, 0};
+	else if (tmp.first == -1)
+		dir = {0, -1};
+	else if (tmp.second == 1)
+		dir = {-1, 0};
+	return (dir);
+}
+
+void	GameCore::bubgKillPlayer()
+{
+	if (_player1.isAlive() && std::round(_player1.getPos().first) == _bubgPos.first && std::round(_player1.getPos().second) == _bubgPos.second)
+			_player1.setAlive(false);
+	if (_player2.isAlive() && std::round(_player2.getPos().first) == _bubgPos.first && std::round(_player2.getPos().second) == _bubgPos.second)
+		_player2.setAlive(false);
+	for (auto &it : _iaList) {
+		if (it.isAlive() && std::round(it.getPos().first) == _bubgPos.first && std::round(it.getPos().second) == _bubgPos.second)
+			it.setAlive(false);
+	}
+}
+
+void	GameCore::bubgFindNextPos()
+{
+	if (_mapClosing && !isThereFreeTile()) {
+		_bubgPos.first -= _bubgDir.first;
+		_bubgPos.second -= _bubgDir.second;
+		_bubgDir = turnLeft(_bubgDir);
+		_bubgPos.first += _bubgDir.first;
+		_bubgPos.second += _bubgDir.second;
+		return ;
+	}
+	_vectorEntities[_bubgPos.second][_bubgPos.first]->stomp();
+	bubgKillPlayer();
+	if (_vectorEntities[_bubgPos.second][_bubgPos.first]->isEmpty())
+		_vectorEntities[_bubgPos.second][_bubgPos.first]->addWall(_bubgPos.first, _bubgPos.second, _id);
+	if (!_mapClosing)
+		_mapClosing = true;
+	_bubgPos.first += _bubgDir.first;
+	_bubgPos.second += _bubgDir.second;
+}
+
 void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std::pair<int, int> dir, float orientation)
 {
 	std::pair<int, int>	pos = player.getIa();
@@ -717,6 +785,12 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state,
 	_entitiesToRemove.clear();
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
+	if (_bubgCounter > 0)
+		_bubgCounter -= 1;
+	else if (_bubgCounter == 0 && _params.bubg) {
+		bubgFindNextPos();
+		_bubgCounter = 50;
+	}
 	changed = playerMovement(act);
 	handleIA();
 	bombManager(act);
@@ -868,11 +942,9 @@ std::vector<std::unique_ptr<IEntity>>	&GameCore::getAllMap()
 		for (auto &ref : line) {
 			if (!ref->isEmpty() && ref->getType() == Entity::CUBE) {
 				ACube	*tmp = static_cast<ACube*>(ref->getEntity().get());
-				_updateEntities.push_back(std::make_unique<ACube>(tmp->getPos().first, tmp->getPos().second, tmp->getTexture(), tmp->getId()));
+				_updateEntities.push_back(std::make_unique<ACube>(tmp->getPos().first, tmp->getPos().second, tmp->getTexture(), tmp->getId(), true));
 			}
-				
 		}
 	}
-	std::cout << "toto" << std::endl;
 	return (_updateEntities);
 }

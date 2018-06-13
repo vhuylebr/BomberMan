@@ -7,8 +7,8 @@
 
 #include "ACube.hpp"
 
-ACube::ACube(float x, float y, std::string texture, int id)
-    : _pos({x, y}), _texture(texture), _id(id)
+ACube::ACube(float x, float y, std::string texture, int id, bool d)
+    : _pos({x, y}), _texture(texture), _id(id), _destructible(d)
 {
 }
 
@@ -24,6 +24,11 @@ Entity	ACube::getType() const
 pairUC	ACube::getPos() const
 {
 	return std::make_pair(_pos.x, _pos.y);
+}
+
+bool    ACube::isDestructible() const
+{
+    return (_destructible);
 }
 
 std::string ACube::getTexture() const

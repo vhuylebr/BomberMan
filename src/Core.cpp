@@ -34,14 +34,14 @@ void 	Core::menuManager(STATE &last)
 	_lib.drawMenu();
 }
 
-static const t_bonus bonusButton[NB_ITEMS] {
+static const t_bonus bonusButton[NB_ITEMS + 1] {
 	{9, eItem::BOMB_UP},
 	{11, eItem::POWER_UP},
 	{13, eItem::SUPER_BOMB},
 	{15, eItem::SPEED},
-//	{17, eItem::WALL_PASS},
 	{19, eItem::KICK},
 	{44, eItem::SHIELD},
+	{46, eItem::BUBG},
 };
 
 int 	Core::getParametersFromMenu()
@@ -59,6 +59,9 @@ int 	Core::getParametersFromMenu()
 		for (int i = 0; i < NB_ITEMS; i++)
 			if (_lib.getCheckboxState(_menu.getItemByID(bonusButton[i].id)) == true)
 				_param.bonuses.push_back(bonusButton[i].bonus);
+		_param.bubg = _lib.getCheckboxState(_menu.getItemByID(bonusButton[6].id));
+		std::cout << "BUBG : " << _param.bubg << std::endl;
+		
 	} else if (_menu.getStep() == 3) {
 		_param.state = GameState::LOADGAME;
 		_param.gameName = _lib.getListBoxChoice(_menu.getItemByID(1));
@@ -117,7 +120,7 @@ static void introScreen(IrrLib &lib)
 	lib.setVisible(false, INTRO3_ID);
 }
 
-void	Core::gameManager(STATE &last)
+void	Core::gameManager(STATE &last, bool &initialization)
 {
 	if (last == STATE::MENU) {
 		_game.init(_param);
@@ -133,7 +136,10 @@ void	Core::gameManager(STATE &last)
 		}
 		_lib.drawGame();
 		_lib.setSplitScreen(_param.split);
-		_lib.newMenuItems(_game.createLoadScreen());
+		if (initialization == false) {
+			initialization = true;
+			_lib.newMenuItems(_game.createLoadScreen());
+		}
 		introScreen(_lib);
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
@@ -190,12 +196,14 @@ using namespace std::chrono;
 int	Core::loop()
 {
 	STATE   lstate = STATE::INIT;
+	bool initialization = false;
 
 	if (startMusic() == -1)
 		return -1;
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		_now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		if (_state == STATE::MENU) {
+			initialization = false;
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
 				_coremusic.stop(SOUND::MENU);
@@ -209,9 +217,9 @@ int	Core::loop()
 			}
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE
 		|| _state == STATE::END)
-			gameManager(lstate);
 	__int64 later = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	std::this_thread::sleep_for(std::chrono::milliseconds(later - _now));
+    gameManager(lstate, initialization);
 	}
 	return 0;
 }

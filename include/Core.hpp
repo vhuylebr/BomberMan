@@ -25,7 +25,7 @@ public:
 protected:
 	int 		startMusic();
 	void 		menuManager(STATE &last);
-	void 		gameManager(STATE &last);
+	void 		gameManager(STATE &last, bool &);
 
 private:
 	parameters	_param;

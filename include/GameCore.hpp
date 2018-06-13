@@ -51,6 +51,7 @@ struct  parameters
 	std::vector<eItem> 	bonuses;		// Vecteur de bonus actifs
 	std::string 		mapname;
 	bool 				split;
+	bool bubg;
 };
 
 struct	movement
@@ -112,6 +113,10 @@ private:
 	void													getMapFromFile(Map map, parameters params);
 	bool													thereIsBomb(int x, int y);
 	void													initEndScreen(STATE &, char);
+	pairUC	turnLeft(pairUC tmp);
+	bool	isThereFreeTile();
+	void									bubgFindNextPos();
+	void									bubgKillPlayer();
 
 	std::vector<Player>										_iaList;
 	std::vector<std::unique_ptr<IEntity>>					_entities;
@@ -120,16 +125,20 @@ private:
 	Player													_player1;
 	Player													_player2;
 	std::vector<Bomb>										_bombs;
-	std::vector<std::vector<std::unique_ptr<EntityPos> > > 	_vectorEntities;
+	std::vector<std::vector<std::unique_ptr<EntityPos> > >	_vectorEntities;
 	std::vector<std::unique_ptr<IEntity>>					_updateEntities;
 	std::vector<std::unique_ptr<IEntity>>					_mobileEntities;
 	std::vector<std::unique_ptr<IEntity>>					_pauseitem;
+	std::vector<std::pair<int, Entity>>					_entitiesToRemove;
+		parameters												_params;
+	int 									_nbPlayer;
+	int 													_i;
+	int									_bubgCounter;
+	pairUC									_bubgPos;
+	pairUC									_bubgDir;
+	bool	_mapClosing;
 	std::vector<std::unique_ptr<IEntity>>	_endItem;
 	std::vector<std::unique_ptr<IEntity>>	_loadScreenItem;
-	std::vector<std::pair<int, Entity>>						_entitiesToRemove;
-	int 													_nbPlayer;
-	parameters												_params;
-	int 													_i;
 };
 
 #endif /* !GAMECORE_HPP_ */

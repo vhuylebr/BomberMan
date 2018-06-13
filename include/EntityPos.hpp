@@ -42,9 +42,11 @@ class EntityPos {
 		Entity 						getType() const;
 		ItemStatic 					getSubType() const;
 		int 						getId() const;
+		void						stomp();
 		std::unique_ptr<IEntity>	&getEntity();
 		void 						removeFirstEntity();
 		void 						addEntity(float, float, unsigned int &, std::vector<eItem> &);
+		void						addWall(float x, float y, unsigned int &id);
 
 	private:
 		std::unordered_map<ItemStatic, ptrFunc> _functionMap;
