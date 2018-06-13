@@ -361,7 +361,7 @@ static bool keyPressed(Actions &actions, bool changeState)
 
 bool 	Menu::getState(Actions &actions, STATE &state)
 {
-	if (_step == 0 && ((std::clock() - _start ) / (double) CLOCKS_PER_SEC) > 1)
+	if (_step == 0 && ((std::clock() - _start ) / (double) CLOCKS_PER_SEC) > 0.5)
 		return true;
  	if (_step == 2 && actions.buttonPressed == 7) {
 		state = STATE::GAME;
@@ -401,25 +401,25 @@ void Menu::handleIntroMenu(Actions &actions)
 	duration = ( std::clock() - _start ) / (double) CLOCKS_PER_SEC;
 	if (duration > 0 && duration < 1)
 		actions.escape = true;
-	if (duration >= 1 && duration < 2) {
+	if (duration >= 1 && duration < 1.5) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
-	} else if (duration >= 2 && duration < 3) {
+	} else if (duration >= 1.5 && duration < 2) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
-	} else if (duration >= 3 && duration < 4) {
+	} else if (duration >= 2 && duration < 2.5) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
-	} else if (duration > 4) {
+	} else if (duration > 2.5) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
@@ -428,7 +428,7 @@ void Menu::handleIntroMenu(Actions &actions)
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 780, 600, 100)));
 	}
-	if (duration > 5) {
+	if (duration > 3) {
 		_step = 1;
 		_change_menu = true;
 	}
