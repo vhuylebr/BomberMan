@@ -9,7 +9,7 @@
 #include "Wall.hpp"
 
 Wall::Wall(float x, float y, int id)
-	: ACube(x, y, "./media/wall.bmp", id)
+	: ACube(x, y, "./media/wall.bmp", id, true)
 {
 	_isAlive = true;
 }

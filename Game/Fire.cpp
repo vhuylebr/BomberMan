@@ -9,6 +9,6 @@
 #include "Fire.hpp"
 
 Fire::Fire(float x, float y, int id)
-	: ACube(x, y, "./media/fire.jpg", id)
+	: ACube(x, y, "./media/fire.jpg", id, true)
 {
 }

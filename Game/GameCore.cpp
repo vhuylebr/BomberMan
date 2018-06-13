@@ -9,7 +9,8 @@
 #include <sstream>
 
 GameCore::GameCore()
-	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0), _i(0)
+	:_id(1), _player1(-1, -1, -1), _player2(-1, -1, -1), _nbPlayer(0),
+	_i(0), _bubgCounter(3000)
 {
 }
 
@@ -224,6 +225,7 @@ void    GameCore::init(parameters &params)
 	unsigned int x = 0;
 	unsigned int y = 0;
 	_i = 0;
+	_bubgCounter = 30;
 	MapGenerator generator(params.mapSize.first, params.mapSize.second);
 	_nbPlayer = 0;
 	std::vector<std::vector<char>> map;
@@ -253,6 +255,8 @@ void    GameCore::init(parameters &params)
 	_pauseitem.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, PAUSE_ID + 3, "Quit", (SCREEN_WIDTH / 2) - 200, 650, 400, 100)));
 	_size.x = x;
 	_size.y = y;
+	_bubgDir = {1, 0};
+	_bubgPos = {1, 1};
 }
 
 GameCore::~GameCore()
@@ -563,6 +567,60 @@ bool	GameCore::haveBombed(Player player)
 	return (posed == 1) ? true : false;
 }
 
+bool	GameCore::isThereFreeTile()
+{
+	std::cout << "Checking for free tiles {" << _bubgDir.first << "," << _bubgDir.second << "}" << std::endl;
+	pairUC	dir = turnLeft(_bubgDir);
+	pairUC	pos = _bubgPos;
+
+	std::cout << "Starting @ {" << pos.first << "," << pos.second << "} moving with {" << dir.first << "," << dir.second << "}" << std::endl;
+	while (pos.first >= 0 && pos.second >= 0 && pos.first < _size.x && pos.second < _size.y) {
+		std::cout << "- Now pos @ {" << pos.first << "," << pos.second << "}" << std::endl;
+		if (_vectorEntities[pos.second][pos.first]->isEmpty() || _vectorEntities[pos.second][pos.first]->getEntity()->getType() != Entity::CUBE ||
+			!static_cast<ACube*>(_vectorEntities[pos.second][pos.first]->getEntity().get())->isDestructible()) {
+			std::cout << "FREESPOT" << std::endl;
+			return (true);
+		}
+		pos.first += dir.first;
+		pos.second += dir.second;
+	}
+	std::cout << "TURNING" << std::endl;
+	return (false);
+}
+
+pairUC	GameCore::turnLeft(pairUC tmp)
+{
+	pairUC	dir;
+
+	if (tmp.first == 1)
+		dir = {0, 1};
+	else if (tmp.second == -1)
+		dir = {1, 0};
+	else if (tmp.first == -1)
+		dir = {0, -1};
+	else if (tmp.second == 1)
+		dir = {-1, 0};
+	return (dir);
+}
+
+void	GameCore::bubgFindNextPos()
+{
+	std::cout << "I am on {" << _bubgPos.first << "," << _bubgPos.second << "}" << std::endl;
+	if (!isThereFreeTile()) {
+		std::cout << "Turning" << std::endl;
+		_bubgPos.first -= _bubgDir.first;
+		_bubgPos.second -= _bubgDir.second;
+		_bubgDir = turnLeft(_bubgDir);
+	}
+	_bubgPos.first += _bubgDir.first;
+	_bubgPos.second += _bubgDir.second;
+	std::cout << "About to Stomp on {" << _bubgPos.first << "," << _bubgPos.second << "}" << std::endl;
+	_vectorEntities[_bubgPos.second][_bubgPos.first]->stomp();
+	if (_vectorEntities[_bubgPos.second][_bubgPos.first]->isEmpty())
+		_vectorEntities[_bubgPos.second][_bubgPos.first]->addWall(_bubgPos.first, _bubgPos.second, _id);
+	std::cout << "BUBG POS : {" << _bubgPos.first << "," << _bubgPos.second << "}" << std::endl;
+}
+
 void	GameCore::iaAction(std::unique_ptr<EntityPos> &entity, Player &player, std::pair<int, int> dir, float orientation)
 {
 	std::pair<int, int>	pos = player.getIa();
@@ -714,6 +772,12 @@ std::vector<std::unique_ptr<IEntity>> &GameCore::calc(Actions act, STATE &state,
 	_entitiesToRemove.clear();
 	if (_updateEntities.size() > 0)
 		releaseUpdateEntities();
+	if (_bubgCounter > 0)
+		_bubgCounter -= 1;
+	else if (_bubgCounter == 0) {
+		bubgFindNextPos();
+		_bubgCounter = 50;
+	}
 	changed = playerMovement(act);
 	handleIA();
 	bombManager(act);
@@ -860,11 +924,9 @@ std::vector<std::unique_ptr<IEntity>>	&GameCore::getAllMap()
 		for (auto &ref : line) {
 			if (!ref->isEmpty() && ref->getType() == Entity::CUBE) {
 				ACube	*tmp = static_cast<ACube*>(ref->getEntity().get());
-				_updateEntities.push_back(std::make_unique<ACube>(tmp->getPos().first, tmp->getPos().second, tmp->getTexture(), tmp->getId()));
+				_updateEntities.push_back(std::make_unique<ACube>(tmp->getPos().first, tmp->getPos().second, tmp->getTexture(), tmp->getId(), true));
 			}
-				
 		}
 	}
-	std::cout << "toto" << std::endl;
 	return (_updateEntities);
 }

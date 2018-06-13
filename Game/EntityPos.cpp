@@ -44,6 +44,18 @@ void EntityPos::removeFirstEntity()
     _entities.clear();
 }
 
+void    EntityPos::stomp()
+{
+    _entities.clear();
+}
+
+void    EntityPos::addWall(float x, float y, unsigned int &id)
+{
+
+    _entities.push_back(std::make_unique<Wall>(x, y, id));
+    id += 1;
+}
+
 void EntityPos::addEntity(float x, float y, unsigned int &id, std::vector<eItem> &disp)
 {
     _entities.push_back(std::make_unique<Item>(x, y, id, disp));
