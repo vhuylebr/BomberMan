@@ -115,7 +115,7 @@ static void introScreen(IrrLib &lib)
 	lib.setVisible(false, INTRO3_ID);
 }
 
-void	Core::gameManager(STATE &last)
+void	Core::gameManager(STATE &last, bool &initialization)
 {
 	if (last == STATE::MENU) {
 		_game.init(_param);
@@ -131,7 +131,10 @@ void	Core::gameManager(STATE &last)
 		}
 		_lib.drawGame();
 		_lib.setSplitScreen(_param.split);
-		_lib.newMenuItems(_game.createLoadScreen());
+		if (initialization == false) {
+			initialization = true;
+			_lib.newMenuItems(_game.createLoadScreen());
+		}
 		introScreen(_lib);
 	} else if (_state == STATE::PAUSE) {
 		_game.handlePause(_lib.getActions(), _state);
@@ -186,11 +189,13 @@ int		Core::startMusic()
 int	Core::loop()
 {
 	STATE   lstate = STATE::INIT;
+	bool initialization = false;
 
 	if (startMusic() == -1)
 		return -1;
 	while (_state != STATE::EXIT && _lib.getRun()) {
 		if (_state == STATE::MENU) {
+			initialization = false;
 			menuManager(lstate);
 			if (_state == STATE::GAME) {
 				_coremusic.stop(SOUND::MENU);
@@ -204,7 +209,7 @@ int	Core::loop()
 			}
 		} else if (_state == STATE::GAME || _state == STATE::PAUSE
 		|| _state == STATE::END)
-			gameManager(lstate);
+			gameManager(lstate, initialization);
 	}
 	return 0;
 }
