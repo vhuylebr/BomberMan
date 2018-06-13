@@ -399,27 +399,28 @@ void Menu::handleIntroMenu(Actions &actions)
 	double duration;
 
 	duration = ( std::clock() - _start ) / (double) CLOCKS_PER_SEC;
-	if (duration > 0 && duration < 1)
-		actions.down = true;
-	if (duration >= 1 && duration < 1.5) {
+	if (duration > 0 && duration < 0.5)
+//		actions.buttonPressed = 2;
+		actions.escape = true;
+	if (duration >= 0.5 && duration < 1) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+	} else if (duration >= 1 && duration < 1.5) {
+		_changeState = true;
+		_changed = true;
+		_item.clear();
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
+		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
 	} else if (duration >= 1.5 && duration < 2) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
-	} else if (duration >= 2 && duration < 2.5) {
-		_changeState = true;
-		_changed = true;
-		_item.clear();
-		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 6, "", (SCREEN_WIDTH / 2) - 650, 100, 1260, 350, "media/title.png", true)));
-		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 1, "Start Game", (SCREEN_WIDTH / 2) - 300, 520, 600, 100)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
-	} else if (duration > 2.5) {
+	} else if (duration > 2) {
 		_changeState = true;
 		_changed = true;
 		_item.clear();
@@ -428,7 +429,7 @@ void Menu::handleIntroMenu(Actions &actions)
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 2, "Load Game", (SCREEN_WIDTH / 2) - 300, 650, 600, 100)));
 		_item.push_back(std::unique_ptr<IEntity>(new MenuItem(Entity::BUTTON, 3, "Quit", (SCREEN_WIDTH / 2) - 300, 780, 600, 100)));
 	}
-	if (duration > 3 || actions.escape) {
+	if (duration > 2.5 || (duration > 0.5 && actions.escape)) {
 		_step = 1;
 		_change_menu = true;
 	}
