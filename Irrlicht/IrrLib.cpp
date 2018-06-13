@@ -11,7 +11,7 @@ IrrLib::IrrLib(Actions &KeyIsDown)
 	:_actions(KeyIsDown), _ground(nullptr), _screenSizeX(SCREEN_WIDTH), _screenSizeY(SCREEN_HEIGHT), _splitScreen(false), _lastFps(0), _altitude(10)
 {
 	_device = createDevice(irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(SCREEN_WIDTH, SCREEN_HEIGHT),
-		16, true, true, true, &_eventReceiver);
+		16, false, true, false, &_eventReceiver);
 	_device->setWindowCaption(L"Irrlicht Engine - User Interface");
 	_device->setResizable(false);
 	_driver = _device->getVideoDriver();
